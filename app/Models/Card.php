@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Card extends Model
 {
@@ -12,36 +14,55 @@ class Card extends Model
     protected $fillable = [
         'id',
         'name',
-        'supertype',
-        'subtypes',
+        'supertype_id',
         'level',
         'hp',
-        'types',
-        'evolves_to',
+        'evolvesFrom',
+        'evolvesTo',
+        'rules',
+        'ancientTrait',
+        'abilities',
         'attacks',
         'weaknesses',
+        'resistances',
         'retreat_cost',
-        'converted_retreat_cost',
+        'convertedRetreatCost',
         'set_id',
-        'set_name',
-        'rarity',
-        'flavor_text',
-        'national_pokedex_numbers',
-        'small_image_url',
-        'large_image_url',
-        'tcgplayer_url',
-        'cardmarket_url',
-        'prices',
+        'number',
+        'artist',
+        'rarity_id',
+        'flavorText',
+        'nationalPokedexNumbers',
+        'legalities',
+        'regulationMark',
+        'images',
+        'tcgplayer',
+        'cardmarket',
     ];
 
-    protected $casts = [
-        'subtypes' => 'array',
-        'types' => 'array',
-        'evolves_to' => 'array',
-        'attacks' => 'array',
-        'weaknesses' => 'array',
-        'retreat_cost' => 'array',
-        'national_pokedex_numbers' => 'array',
-        'prices' => 'array',
-    ];
+    // Relaciones
+    public function set(): belongsTo
+    {
+        return $this->belongsTo(Set::class);
+    }
+
+    public function supertype(): belongsTo
+    {
+        return $this->belongsTo(Supertype::class);
+    }
+
+    public function rarity(): belongsTo
+    {
+        return $this->belongsTo(Rarity::class);
+    }
+
+    public function types(): belongsToMany
+    {
+        return $this->belongsToMany(Type::class, 'types_cards');
+    }
+
+    public function subtypes(): belongsToMany
+    {
+        return $this->belongsToMany(Subtype::class, 'subtypes_cards');
+    }
 }

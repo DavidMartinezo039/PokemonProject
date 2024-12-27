@@ -3,6 +3,11 @@
 namespace Database\Seeders;
 
 use App\Models\Card;
+use App\Models\Set;
+use App\Models\Type;
+use App\Models\Supertype;
+use App\Models\Rarity;
+use App\Models\Subtype;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Http;
@@ -14,59 +19,107 @@ class CardSeeder extends Seeder
      */
     public function run(): void
     {
-        $url = 'https://api.pokemontcg.io/v2/cards';
-        $page = 1;
-        $pageSize = 250; // Tamaño máximo permitido por la API
+        // Obtener datos desde la API
+        $sets = $this->getSetsFromApi();
+        $types = $this->getTypesFromApi();
+        $supertypes = $this->getSupertypesFromApi();
+        $rarities = $this->getRaritiesFromApi();
+        $subtypes = $this->getSubtypesFromApi();
 
-        do {
-            // Realizamos la solicitud a la API con paginación
-            $response = Http::withHeaders([
-                'Authorization' => 'Bearer 5cc3c6ec-af79-4bc8-b926-530b88a3d37b',
-            ])->get($url, [
-                'page' => $page,
-                'pageSize' => $pageSize,
-            ]);
+        // Insertar sets
+        foreach ($sets as $set) {
+            Set::updateOrCreate(
+                ['id' => $set['id']],
+                [
+                    'name' => $set['name'],
+                    'series' => $set['series'],
+                    'printedTotal' => $set['printedTotal'] ?? null,
+                    'total' => $set['total'] ?? null,
+                    'legalities' => json_encode($set['legalities']),
+                    'ptcgoCode' => $set['ptcgoCode'] ?? null,
+                    'releaseDate' => $set['releaseDate'] ?? null,
+                    'updatedAt' => $set['updatedAt'] ?? null,
+                    'images' => json_encode($set['images']),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
+            );
+        }
 
-            if ($response->failed()) {
-                $this->command->error('Failed to fetch data from the API at page ' . $page);
-                break;
-            }
+        // Insertar tipos
+        foreach ($types as $type) {
+            Type::updateOrCreate(['name' => $type]);
+        }
 
-            $cards = $response->json('data');
-            $this->command->info('Fetched ' . count($cards) . ' cards from page ' . $page);
+        // Insertar supertypes
+        foreach ($supertypes as $supertype) {
+            Supertype::updateOrCreate(['name' => $supertype]);
+        }
 
-            // Guardamos cada carta en la base de datos
-            foreach ($cards as $card) {
-                Card::updateOrCreate(
-                    ['id' => $card['id']],
-                    [
-                        'name' => $card['name'],
-                        'supertype' => $card['supertype'] ?? null,
-                        'subtypes' => $card['subtypes'] ?? null,
-                        'level' => $card['level'] ?? null,
-                        'hp' => $card['hp'] ?? null,
-                        'types' => $card['types'] ?? null,
-                        'evolves_to' => $card['evolvesTo'] ?? null,
-                        'attacks' => $card['attacks'] ?? null,
-                        'weaknesses' => $card['weaknesses'] ?? null,
-                        'retreat_cost' => $card['retreatCost'] ?? null,
-                        'converted_retreat_cost' => $card['convertedRetreatCost'] ?? null,
-                        'set_id' => $card['set']['id'] ?? null,
-                        'set_name' => $card['set']['name'] ?? null,
-                        'rarity' => $card['rarity'] ?? null,
-                        'flavor_text' => $card['flavorText'] ?? null,
-                        'national_pokedex_numbers' => $card['nationalPokedexNumbers'] ?? null,
-                        'small_image_url' => $card['images']['small'] ?? null,
-                        'large_image_url' => $card['images']['large'] ?? null,
-                        'tcgplayer_url' => $card['tcgplayer']['url'] ?? null,
-                        'cardmarket_url' => $card['cardmarket']['url'] ?? null,
-                        'prices' => $card['cardmarket']['prices'] ?? null,
-                    ]
-                );
-            }
+        // Insertar raridades
+        foreach ($rarities as $rarity) {
+            Rarity::updateOrCreate(['name' => $rarity]);
+        }
 
-            // Incrementamos la página para la siguiente solicitud
-            $page++;
-        } while (count($cards) > 0); // Si ya no hay más cartas, el bucle termina
+        // Insertar subtipos
+        foreach ($subtypes as $subtype) {
+            Subtype::updateOrCreate(['name' => $subtype]);
+        }
+    }
+
+    /**
+     * Obtener los sets desde la API.
+     *
+     * @return array
+     */
+    private function getSetsFromApi()
+    {
+        $response = Http::timeout(30) // Aumentar el tiempo de espera a 30 segundos
+        ->get('https://api.pokemontcg.io/v2/sets');
+        return $response->json('data');
+    }
+
+    /**
+     * Obtener los tipos desde la API.
+     *
+     * @return array
+     */
+    private function getTypesFromApi()
+    {
+        $response = Http::get('https://api.pokemontcg.io/v2/types');
+        return $response->json('data');
+    }
+
+    /**
+     * Obtener los supertypes desde la API.
+     *
+     * @return array
+     */
+    private function getSupertypesFromApi()
+    {
+        $response = Http::get('https://api.pokemontcg.io/v2/supertypes');
+        return $response->json('data');
+    }
+
+    /**
+     * Obtener las raridades desde la API.
+     *
+     * @return array
+     */
+    private function getRaritiesFromApi()
+    {
+        $response = Http::get('https://api.pokemontcg.io/v2/rarities');
+        return $response->json('data');
+    }
+
+    /**
+     * Obtener los subtipos desde la API.
+     *
+     * @return array
+     */
+    private function getSubtypesFromApi()
+    {
+        $response = Http::get('https://api.pokemontcg.io/v2/subtypes');
+        return $response->json('data');
     }
 }
