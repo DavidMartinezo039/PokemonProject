@@ -9,6 +9,7 @@ use App\Models\Type;
 use App\Models\Subtype;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\DB;
 
 class CardSeeder extends Seeder
 {
@@ -41,15 +42,24 @@ class CardSeeder extends Seeder
                 break;
             }
 
-            foreach ($cards as $cardData) {
-                $this->createCard($cardData);
+            $chunks = array_chunk($cards, 100);
+
+            foreach ($chunks as $chunk) {
+                foreach ($chunk as $cardData) {
+                    $this->createCard($cardData);
+                }
             }
 
+            // Reconectar base de datos para liberar memoria
+            DB::disconnect();
+            DB::reconnect();
+
             $totalCards += count($cards);
+            echo "Cartas procesadas hasta ahora: {$totalCards}\n";
             $page++;
         } while (count($cards) === $perPage);
 
-        echo "Total cards seeded: {$totalCards}\n";
+        echo "Total de cartas insertadas: {$totalCards}\n";
     }
 
     /**
@@ -59,7 +69,6 @@ class CardSeeder extends Seeder
      */
     private function createCard(array $cardData)
     {
-        echo "Procesando carta: {$cardData['id']} - {$cardData['name']}\n";
         $id = $cardData['id'];
         // Insert the card
         $card = Card::updateOrCreate(
@@ -90,8 +99,6 @@ class CardSeeder extends Seeder
             ]
         );
 
-        $cards = Card::all();
-
 // Asegúrate de que el ID es válido
 
         $card = Card::where('id', $id)->first();
@@ -112,14 +119,10 @@ class CardSeeder extends Seeder
 // Sincronizar los tipos y subtipos con la carta
         if (!empty($typeIds)) {
             $card->types()->sync($typeIds);
-        } else {
-            echo "La carta con ID {$cardData['id']} no tiene tipos asociados.\n";
         }
 
         if (!empty($subtypeIds)) {
             $card->subtypes()->sync($subtypeIds);
-        } else {
-            echo "La carta con ID {$cardData['id']} no tiene subtipos asociados.\n";
         }
     }
 
