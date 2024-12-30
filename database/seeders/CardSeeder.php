@@ -3,12 +3,10 @@
 namespace Database\Seeders;
 
 use App\Models\Card;
-use App\Models\Set;
-use App\Models\Type;
-use App\Models\Supertype;
 use App\Models\Rarity;
+use App\Models\Supertype;
+use App\Models\Type;
 use App\Models\Subtype;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Http;
 
@@ -19,107 +17,131 @@ class CardSeeder extends Seeder
      */
     public function run(): void
     {
-        // Obtener datos desde la API
-        $sets = $this->getSetsFromApi();
-        $types = $this->getTypesFromApi();
-        $supertypes = $this->getSupertypesFromApi();
-        $rarities = $this->getRaritiesFromApi();
-        $subtypes = $this->getSubtypesFromApi();
+        $this->seedCards();
+    }
 
-        // Insertar sets
-        foreach ($sets as $set) {
-            Set::updateOrCreate(
-                ['id' => $set['id']],
-                [
-                    'name' => $set['name'],
-                    'series' => $set['series'],
-                    'printedTotal' => $set['printedTotal'] ?? null,
-                    'total' => $set['total'] ?? null,
-                    'legalities' => json_encode($set['legalities']),
-                    'ptcgoCode' => $set['ptcgoCode'] ?? null,
-                    'releaseDate' => $set['releaseDate'] ?? null,
-                    'updatedAt' => $set['updatedAt'] ?? null,
-                    'images' => json_encode($set['images']),
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]
-            );
+    /**
+     * Seed cards from the Pokémon TCG API.
+     */
+    private function seedCards()
+    {
+        $page = 1;
+        $perPage = 250;
+        $totalCards = 0;
+
+        do {
+            $response = Http::timeout(30)->get('https://api.pokemontcg.io/v2/cards', [
+                'page' => $page,
+                'pageSize' => $perPage,
+            ]);
+
+            $cards = $response->json('data');
+
+            if (!$cards) {
+                break;
+            }
+
+            foreach ($cards as $cardData) {
+                $this->createCard($cardData);
+            }
+
+            $totalCards += count($cards);
+            $page++;
+        } while (count($cards) === $perPage);
+
+        echo "Total cards seeded: {$totalCards}\n";
+    }
+
+    /**
+     * Create or update a card in the database.
+     *
+     * @param array $cardData
+     */
+    private function createCard(array $cardData)
+    {
+        echo "Procesando carta: {$cardData['id']} - {$cardData['name']}\n";
+        $id = $cardData['id'];
+        // Insert the card
+        $card = Card::updateOrCreate(
+            [
+                'id' => $cardData['id'],
+                'name' => $cardData['name'],
+                'supertype_id' => $this->getSupertypeId($cardData['supertype']),
+                'level' => $cardData['level'] ?? null,
+                'hp' => $cardData['hp'] ?? null,
+                'evolvesFrom' => $cardData['evolvesFrom'] ?? null,
+                'evolvesTo' => isset($cardData['evolvesTo']) ? json_encode($cardData['evolvesTo']) : null,
+                'attacks' => isset($cardData['attacks']) ? json_encode($cardData['attacks']) : null,
+                'weaknesses' => isset($cardData['weaknesses']) ? json_encode($cardData['weaknesses']) : null,
+                'resistances' => isset($cardData['resistances']) ? json_encode($cardData['resistances']) : null,
+                'retreatCost' => isset($cardData['retreatCost']) ? json_encode($cardData['retreatCost']) : null,
+                'convertedRetreatCost' => $cardData['convertedRetreatCost'] ?? null,
+                'set_id' => $cardData['set']['id'] ?? null,
+                'number' => $cardData['number'] ?? null,
+                'artist' => $cardData['artist'] ?? null,
+                'rarity_id' => isset($cardData['rarity']) ? $this->getRarityId($cardData['rarity']) : null,
+                'flavorText' => $cardData['flavorText'] ?? null,
+                'nationalPokedexNumbers' => isset($cardData['nationalPokedexNumbers']) ? json_encode($cardData['nationalPokedexNumbers']) : null,
+                'legalities' => isset($cardData['legalities']) ? json_encode($cardData['legalities']) : null,
+                'regulationMark' => $cardData['regulationMark'] ?? null,
+                'images' => isset($cardData['images']) ? json_encode($cardData['images']) : null,
+                'tcgplayer' => isset($cardData['tcgplayer']) ? json_encode($cardData['tcgplayer']) : null,
+                'cardmarket' => isset($cardData['cardmarket']) ? json_encode($cardData['cardmarket']) : null,
+            ]
+        );
+
+        $cards = Card::all();
+
+// Asegúrate de que el ID es válido
+
+        $card = Card::where('id', $id)->first();
+
+        if (!$card) {
+            throw new \Exception("La carta con ID {$id} no existe.");
         }
 
-        // Insertar tipos
-        foreach ($types as $type) {
-            Type::updateOrCreate(['name' => $type]);
+// Validar la existencia de 'types' y 'subtypes' antes de acceder a ellas
+        $typeIds = isset($cardData['types']) && is_array($cardData['types'])
+            ? Type::whereIn('name', $cardData['types'])->pluck('id')->toArray()
+            : [];
+
+        $subtypeIds = isset($cardData['subtypes']) && is_array($cardData['subtypes'])
+            ? Subtype::whereIn('name', $cardData['subtypes'])->pluck('id')->toArray()
+            : [];
+
+// Sincronizar los tipos y subtipos con la carta
+        if (!empty($typeIds)) {
+            $card->types()->sync($typeIds);
+        } else {
+            echo "La carta con ID {$cardData['id']} no tiene tipos asociados.\n";
         }
 
-        // Insertar supertypes
-        foreach ($supertypes as $supertype) {
-            Supertype::updateOrCreate(['name' => $supertype]);
-        }
-
-        // Insertar raridades
-        foreach ($rarities as $rarity) {
-            Rarity::updateOrCreate(['name' => $rarity]);
-        }
-
-        // Insertar subtipos
-        foreach ($subtypes as $subtype) {
-            Subtype::updateOrCreate(['name' => $subtype]);
+        if (!empty($subtypeIds)) {
+            $card->subtypes()->sync($subtypeIds);
+        } else {
+            echo "La carta con ID {$cardData['id']} no tiene subtipos asociados.\n";
         }
     }
 
     /**
-     * Obtener los sets desde la API.
+     * Get the supertype ID by name.
      *
-     * @return array
+     * @param string|null $supertypeName
+     * @return int|null
      */
-    private function getSetsFromApi()
+    private function getSupertypeId(?string $supertypeName): ?int
     {
-        $response = Http::timeout(30) // Aumentar el tiempo de espera a 30 segundos
-        ->get('https://api.pokemontcg.io/v2/sets');
-        return $response->json('data');
+        return $supertypeName ? Supertype::where('name', $supertypeName)->value('id') : null;
     }
 
     /**
-     * Obtener los tipos desde la API.
+     * Get the rarity ID by name.
      *
-     * @return array
+     * @param string|null $rarityName
+     * @return int|null
      */
-    private function getTypesFromApi()
+    private function getRarityId(?string $rarityName): ?int
     {
-        $response = Http::get('https://api.pokemontcg.io/v2/types');
-        return $response->json('data');
-    }
-
-    /**
-     * Obtener los supertypes desde la API.
-     *
-     * @return array
-     */
-    private function getSupertypesFromApi()
-    {
-        $response = Http::get('https://api.pokemontcg.io/v2/supertypes');
-        return $response->json('data');
-    }
-
-    /**
-     * Obtener las raridades desde la API.
-     *
-     * @return array
-     */
-    private function getRaritiesFromApi()
-    {
-        $response = Http::get('https://api.pokemontcg.io/v2/rarities');
-        return $response->json('data');
-    }
-
-    /**
-     * Obtener los subtipos desde la API.
-     *
-     * @return array
-     */
-    private function getSubtypesFromApi()
-    {
-        $response = Http::get('https://api.pokemontcg.io/v2/subtypes');
-        return $response->json('data');
+        return $rarityName ? Rarity::where('name', $rarityName)->value('id') : null;
     }
 }

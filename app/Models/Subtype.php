@@ -14,6 +14,6 @@ class Subtype extends Model
 
     public function cards(): BelongsToMany
     {
-        return $this->belongsToMany(Card::class, 'subtypes_cards');
+        return $this->belongsToMany(Card::class, 'subtypes_cards' , 'subtype_id', 'card_id');
     }
 }

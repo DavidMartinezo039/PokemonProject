@@ -14,6 +14,6 @@ class Type extends Model
 
     public function cards(): BelongsToMany
     {
-        return $this->belongsToMany(Card::class, 'types_cards');
+        return $this->belongsToMany(Card::class, 'types_cards', 'type_id', 'card_id');
     }
 }

@@ -21,7 +21,8 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call([
-            CardSeeder::class,   // Seeder para las cartas
+            CardSupportDataSeeder::class,   // Seeder para las tablas de apoyo a las cartas
+            CardSeeder::class,              // Seeder para las cartas
         ]);
     }
 }

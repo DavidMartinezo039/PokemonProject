@@ -32,7 +32,7 @@ return new class extends Migration
             $table->foreign('set_id')->references('id')->on('sets')->onDelete('cascade'); // Relación con 'sets'
             $table->string('number')->nullable(); // Número de la carta en el set
             $table->string('artist')->nullable(); // Artista de la carta
-            $table->foreignId('rarity_id')->constrained('rarities')->onDelete('cascade'); // Relación con 'rarities'
+            $table->foreignId('rarity_id')->nullable()->constrained('rarities')->onDelete('cascade'); // Relación con 'rarities'
             $table->string('flavorText')->nullable(); // Texto de sabor (descripción de la carta)
             $table->json('nationalPokedexNumbers')->nullable(); // Números del Pokédex nacional (solo para Pokémon)
             $table->json('legalities')->nullable(); // Legalidades en diferentes formatos

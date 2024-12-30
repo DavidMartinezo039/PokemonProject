@@ -11,6 +11,9 @@ class Card extends Model
 {
     use HasFactory;
 
+    protected $keyType = 'string'; // Clave primaria es una cadena
+    public $incrementing = false; // No es autoincremental
+
     protected $fillable = [
         'id',
         'name',
@@ -58,11 +61,11 @@ class Card extends Model
 
     public function types(): belongsToMany
     {
-        return $this->belongsToMany(Type::class, 'types_cards');
+        return $this->belongsToMany(Type::class, 'types_cards', 'card_id', 'type_id');
     }
 
     public function subtypes(): belongsToMany
     {
-        return $this->belongsToMany(Subtype::class, 'subtypes_cards');
+        return $this->belongsToMany(Subtype::class, 'subtypes_cards', 'card_id', 'subtype_id');
     }
 }
