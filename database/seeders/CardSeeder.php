@@ -42,12 +42,8 @@ class CardSeeder extends Seeder
                 break;
             }
 
-            $chunks = array_chunk($cards, 100);
-
-            foreach ($chunks as $chunk) {
-                foreach ($chunk as $cardData) {
-                    $this->createCard($cardData);
-                }
+            foreach ($cards as $cardData) {
+                $this->createCard($cardData);
             }
 
             // Reconectar base de datos para liberar memoria
@@ -69,9 +65,8 @@ class CardSeeder extends Seeder
      */
     private function createCard(array $cardData)
     {
-        $id = $cardData['id'];
         // Insert the card
-        $card = Card::updateOrCreate(
+        $card = Card::Create(
             [
                 'id' => $cardData['id'],
                 'name' => $cardData['name'],
@@ -98,14 +93,6 @@ class CardSeeder extends Seeder
                 'cardmarket' => isset($cardData['cardmarket']) ? json_encode($cardData['cardmarket']) : null,
             ]
         );
-
-// Asegúrate de que el ID es válido
-
-        $card = Card::where('id', $id)->first();
-
-        if (!$card) {
-            throw new \Exception("La carta con ID {$id} no existe.");
-        }
 
 // Validar la existencia de 'types' y 'subtypes' antes de acceder a ellas
         $typeIds = isset($cardData['types']) && is_array($cardData['types'])
