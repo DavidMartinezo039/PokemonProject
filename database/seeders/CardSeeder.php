@@ -30,6 +30,12 @@ class CardSeeder extends Seeder
         $perPage = 250;
         $totalCards = 0;
 
+        // Cargar mapas de supertypes y rarities una vez
+        $supertypes = Supertype::pluck('id', 'name')->toArray();
+        $rarities = Rarity::pluck('id', 'name')->toArray();
+        $types = Type::pluck('id', 'name')->toArray();
+        $subtypes = Subtype::pluck('id', 'name')->toArray();
+
         do {
             $response = Http::timeout(30)->get('https://api.pokemontcg.io/v2/cards', [
                 'page' => $page,
@@ -42,9 +48,12 @@ class CardSeeder extends Seeder
                 break;
             }
 
-            foreach ($cards as $cardData) {
-                $this->createCard($cardData);
-            }
+            // Insertar todas las cartas en una transacción
+            DB::transaction(function () use ($cards, $supertypes, $rarities, $types, $subtypes) {
+                foreach ($cards as $cardData) {
+                    $this->createCard($cardData, $supertypes, $rarities, $types, $subtypes);
+                }
+            });
 
             // Reconectar base de datos para liberar memoria
             DB::disconnect();
@@ -63,14 +72,23 @@ class CardSeeder extends Seeder
      *
      * @param array $cardData
      */
-    private function createCard(array $cardData)
+    private function createCard(array $cardData, array $supertypes, array $rarities, array $types, array $subtypes)
     {
+        // Validar y obtener los IDs de supertypes y rarities desde los mapas
+        $supertypeId = isset($cardData['supertype']) && array_key_exists($cardData['supertype'], $supertypes)
+            ? $supertypes[$cardData['supertype']]
+            : null;
+
+        $rarityId = isset($cardData['rarity']) && array_key_exists($cardData['rarity'], $rarities)
+            ? $rarities[$cardData['rarity']]
+            : null;
+
         // Insert the card
         $card = Card::Create(
             [
                 'id' => $cardData['id'],
                 'name' => $cardData['name'],
-                'supertype_id' => $this->getSupertypeId($cardData['supertype']),
+                'supertype_id' => $supertypeId,
                 'level' => $cardData['level'] ?? null,
                 'hp' => $cardData['hp'] ?? null,
                 'evolvesFrom' => $cardData['evolvesFrom'] ?? null,
@@ -83,7 +101,7 @@ class CardSeeder extends Seeder
                 'set_id' => $cardData['set']['id'] ?? null,
                 'number' => $cardData['number'] ?? null,
                 'artist' => $cardData['artist'] ?? null,
-                'rarity_id' => isset($cardData['rarity']) ? $this->getRarityId($cardData['rarity']) : null,
+                'rarity_id' => $rarityId,
                 'flavorText' => $cardData['flavorText'] ?? null,
                 'nationalPokedexNumbers' => isset($cardData['nationalPokedexNumbers']) ? json_encode($cardData['nationalPokedexNumbers']) : null,
                 'legalities' => isset($cardData['legalities']) ? json_encode($cardData['legalities']) : null,
@@ -94,16 +112,20 @@ class CardSeeder extends Seeder
             ]
         );
 
-// Validar la existencia de 'types' y 'subtypes' antes de acceder a ellas
+        // Relacionar tipos y subtipos
         $typeIds = isset($cardData['types']) && is_array($cardData['types'])
-            ? Type::whereIn('name', $cardData['types'])->pluck('id')->toArray()
+            ? array_map(fn($type) => $types[$type] ?? null, $cardData['types'])
             : [];
 
         $subtypeIds = isset($cardData['subtypes']) && is_array($cardData['subtypes'])
-            ? Subtype::whereIn('name', $cardData['subtypes'])->pluck('id')->toArray()
+            ? array_map(fn($subtype) => $subtypes[$subtype] ?? null, $cardData['subtypes'])
             : [];
 
-// Sincronizar los tipos y subtipos con la carta
+        // Filtrar IDs nulos
+        $typeIds = array_filter($typeIds);
+        $subtypeIds = array_filter($subtypeIds);
+
+        // Sincronizar relaciones
         if (!empty($typeIds)) {
             $card->types()->sync($typeIds);
         }
@@ -111,27 +133,5 @@ class CardSeeder extends Seeder
         if (!empty($subtypeIds)) {
             $card->subtypes()->sync($subtypeIds);
         }
-    }
-
-    /**
-     * Get the supertype ID by name.
-     *
-     * @param string|null $supertypeName
-     * @return int|null
-     */
-    private function getSupertypeId(?string $supertypeName): ?int
-    {
-        return $supertypeName ? Supertype::where('name', $supertypeName)->value('id') : null;
-    }
-
-    /**
-     * Get the rarity ID by name.
-     *
-     * @param string|null $rarityName
-     * @return int|null
-     */
-    private function getRarityId(?string $rarityName): ?int
-    {
-        return $rarityName ? Rarity::where('name', $rarityName)->value('id') : null;
     }
 }
