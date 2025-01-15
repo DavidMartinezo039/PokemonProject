@@ -9,9 +9,13 @@ class CardController extends Controller
 {
     public function index()
     {
-        $cards = Card::all();
-        return view('cards.index', compact('cards'));
+        $cards = Card::paginate(50);
+        $message = $cards->isEmpty() ? 'No cards available' : null;
+
+        // Pasa siempre la variable $cards a la vista
+        return view('cards.index', compact('cards', 'message'));
     }
+
 
     public function show($id)
     {
