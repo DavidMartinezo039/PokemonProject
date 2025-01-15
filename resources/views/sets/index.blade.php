@@ -1,16 +1,19 @@
-    <h1>Lista de Sets</h1>
+<h1>Lista de Sets</h1>
 
-    @if($sets->isEmpty())
-        <p>No hay sets disponibles.</p>
-    @else
-        <ul>
-            @foreach ($sets as $set)
-                <li>
-                    <a href="{{ route('sets.show', $set->id) }}">{{ $set->name }}</a>
-                    <!-- Aquí puedes agregar más detalles si lo deseas -->
-                </li>
-            @endforeach
-        </ul>
-    @endif
+@if(isset($message))
+    <div class="alert alert-info">
+        {{ $message }}
+    </div>
+@else
+    <ul>
+        @foreach ($sets as $set)
+            <li>
+                <a href="{{ route('sets.show', $set->id) }}">
+                    <img src="{{ $set->images['logo'] }}" alt="Logo de {{ $set->name }}" style="width: 100px; height: 100px; object-fit: contain;">
+                </a>
+            </li>
+        @endforeach
+    </ul>
+@endif
 
-    <a href="{{ route('sets.create') }}">Crear nuevo set</a>
+<a href="{{ route('sets.create') }}">Crear nuevo set</a>
