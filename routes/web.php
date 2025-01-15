@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SetController;
 use Illuminate\Support\Facades\Route;
@@ -9,6 +10,7 @@ Route::get('/', function () {
 });
 
 Route::resource('sets', SetController::class);
+Route::resource('cards', CardController::class);
 
 
 Route::get('/dashboard', function () {

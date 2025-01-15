@@ -14,6 +14,22 @@ class Card extends Model
     protected $keyType = 'string'; // Clave primaria es una cadena
     public $incrementing = false; // No es autoincremental
 
+    protected $casts = [
+        'evolvesTo' => 'array',
+        'rules' => 'array',
+        'ancientTrait' => 'array',
+        'abilities' => 'array',
+        'attacks' => 'array',
+        'weaknesses' => 'array',
+        'resistances' => 'array',
+        'retreatCost' => 'array',
+        'nationalPokedexNumbers' => 'array',
+        'legalities' => 'array',
+        'images' => 'array',
+        'tcgplayer' => 'array',
+        'cardmarket' => 'array',
+    ];
+
     protected $fillable = [
         'id',
         'name',
