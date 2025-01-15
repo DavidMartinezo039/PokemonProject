@@ -13,6 +13,11 @@ class Set extends Model
     protected $keyType = 'string'; // Clave primaria es una cadena
     public $incrementing = false; // No es autoincremental
 
+    protected $casts = [
+        'legalities' => 'array',
+        'images' => 'array',
+    ];
+
     protected $fillable = [
         'id',
         'name',

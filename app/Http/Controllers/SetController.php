@@ -10,14 +10,18 @@ class SetController extends Controller
     public function index()
     {
         $sets = Set::all();
+
+        if ($sets->isEmpty()) {
+            return view('sets.index')->with('message', 'No sets available');
+        }
+
         return view('sets.index', compact('sets'));
     }
 
     public function show($id)
     {
         $set = Set::findOrFail($id);
-        $images = json_decode($set->images, true);
-        return view('sets.show', compact('set', 'images'));
+        return view('sets.show', compact('set'));
     }
 
     public function showCards($id)

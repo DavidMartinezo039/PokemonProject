@@ -14,11 +14,11 @@
             <!-- Mostrar las imágenes con tamaño ajustado -->
             <div class="mb-4">
                 <h4>Logo:</h4>
-                <img src="{{ $images['logo'] }}" alt="Logo de {{ $set->name }}" style="width: 100px; height: 100px; object-fit: contain;">
+                <img src="{{ $set->images['logo'] }}" alt="Logo de {{ $set->name }}" style="width: 100px; height: 100px; object-fit: contain;">
             </div>
             <div>
                 <h4>Símbolo:</h4>
-                <img src="{{ $images['symbol'] }}" alt="Símbolo de {{ $set->name }}" style="width: 100px; height: 100px; object-fit: contain;">
+                <img src="{{ $set->images['symbol'] }}" alt="Símbolo de {{ $set->name }}" style="width: 100px; height: 100px; object-fit: contain;">
             </div>
         </div>
     </div>
