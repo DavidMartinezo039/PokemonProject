@@ -35,8 +35,6 @@ class SetFactory extends Factory
                 'logo' => $this->faker->imageUrl(200, 200, 'abstract', true, 'logo'),
                 'symbol' => $this->faker->imageUrl(100, 100, 'abstract', true, 'symbol'),
             ],
-            'created_at' => now(),
-            'updated_at' => now(),
         ];
     }
 }

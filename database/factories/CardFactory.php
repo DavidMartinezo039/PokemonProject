@@ -74,8 +74,6 @@ class CardFactory extends Factory
                     'trendPrice' => $this->faker->randomFloat(2, 1, 25),
                 ],
             ],
-            'created_at' => now(),
-            'updated_at' => now(),
         ];
     }
 }

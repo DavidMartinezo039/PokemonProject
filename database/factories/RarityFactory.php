@@ -18,8 +18,6 @@ class RarityFactory extends Factory
     {
         return [
             'name' => $this->faker->randomElement(['Common', 'Uncommon', 'Rare', 'Ultra Rare', 'Secret Rare']),
-            'created_at' => now(),
-            'updated_at' => now(),
         ];
     }
 }
