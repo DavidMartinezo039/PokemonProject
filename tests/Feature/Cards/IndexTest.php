@@ -36,12 +36,8 @@ class IndexTest extends TestCase
     /** @test */
     public function test_index_displays_message_when_no_cards_exist()
     {
-        // No crear ninguna carta
-
-        // Realiza una solicitud GET a la ruta 'cards.index'
         $response = $this->get(route('cards.index'));
 
-        // Verifica que se muestra un mensaje indicando que no hay cartas
         $response->assertSee('No hay cartas disponibles.');
     }
 }
