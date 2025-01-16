@@ -28,6 +28,11 @@ class SetController extends Controller
     {
         $set = Set::findOrFail($id);
         $cards = $set->cards;
+
+        if ($cards->isEmpty()) {
+            return view('sets.cards', compact('set', 'cards'))->with('message', 'No hay cartas disponibles.');
+        }
+
         return view('sets.cards', compact('set', 'cards'));
     }
 

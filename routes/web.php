@@ -10,6 +10,7 @@ Route::get('/', function () {
 });
 
 Route::resource('sets', SetController::class);
+Route::get('/sets/{set}/cards', [SetController::class, 'showCards'])->name('sets.cards');
 Route::resource('cards', CardController::class);
 
 
