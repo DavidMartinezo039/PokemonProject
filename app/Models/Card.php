@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -58,6 +59,51 @@ class Card extends Model
         'tcgplayer',
         'cardmarket',
     ];
+
+    /**
+     * Validación para asegurar que set_id sea válido.
+     * Validación para asegurar que supertype_id sea válido.
+     * Validación para asegurar que rarity_id sea válido.
+     * Aumenta el printedTotal y total del set asociado.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($card) {
+            if (!Set::find($card->set_id)) {
+                throw new ModelNotFoundException("Set not found");
+            }
+        });
+
+        static::creating(function ($card) {
+            if (!Supertype::find($card->supertype_id)) {
+                throw new ModelNotFoundException("Supertype not found");
+            }
+        });
+
+        static::creating(function ($card) {
+            if (!Rarity::find($card->rarity_id)) {
+                throw new ModelNotFoundException("Rarity not found");
+            }
+        });
+
+        static::creating(function ($card) {
+            if ($set = Set::find($card->set_id)) {
+                // Aumentar el total de cartas en el set
+                $set->increment('printedTotal');
+                $set->increment('total');
+            }
+        });
+
+        static::deleting(function ($card) {
+            if ($set = Set::find($card->set_id)) {
+                // Disminuir el total de cartas en el set
+                $set->decrement('printedTotal');
+                $set->decrement('total');
+            }
+        });
+    }
 
     // Relaciones
     public function set(): belongsTo
