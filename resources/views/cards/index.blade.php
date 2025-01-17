@@ -1,10 +1,11 @@
-@extends('layouts.app') <!-- Extiende la plantilla principal -->
+@extends('layouts.navbar-layout') <!-- Extiende la plantilla principal -->
 
-@section('title', 'Inicio') <!-- Título de la página -->
+@section('title', 'Cards') <!-- Título de la página -->
 
 @section('content')
-<x-navbar />
-<h1>Lista de Cartas</h1>
+    <x-navbar/>
 
-<x-card-list :cards="$cards" />
+    <h1>Lista de Cartas</h1>
+
+    <x-card-list :cards="$cards"/>
 @endsection

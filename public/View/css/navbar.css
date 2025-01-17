@@ -1,0 +1,67 @@
+
+
+/* Barra de navegación fija en la parte superior */
+.navbar {
+    background-color: #212529;
+    padding: 10px 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; /* Asegura que el menú quede encima del contenido */
+}
+
+/* Oculta el botón de menú en pantallas grandes */
+.navbar-toggler {
+    display: none;
+}
+
+/* Contenedor con flexbox para alinear los elementos */
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+/* Ajustar los elementos del navbar */
+.navbar-nav {
+    display: flex;
+    gap: 30px;
+    margin: 0;
+}
+
+/* Quitamos el estilo predeterminado de la lista */
+.navbar-nav .nav-item {
+    list-style: none;
+}
+
+/* Añadimos margen al ultimo elemento de la lista para que no se salga de la pantalla */
+.navbar-nav .nav-item:last-child {
+    margin-right: 50px;
+}
+
+/* Estilo para los enlaces */
+.navbar-nav .nav-link {
+    color: white;
+    font-size: 1rem;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+/* La pestaña en la que nos encontramos se ve en amarillo */
+.navbar-nav .nav-link.active {
+    color: #cca000;
+}
+
+/* Cambio de color al pasar el ratón por encima */
+.navbar-nav .nav-link:hover {
+    color: #cca000;
+}
+
+/* Asegura que el contenido debajo del navbar no quede oculto */
+body {
+    padding-top: 80px;
+}

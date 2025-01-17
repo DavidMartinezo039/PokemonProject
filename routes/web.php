@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
 
 Route::resource('sets', SetController::class);
 Route::get('/sets/{set}/cards', [SetController::class, 'showCards'])->name('sets.cards');
