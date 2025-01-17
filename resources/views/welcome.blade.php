@@ -6,7 +6,9 @@
     <!-- Aquí va tu contenido específico -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
         <div class="container">
-            <a class="navbar-brand" href="#page-top"><img src="{{ asset('View/assets/img/navbar-logo.svg') }}" alt="..." /></a>
+            <a class="navbar-brand" href="#page-top"><img src="{{ asset('View/assets/img/logo.png') }}" alt="..." style="height: 70px; transition: transform 0.3s ease-in-out;"
+                                                          onmouseover="this.style.transform='scale(1.2)'"
+                                                          onmouseout="this.style.transform='scale(1)'"/></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 Menu
                 <i class="fas fa-bars ms-1"></i>
@@ -26,8 +28,8 @@
     <!-- Masthead -->
     <header class="masthead">
         <div class="container">
-            <div class="masthead-subheading">Welcome To Poke Project!</div>
-            <div class="masthead-heading text-uppercase">It's Nice To Meet You</div>
+            <!-- <div class="masthead-subheading">Welcome To Poke Project!</div> -->
+            <div class="masthead-heading text-uppercase">Welcome To Poket Project</div>
             <a class="btn btn-primary btn-xl text-uppercase" href="#services">Tell Me More</a>
         </div>
     </header>
