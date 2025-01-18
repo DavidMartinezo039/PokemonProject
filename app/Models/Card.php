@@ -112,4 +112,9 @@ class Card extends Model
     {
         return $this->belongsToMany(Subtype::class, 'subtypes_cards', 'card_id', 'subtype_id');
     }
+
+    public function userSets(): belongsToMany
+    {
+        return $this->belongsToMany(UserSet::class, 'user_set_cards', 'card_id', 'user_set_id');
+    }
 }

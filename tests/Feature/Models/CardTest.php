@@ -8,6 +8,8 @@ use App\Models\Supertype;
 use App\Models\Rarity;
 use App\Models\Type;
 use App\Models\Subtype;
+use App\Models\User;
+use App\Models\UserSet;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -90,6 +92,26 @@ class CardTest extends TestCase
         $this->assertDatabaseHas('sets', ['id' => $set->id]);
         $this->assertDatabaseHas('supertypes', ['id' => $supertype->id]);
     }
+
+    /** @test */
+    public function it_belongs_to_many_user_sets()
+    {
+        // Crea un usuario y un UserSet
+        $user = User::factory()->create();
+        $userSet = UserSet::factory()->create(['user_id' => $user->id]);
+
+        // Crea una carta y asocia esa carta con el UserSet
+        $card = Card::factory()->create();
+        $userSet->cards()->attach($card);
+
+        // Verifica que la carta esté asociada al UserSet
+        $this->assertCount(1, $userSet->cards);
+        $this->assertTrue($userSet->cards->contains($card));
+
+        // Verifica que la carta también pertenezca al UserSet correspondiente
+        $this->assertTrue($card->userSets->contains($userSet));
+    }
+
 
 
     /** @test */
