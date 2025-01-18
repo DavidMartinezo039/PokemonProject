@@ -17,7 +17,7 @@ class SupertypeFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->randomElement(['Pokémon', 'Trainer', 'Energy']),
+            'name' => $this->faker->word,
         ];
     }
 }

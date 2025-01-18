@@ -71,24 +71,6 @@ class Card extends Model
         parent::boot();
 
         static::creating(function ($card) {
-            if (!Set::find($card->set_id)) {
-                throw new ModelNotFoundException("Set not found");
-            }
-        });
-
-        static::creating(function ($card) {
-            if (!Supertype::find($card->supertype_id)) {
-                throw new ModelNotFoundException("Supertype not found");
-            }
-        });
-
-        static::creating(function ($card) {
-            if (!Rarity::find($card->rarity_id)) {
-                throw new ModelNotFoundException("Rarity not found");
-            }
-        });
-
-        static::creating(function ($card) {
             if ($set = Set::find($card->set_id)) {
                 // Aumentar el total de cartas en el set
                 $set->increment('printedTotal');

@@ -17,7 +17,7 @@ class RarityFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->randomElement(['Common', 'Uncommon', 'Rare', 'Ultra Rare', 'Secret Rare']),
+            'name' => $this->faker->word,
         ];
     }
 }

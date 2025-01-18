@@ -23,6 +23,7 @@ class CardController extends Controller
         return view('cards.show', compact('card'));
     }
 
+    /*
     public function create()
     {
         return view('cards.create');
@@ -63,4 +64,5 @@ class CardController extends Controller
         $card->delete();
         return redirect()->route('cards.index')->with('success', 'Carta eliminada correctamente');
     }
+    */
 }
