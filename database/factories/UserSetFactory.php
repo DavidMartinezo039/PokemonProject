@@ -15,6 +15,7 @@ class UserSetFactory extends Factory
             'description' => $this->faker->sentence,
             'image' => $this->faker->imageUrl(150, 150, 'abstract', true, 'logo'),
             'user_id' => User::factory(),
+            'card_count' => 0,
         ];
     }
 }

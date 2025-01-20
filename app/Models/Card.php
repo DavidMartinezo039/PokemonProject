@@ -66,28 +66,7 @@ class Card extends Model
      * Validación para asegurar que rarity_id sea válido.
      * Aumenta el printedTotal y total del set asociado.
      */
-    protected static function boot()
-    {
-        parent::boot();
 
-        static::creating(function ($card) {
-            if ($set = Set::find($card->set_id)) {
-                // Aumentar el total de cartas en el set
-                $set->increment('printedTotal');
-                $set->increment('total');
-            }
-        });
-
-        static::deleting(function ($card) {
-            if ($set = Set::find($card->set_id)) {
-                // Disminuir el total de cartas en el set
-                $set->decrement('printedTotal');
-                $set->decrement('total');
-            }
-        });
-    }
-
-    // Relaciones
     public function set(): belongsTo
     {
         return $this->belongsTo(Set::class);
@@ -113,7 +92,7 @@ class Card extends Model
         return $this->belongsToMany(Subtype::class, 'subtypes_cards', 'card_id', 'subtype_id');
     }
 
-    public function userSets(): belongsToMany
+    public function userSets(): BelongsToMany
     {
         return $this->belongsToMany(UserSet::class, 'user_set_cards', 'card_id', 'user_set_id');
     }

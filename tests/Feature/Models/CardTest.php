@@ -112,39 +112,22 @@ class CardTest extends TestCase
         $this->assertTrue($card->userSets->contains($userSet));
     }
 
-
-
     /** @test */
-/*
-    public function it_increments_printedTotal_and_total_when_creating_a_card()
+    public function it_associates_a_card_to_a_user_set()
     {
-        $set = Set::factory()->create([
-            'printedTotal' => 0,
-            'total' => 0,
-        ]);
-        Card::factory()->create(['set_id' => $set->id]);
+        // Crear un userSet
+        $userSet = UserSet::factory()->create();
 
-        $set->refresh();
-        $this->assertEquals(1, $set->printedTotal);
-        $this->assertEquals(1, $set->total);
+        // Crear una carta
+        $card = Card::factory()->create();
+
+        // Asociar la carta al userSet
+        $userSet->cards()->attach($card);
+
+        // Comprobar que la carta está asociada correctamente al userSet
+        $this->assertTrue($userSet->cards->contains($card));
+
+        // Comprobar que el número de cartas en el userSet es 1
+        $this->assertEquals(1, $userSet->cards()->count());
     }
-*/
-    /** @test */
-/*
-    public function it_decrements_printedTotal_and_total_when_deleting_a_card()
-    {
-        $set = Set::factory()->create([
-            'printedTotal' => 5,
-            'total' => 5,
-        ]);
-        Card::factory()->create(['set_id' => $set->id]);
-        $card = Card::factory()->create(['set_id' => $set->id]);
-
-        $card->delete();
-
-        $set->refresh();
-        $this->assertEquals(6, $set->printedTotal);
-        $this->assertEquals(6, $set->total);
-    }
-*/
 }

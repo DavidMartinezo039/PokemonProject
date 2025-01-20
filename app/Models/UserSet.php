@@ -11,9 +11,8 @@ class UserSet extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'images', 'user_id'];
+    protected $fillable = ['name', 'description', 'images', 'user_id', 'card_count'];
 
-    // Relación muchos a muchos con cartas
     public function cards(): BelongsToMany
     {
         return $this->belongsToMany(Card::class, 'user_set_cards', 'user_set_id', 'card_id');
