@@ -7,19 +7,11 @@
     <!-- Enlazando el CSS -->
     <link rel="stylesheet" href="{{ asset('View/css/navbar.css') }}">
     <!-- Agrega otros archivos CSS si es necesario -->
+    @yield('additional-css')
 </head>
 <body>
-<header>
-    <!-- Aquí puedes incluir la Navbar común -->
-</header>
-
-<main>
-    @yield('content') <!-- Aquí se cargará el contenido específico de cada página -->
-</main>
-
-<footer>
-    <!-- Footer común -->
-</footer>
+<x-navbar/>
+@yield('content')
 
 <!-- Enlazando el JS -->
 <script src="{{ asset('') }}"></script>
