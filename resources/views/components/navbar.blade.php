@@ -36,7 +36,7 @@
                 @else
                     <!-- Si el usuario no está autenticado, muestra los enlaces de Login y Sign Up -->
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('login') }}" id="login-link">
+                        <a class="nav-link {{ request()->is('login') ? 'active' : '' }}" href="{{ route('login') }}" id="login-link">
                             Login/Register
                         </a>
                     </li>

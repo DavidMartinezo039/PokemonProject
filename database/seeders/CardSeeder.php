@@ -104,11 +104,11 @@ class CardSeeder extends Seeder
                 'rarity_id' => $rarityId,
                 'flavorText' => $cardData['flavorText'] ?? null,
                 'nationalPokedexNumbers' => isset($cardData['nationalPokedexNumbers']) ? json_encode($cardData['nationalPokedexNumbers']) : null,
-                'legalities' => isset($cardData['legalities']) ? json_encode($cardData['legalities']) : null,
+                'legalities' => $cardData['legalities'] ?? null,
                 'regulationMark' => $cardData['regulationMark'] ?? null,
-                'images' => isset($cardData['images']) ? json_encode($cardData['images']) : null,
-                'tcgplayer' => isset($cardData['tcgplayer']) ? json_encode($cardData['tcgplayer']) : null,
-                'cardmarket' => isset($cardData['cardmarket']) ? json_encode($cardData['cardmarket']) : null,
+                'images' => $cardData['images'] ?? null,
+                'tcgplayer' => $cardData['tcgplayer'] ?? null,
+                'cardmarket' => $cardData['cardmarket'] ?? null,
             ]
         );
 

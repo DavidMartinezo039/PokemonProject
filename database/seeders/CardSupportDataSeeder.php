@@ -33,11 +33,11 @@ class CardSupportDataSeeder extends Seeder
                     'series' => $set['series'],
                     'printedTotal' => $set['printedTotal'] ?? null,
                     'total' => $set['total'] ?? null,
-                    'legalities' => json_encode($set['legalities']),
+                    'legalities' => $set['legalities'] ?? null,
                     'ptcgoCode' => $set['ptcgoCode'] ?? null,
                     'releaseDate' => $set['releaseDate'] ?? null,
                     'updatedAt' => $set['updatedAt'] ?? null,
-                    'images' => json_encode($set['images']),
+                    'images' => $set['images'] ?? null,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]
