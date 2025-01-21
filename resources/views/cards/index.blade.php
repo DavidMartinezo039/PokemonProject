@@ -2,8 +2,11 @@
 
 @section('title', 'Cards') <!-- Título de la página -->
 
+@section('additional-css')
+    <link rel="stylesheet" href="{{ asset('css/cards.css') }}">
+@endsection
+
 @section('content')
-    <x-navbar/>
 
     <h1>Lista de Cartas</h1>
 
