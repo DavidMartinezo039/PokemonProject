@@ -37,12 +37,7 @@
                     <!-- Si el usuario no está autenticado, muestra los enlaces de Login y Sign Up -->
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('login') }}" id="login-link">
-                            Login
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('register') }}">
-                            Sign Up
+                            Login/Register
                         </a>
                     </li>
                 @endif

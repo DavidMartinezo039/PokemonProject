@@ -7,45 +7,59 @@
 @endsection
 
 @section('content')
-    <div class="login-wrapper">
-        <div class="login-container">
-            <div class="form-box">
-                <h2>Login</h2>
-                <form method="POST" action="{{ route('login') }}">
-                    @csrf
+    <div class="main">
+        <input type="checkbox" id="chk" aria-hidden="true">
 
-                    <!-- Email Address -->
-                    <div>
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" value="{{ old('email') }}" required autofocus>
-                        @error('email')
-                        <p class="error-message">{{ $message }}</p>
-                        @enderror
-                    </div>
+        <!-- Sign Up Form -->
+        <div class="signup">
+            <form action="{{ route('register') }}" method="POST">
+                @csrf
+                <label for="chk" aria-hidden="true">Sign up</label>
 
-                    <!-- Password -->
-                    <div class="mt-4">
-                        <label for="password">Password</label>
-                        <input type="password" id="password" name="password" required>
-                        @error('password')
-                        <p class="error-message">{{ $message }}</p>
-                        @enderror
-                    </div>
+                <!-- User Name -->
+                <input type="text" name="name" placeholder="User name" value="{{ old('name') }}" required>
+                @error('name')
+                <p class="error-message">{{ $message }}</p>
+                @enderror
 
-                    <!-- Remember Me -->
-                    <div class="block mt-4">
-                        <label for="remember_me">
-                            <input type="checkbox" id="remember_me" name="remember">
-                            Remember me
-                        </label>
-                    </div>
+                <!-- Email -->
+                <input type="email" name="email" placeholder="Email" value="{{ old('email') }}" required>
+                @error('email')
+                <p class="error-message">{{ $message }}</p>
+                @enderror
 
-                    <!-- Submit Button -->
-                    <button type="submit">Login</button>
+                <!-- Password -->
+                <input type="password" name="password" placeholder="Password" required>
+                @error('password')
+                <p class="error-message">{{ $message }}</p>
+                @enderror
 
-                    <p>Don't have an account? <a href="{{ route('register') }}">Sign Up</a></p>
-                </form>
-            </div>
+                <!-- Confirm Password -->
+                <input type="password" name="password_confirmation" placeholder="Confirm Password" required>
+                <button type="submit">Sign up</button>
+            </form>
+        </div>
+
+        <!-- Login Form -->
+        <div class="login">
+            <form action="{{ route('login') }}" method="POST">
+                @csrf
+                <label for="chk" aria-hidden="true">Login</label>
+
+                <!-- Email -->
+                <input type="email" name="email" placeholder="Email" value="{{ old('email') }}" required>
+                @error('email')
+                <p class="error-message">{{ $message }}</p>
+                @enderror
+
+                <!-- Password -->
+                <input type="password" name="password" placeholder="Password" required>
+                @error('password')
+                <p class="error-message">{{ $message }}</p>
+                @enderror
+
+                <button type="submit">Login</button>
+            </form>
         </div>
     </div>
 @endsection
