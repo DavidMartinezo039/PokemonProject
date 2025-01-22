@@ -27,7 +27,9 @@ class SetController extends Controller
     public function showCards($id)
     {
         $set = Set::findOrFail($id);
-        $cards = $set->cards;
+
+        $cards = $set->cards()->paginate(50);
+
 
         if ($cards->isEmpty()) {
             return view('sets.cards', compact('set', 'cards'))->with('message', 'No hay cartas disponibles.');

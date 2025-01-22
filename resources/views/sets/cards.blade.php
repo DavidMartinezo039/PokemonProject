@@ -1,3 +1,14 @@
-<h1>Cartas del Set: {{ $set->name }}</h1>
+@extends('layouts.navbar-layout')
 
-<x-card-list :cards="$cards" />
+@section('title', $set->id . ' - Cards')
+
+@section('additional-css')
+    <link rel="stylesheet" href="{{ asset('View/css/cards.css') }}">
+@endsection
+
+@section('content')
+
+    <x-card-list :cards="$cards"/>
+
+
+@endsection
