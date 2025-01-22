@@ -1,26 +1,15 @@
-<div class="row">
-    @forelse ($cards as $card)
-    <div class="col-md-4">
-        <div class="card">
-            <img src="{{ $card->images['small'] }}" alt="Imagen de {{ $card->name }}">
-
-
-            <div class="card-body">
-                <h5 class="card-title">{{ $card->name }}</h5>
-                <p class="card-text">Rareza:
-                    @if ($card->rarity)
-                        {{ $card->rarity->name }}
-                    @else
-                        <em>No tiene rareza</em>
-                    @endif
-                </p>
-            </div>
+<div class="cards-row">
+    @foreach ($cards as $card)
+        <div class="card-container">
+            <a href="{{ route('cards.show', $card->id) }}" class="card-link">
+                <div class="card">
+                    <img src="{{ $card->images['small'] }}" alt="Imagen de {{ $card->name }}" class="card-img">
+                </div>
+            </a>
         </div>
-    </div>
-    @empty
-        <p>{{ $message }}</p> <!-- Mostrar mensaje si no hay cartas -->
-    @endforelse
+    @endforeach
 </div>
+
 
 <div class="pagination-container">
     {{ $cards->links('vendor.pagination.tailwind') }}

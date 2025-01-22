@@ -1,44 +1,61 @@
-.pagination {
+body {
+    background-image: url("../assets/img/CartasFondo.jpg");
+    background-attachment: fixed; /* Esto hace que el fondo se quede fijo mientras se hace scroll */
+    background-position: center center; /* Centra la imagen */
+    background-size: cover; /* Asegura que el fondo cubra toda la pantalla */
+    height: 100vh; /* Hace que el fondo ocupe toda la altura de la pantalla */
+    margin-top: 100px;
+}
+
+
+
+.cards-row {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
+    margin: 0 auto;
+    max-width: 1200px;
+    perspective: 1500px; /* Perspectiva general aplicada a las cartas */
 }
 
-.pagination-prev, .pagination-next {
-    margin: 0 10px;
-    font-size: 14px;
-}
-
-.pagination-prev a, .pagination-next a {
-    color: #573b8a;
-    text-decoration: none;
-}
-
-.pagination-prev .disabled, .pagination-next .disabled {
-    color: #ccc;
-}
-
-.pagination-links {
-    display: flex;
-    justify-content: center;
-}
-
-.pagination-links a {
-    margin: 0 5px;
-    padding: 5px 10px;
-    color: #573b8a;
-    text-decoration: none;
-}
-
-.pagination-links .current {
-    font-weight: bold;
-    color: #6d44b8;
-}
-
-.pagination-info {
+.card-container {
+    width: calc(20% - 20px); /* 5 cartas por fila con espacio entre ellas */
+    margin-bottom: 20px;
     text-align: center;
-    margin-top: 10px;
-    font-size: 14px;
-    color: #333;
+}
+
+.card {
+    width: 100%;
+    height: auto;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transform-style: preserve-3d; /* Mantiene la preservación 3D */
+    border-radius: 8px;
+    transform: scale(1); /* Mantiene el tamaño por defecto */
+}
+
+.card-link {
+    display: block;
+    text-decoration: none; /* Elimina el subrayado del enlace */
+}
+
+.card-img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.card-img:hover {
+    transform: scale(1.1); /* Aumento de tamaño de la imagen al pasar el cursor */
+    filter: brightness(1.05); /* Brillo más fuerte */
+}
+
+.card:hover {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5); /* Aumenta la sombra para resaltar */
+    transform: scale(1.05); /* Incremento del tamaño al pasar el cursor */
+}
+
+.card:hover .card-img {
+    transform: scale(1.15); /* Aumento más grande de la imagen al hacer hover */
 }

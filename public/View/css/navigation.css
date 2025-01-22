@@ -1,0 +1,52 @@
+.pagination-container {
+    margin-top: 20px;
+    margin-bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.pagination-container .pagination {
+    display: flex;
+    gap: 10px; /* Aumenta el espacio entre los botones */
+    list-style: none;
+    padding: 0;
+}
+
+.pagination-container .pagination a {
+    color: #1C1348; /* Texto oscuro para enlaces */
+    text-decoration: none;
+    padding: 10px 15px; /* Aumenta el tamaño de los botones */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #ffffff; /* Fondo blanco */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.pagination-container .pagination a:hover {
+    background-color: #573b8a; /* Fondo morado oscuro en hover */
+    color: white; /* Cambia el color del texto a blanco en hover */
+}
+
+.current {
+    background-color: #573b8a; /* Fondo azul para el número de página actual */
+    color: white;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-weight: bold; /* Hace el número de página actual más visible */
+}
+
+.pagination-container .pagination span.disabled {
+    color: #ffffff; /* Puntos suspensivos blancos */
+    background-color: #1C1348; /* Fondo oscuro */
+    padding: 10px 15px;
+    border-radius: 5px;
+}
+
+.pagination-info {
+    color: white;
+    margin-top: 20px;
+    text-align: center;
+    font-size: 16px; /* Ajusta el tamaño de texto */
+}

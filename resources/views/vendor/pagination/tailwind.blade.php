@@ -3,9 +3,9 @@
         {{-- Botón de "Previous" --}}
         <span class="pagination-prev">
             @if ($paginator->onFirstPage())
-                <span class="disabled">« Previous</span>
+                <span class="disabled">«</span>
             @else
-                <a href="{{ $paginator->previousPageUrl() }}" rel="prev">« Previous</a>
+                <a href="{{ $paginator->previousPageUrl() }}" rel="prev">«</a>
             @endif
         </span>
 
@@ -29,15 +29,15 @@
         {{-- Botón de "Next" --}}
         <span class="pagination-next">
             @if ($paginator->hasMorePages())
-                <a href="{{ $paginator->nextPageUrl() }}" rel="next">Next »</a>
+                <a href="{{ $paginator->nextPageUrl() }}" rel="next">»</a>
             @else
-                <span class="disabled">Next »</span>
+                <span class="disabled">»</span>
             @endif
         </span>
     </nav>
 
-    {{-- Mostrar el rango actual de elementos --}}
+    {{-- Mostrar el rango actual de elementos
     <div class="pagination-info">
         Showing {{ $paginator->firstItem() }} to {{ $paginator->lastItem() }} of {{ $paginator->total() }} cards
-    </div>
+    </div> --}}
 @endif

@@ -15,5 +15,6 @@
 
 <!-- Enlazando el JS -->
 <script src="{{ asset('') }}"></script>
+@yield('additional-js')
 </body>
 </html>
