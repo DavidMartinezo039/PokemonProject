@@ -20,6 +20,16 @@ class Card extends Model
         'legalities' => 'array',
         'tcgplayer' => 'array',
         'cardmarket' => 'array',
+        'nationalPokedexNumbers' => 'array',
+        'retreatCost' => 'array',
+        'resistances' => 'array',
+        'weaknesses' => 'array',
+        'attacks' => 'array',
+        'abilities' => 'array',
+        'evolvesFrom' => 'array',
+        'evolvesTo' => 'array',
+        'rules' => 'array',
+        'ancientTrait' => 'array',
     ];
 
     protected $fillable = [

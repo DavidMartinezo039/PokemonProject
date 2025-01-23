@@ -20,7 +20,7 @@ class SetFactory extends Factory
     {
         return [
             'id' => $this->faker->uuid(), // ID único
-            'name' => $this->faker->words(3, true), // Nombre del set
+            'name' => $this->faker->unique()->words(3, true), // Nombre del set
             'series' => $this->faker->words(2, true), // Serie a la que pertenece
             'printedTotal' => $this->faker->numberBetween(50, 300), // Total impreso
             'total' => $this->faker->numberBetween(50, 300), // Total de cartas

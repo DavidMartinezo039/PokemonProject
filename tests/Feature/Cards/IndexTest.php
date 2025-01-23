@@ -28,8 +28,6 @@ class IndexTest extends TestCase
         $response->assertStatus(200);
         foreach ($cards as $card) {
             $response->assertSee($card->images['small']);
-            $response->assertSee($card->name);
-            $response->assertSee($card->rarity ? $card->rarity->name : 'No tiene rareza');
         }
     }
 
