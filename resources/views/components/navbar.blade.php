@@ -21,7 +21,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->is('user_sets') ? 'active' : '' }}" href="{{ route('user_sets.index') }}">
+                    <a class="nav-link {{ request()->is('user-sets') ? 'active' : '' }}" href="{{ route('user-sets.index') }}">
                         My Sets
                     </a>
                     <!-- Aquí está la lógica para mostrar el Login/Sign Up o el avatar -->

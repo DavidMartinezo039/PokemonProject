@@ -5,6 +5,7 @@
 @section('additional-css')
     <link rel="stylesheet" href="{{ asset('View/css/cards.css') }}">
     <link rel="stylesheet" href="{{ asset('View/css/navigation.css') }}">
+    <link rel="stylesheet" href="{{ asset('View/css/error-message.css') }}">
 @endsection
 
 @section('additional-js')

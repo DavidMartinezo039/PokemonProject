@@ -15,7 +15,9 @@ class UserSetsControllerTest extends TestCase
     /** @test */
     public function test_add_card_to_user_set()
     {
-        User::factory()->create(['id' => 1]);
+        $user = User::factory()->create(['id' => 1]);
+
+        $this->actingAs($user);
 
         $userSet = UserSet::create([
             'name' => 'Set de prueba',
@@ -25,21 +27,39 @@ class UserSetsControllerTest extends TestCase
 
         $card = Card::factory()->create();
 
-        $response = $this->postJson("/user-sets/{$userSet->id}/add-card/{$card->id}");
+        // Realizamos la solicitud POST para añadir la carta al set
+        $response = $this->post("/user-sets/{$userSet->id}/add-card/{$card->id}");
 
-        $response->assertStatus(200);
-        $response->assertJson([
-            'message' => 'Carta añadida correctamente al set',
+
+        // Verificamos que la redirección se realiza a la vista del set
+        $response->assertRedirect(route('user-sets.show', $userSet->id));
+
+        // Verificamos que el mensaje de éxito está presente en la sesión
+        $response->assertSessionHas('success', 'Carta añadida correctamente al set');
+
+        // Verificamos que la carta fue añadida al set en la tabla intermedia
+        $this->assertDatabaseHas('user_set_cards', [
+            'user_set_id' => $userSet->id,
+            'card_id' => $card->id,
         ]);
 
+        // Verificamos que el contador del set se incrementó
         $userSet->refresh();
         $this->assertEquals(1, $userSet->card_count);
+
+        // Verificamos que la carta se muestra en la vista del set
+        $response = $this->get(route('user-sets.show', $userSet->id));
+        $response->assertSee($card->name); // Cambia 'name' por un atributo relevante de la carta
     }
+
+
 
     /** @test */
     public function test_remove_card_from_user_set()
     {
-        User::factory()->create(['id' => 1]);
+        $user = User::factory()->create(['id' => 1]);
+
+        $this->actingAs($user);
 
         $userSet = UserSet::create([
             'name' => 'Set de prueba',
@@ -49,16 +69,18 @@ class UserSetsControllerTest extends TestCase
 
         $card = Card::factory()->create();
 
-        $userSet->cards()->attach($card->id);
+        $userSet->cards()->attach($card->id);  // Asociar la carta al set
 
-        $response = $this->postJson("/user-sets/{$userSet->id}/remove-card/{$card->id}");
+        $response = $this->post("/user-sets/{$userSet->id}/remove-card/{$card->id}");
 
-        $response->assertStatus(200);
-        $response->assertJson([
-            'message' => 'Carta eliminada correctamente del set',
-        ]);
+        $response->assertRedirect(route('user-sets.show', $userSet->id));
 
+        // Verificar que la respuesta sea la correcta
+        $response->assertSessionHas('success', 'Carta eliminada correctamente al set');
+
+        // Verificar que el set ha sido actualizado correctamente
         $userSet->refresh();
-        $this->assertEquals(0, $userSet->card_count);
+        $this->assertEquals(0, $userSet->card_count);  // Asegurarse de que el contador se ha decrementado
     }
+
 }

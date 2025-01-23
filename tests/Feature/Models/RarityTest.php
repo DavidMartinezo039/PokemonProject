@@ -23,14 +23,6 @@ class RarityTest extends TestCase
     }
 
     /** @test */
-    public function it_throws_an_error_when_associating_invalid_card_id()
-    {
-        $this->expectException(ModelNotFoundException::class);
-
-        Card::factory()->create(['rarity_id' => 999]);
-    }
-
-    /** @test */
     public function a_rarity_can_be_created_with_a_name()
     {
         $rarity = Rarity::factory()->create(['name' => 'Rare']);

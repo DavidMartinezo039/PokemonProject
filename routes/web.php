@@ -23,11 +23,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::resource('user_sets', UserSetController::class);
 
 // Rutas para añadir y eliminar cartas de un set
+    Route::get('user-sets', [UserSetController::class, 'index'])->name('user-sets.index');
     Route::post('user-sets/{userSetId}/add-card/{cardId}', [UserSetController::class, 'addCard'])->name('user-sets.add-card');
     Route::post('user-sets/{userSetId}/remove-card/{cardId}', [UserSetController::class, 'removeCard'])->name('user-sets.remove-card');
+    Route::get('/user-sets/{userSetId}', [UserSetController::class, 'show'])->name('user-sets.show');
 });
 
 require __DIR__.'/auth.php';

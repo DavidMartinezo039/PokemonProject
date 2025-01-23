@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Card;
 use App\Models\UserSet;
 
 class UserSetController extends Controller
@@ -10,7 +11,7 @@ class UserSetController extends Controller
     public function index()
     {
         $sets = UserSet::all(); // Obtener todos los sets
-        return view('user_sets.index', compact('sets'));
+        return view('user-sets.index', compact('sets'));
     }
 
     // Mostrar el formulario para crear un nuevo set
@@ -34,17 +35,17 @@ class UserSetController extends Controller
     }
 
     // Mostrar los detalles de un set
-    public function show($id)
+    public function show($userSetId)
     {
-        $set = UserSet::with('cards')->findOrFail($id); // Cargar las cartas asociadas al set
-        return view('user_sets.show', compact('set'));
+        $set = UserSet::with('cards')->findOrFail($userSetId); // Cargar las cartas asociadas al set
+        return view('user-sets.show', compact('set'));
     }
 
     // Mostrar el formulario para editar un set
     public function edit($id)
     {
         $set = UserSet::findOrFail($id);
-        return view('user_sets.edit', compact('set'));
+        return view('user-sets.edit', compact('set'));
     }
 
     // Actualizar un set
@@ -72,22 +73,29 @@ class UserSetController extends Controller
     }
 
     // Añadir una carta a un set
-    public function addCard($userSetId, $cardId)
+    public function addCard($userSetId,  $cardId)
     {
         $userSet = UserSet::findOrFail($userSetId);
+
         $userSet->cards()->attach($cardId);
+
         $userSet->increment('card_count');
 
-        return redirect()->route('user-sets.show', $userSetId);
+        return redirect()->route('user-sets.show', $userSetId)
+            ->with('success', 'Carta añadida correctamente al set');
+
     }
 
     // Eliminar una carta de un set
     public function removeCard($userSetId, $cardId)
     {
         $userSet = UserSet::findOrFail($userSetId);
+
         $userSet->cards()->detach($cardId);
+
         $userSet->decrement('card_count');
 
-        return redirect()->route('user-sets.show', $userSetId);
+        return redirect()->route('user-sets.show', $userSetId)
+            ->with('success', 'Carta eliminada correctamente al set');;
     }
 }

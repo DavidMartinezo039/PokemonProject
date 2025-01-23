@@ -1,0 +1,10 @@
+.error-message {
+    position: fixed; /* Fija el mensaje en la pantalla */
+    left: 50%; /* Centra horizontalmente */
+    transform: translate(-50%, -50%); /* Ajusta el centro para que esté perfectamente centrado */
+    color: white;
+    font-size: 4rem; /* Aumenta el tamaño del texto */
+    font-weight: bold; /* Hace el texto más destacado */
+    text-align: center;
+    width: 100%;
+}

@@ -61,13 +61,6 @@ class Card extends Model
         'cardmarket',
     ];
 
-    /**
-     * Validación para asegurar que set_id sea válido.
-     * Validación para asegurar que supertype_id sea válido.
-     * Validación para asegurar que rarity_id sea válido.
-     * Aumenta el printedTotal y total del set asociado.
-     */
-
     public function set(): belongsTo
     {
         return $this->belongsTo(Set::class);

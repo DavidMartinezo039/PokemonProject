@@ -1,4 +1,9 @@
 <div class="cards-row">
+    @if($cards->isEmpty())
+        <div class="error-message">
+            <p>No hay cartas disponibles.</p>
+        </div>
+    @else
     @foreach ($cards as $card)
         <div class="card-container">
             <a href="{{ route('cards.show', $card->id) }}" class="card-link">
@@ -8,6 +13,7 @@
             </a>
         </div>
     @endforeach
+    @endif
 </div>
 
 
