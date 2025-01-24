@@ -13,6 +13,75 @@ class UserSetsControllerTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
+    public function test_create_user_set()
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user);
+
+        $response = $this->post('/user-sets', [
+            'name' => 'Nuevo Set',
+        ]);
+
+        $response->assertRedirect(route('user-sets.index'));
+        $response->assertSessionHas('message', 'Set creado con éxito');
+
+        $this->assertDatabaseHas('user_sets', [
+            'name' => 'Nuevo Set',
+            'user_id' => $user->id,
+        ]);
+    }
+
+    /** @test */
+    public function test_edit_user_set()
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user);
+
+        $userSet = UserSet::create([
+            'name' => 'Set Inicial',
+            'user_id' => $user->id,
+        ]);
+
+        $response = $this->put("/user-sets/{$userSet->id}", [
+            'name' => 'Set Editado',
+        ]);
+
+        $response->assertRedirect(route('user-sets.index'));
+        $response->assertSessionHas('success', 'Set actualizado con éxito');
+
+        // Verificar que el UserSet fue actualizado en la base de datos
+        $this->assertDatabaseHas('user_sets', [
+            'id' => $userSet->id,
+            'name' => 'Set Editado',
+        ]);
+    }
+
+    /** @test */
+    public function test_delete_user_set()
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user);
+
+        $userSet = UserSet::create([
+            'name' => 'Set a eliminar',
+            'user_id' => $user->id,
+        ]);
+
+        $response = $this->delete("/user-sets/{$userSet->id}");
+
+        $response->assertRedirect(route('user-sets.index'));
+        $response->assertSessionHas('success', 'Set eliminado con éxito');
+
+        // Verificar que el UserSet fue eliminado de la base de datos
+        $this->assertDatabaseMissing('user_sets', [
+            'id' => $userSet->id,
+        ]);
+    }
+
+    /** @test */
     public function test_add_card_to_user_set()
     {
         $user = User::factory()->create(['id' => 1]);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserSetRequest;
 use App\Models\Card;
 use App\Models\UserSet;
 
@@ -17,22 +18,23 @@ class UserSetController extends Controller
     // Mostrar el formulario para crear un nuevo set
     public function create()
     {
-        return view('user_sets.create');
+        return view('user-sets.create');
     }
 
     // Almacenar un nuevo set
-    public function store(Request $request)
+    public function store(UserSetRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'image' => 'nullable|image',
+        UserSet::create([
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+            'image' => $request->file('image') ? $request->file('image')->store('user-sets') : null,
+            'user_id' => auth()->id(),
+            'card_count' => 0,
         ]);
-
-        $userSet = UserSet::create($request->all());
 
         return redirect()->route('user-sets.index')->with('message', 'Set creado con éxito');
     }
+
 
     // Mostrar los detalles de un set
     public function show($userSetId)
@@ -49,19 +51,17 @@ class UserSetController extends Controller
     }
 
     // Actualizar un set
-    public function update(Request $request, $id)
+    public function update(UserSetRequest $request, $id)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'image' => 'nullable|image',
-        ]);
+        $validated = $request->validated();
 
         $set = UserSet::findOrFail($id);
-        $set->update($request->all());
 
-        return redirect()->route('user-sets.index')->with('message', 'Set actualizado con éxito');
+        $set->update($validated);
+
+        return redirect()->route('user-sets.index')->with('success', 'Set actualizado con éxito');
     }
+
 
     // Eliminar un set
     public function destroy($id)
@@ -69,7 +69,7 @@ class UserSetController extends Controller
         $set = UserSet::findOrFail($id);
         $set->delete();
 
-        return redirect()->route('user-sets.index')->with('message', 'Set eliminado con éxito');
+        return redirect()->route('user-sets.index')->with('success', 'Set eliminado con éxito');
     }
 
     // Añadir una carta a un set
