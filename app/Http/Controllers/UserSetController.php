@@ -67,7 +67,7 @@ class UserSetController extends Controller
     public function destroy($id)
     {
         $set = UserSet::findOrFail($id);
-        
+
         $set->delete();
 
         return redirect()->route('user-sets.index')->with('success', 'Set eliminado con éxito');
