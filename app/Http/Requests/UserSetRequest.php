@@ -38,6 +38,7 @@ class UserSetRequest extends FormRequest
             'image.image' => 'El archivo debe ser una imagen.',
             'image.mimes' => 'La imagen debe estar en formato jpeg, png, jpg o gif.',
             'image.max' => 'La imagen no puede superar los 2MB.',
+            'description.string' => 'La descripción debe ser una cadena de texto.',
         ];
     }
 }

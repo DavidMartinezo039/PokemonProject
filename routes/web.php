@@ -24,16 +24,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
 
-// Rutas para añadir y eliminar cartas de un set
-    Route::get('user-sets', [UserSetController::class, 'index'])->name('user-sets.index');
-    Route::get('/user-sets/{userSetId}', [UserSetController::class, 'show'])->name('user-sets.show');
-    Route::post('user-sets', [UserSetController::class, 'store'])->name('user-sets.store');
-    Route::put('user-sets/{set}', [UserSetController::class, 'update'])->name('user-sets.update');
-    Route::delete('user-sets/{set}', [UserSetController::class, 'destroy'])->name('user-sets.destroy');
+    Route::resource('user-sets', UserSetController::class);
 
-
-    Route::post('user-sets/{userSetId}/add-card/{cardId}', [UserSetController::class, 'addCard'])->name('user-sets.add-card');
-    Route::post('user-sets/{userSetId}/remove-card/{cardId}', [UserSetController::class, 'removeCard'])->name('user-sets.remove-card');
+    Route::post('user-sets/{userSetId}/card/{cardId}', [UserSetController::class, 'addCard'])->name('user-sets.add-card');
+    Route::delete('user-sets/{userSetId}/card/{cardId}', [UserSetController::class, 'removeCard'])->name('user-sets.remove-card');
 });
 
 require __DIR__.'/auth.php';

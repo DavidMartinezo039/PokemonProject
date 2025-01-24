@@ -67,6 +67,7 @@ class UserSetController extends Controller
     public function destroy($id)
     {
         $set = UserSet::findOrFail($id);
+        
         $set->delete();
 
         return redirect()->route('user-sets.index')->with('success', 'Set eliminado con éxito');
@@ -75,7 +76,23 @@ class UserSetController extends Controller
     // Añadir una carta a un set
     public function addCard($userSetId,  $cardId)
     {
-        $userSet = UserSet::findOrFail($userSetId);
+        $userSet = UserSet::find($userSetId);
+        $card = Card::find($cardId);
+
+        if (!$userSet) {
+            return redirect()->route('user-sets.index')
+                ->with('message', 'El set no existe.');
+        }
+
+        if (!$card) {
+            return redirect()->route('user-sets.show', $userSetId)
+                ->with('message', 'La carta no existe.');
+        }
+
+        if ($userSet->cards()->where('card_id', $cardId)->exists()) {
+            return redirect()->route('user-sets.show', $userSetId)
+                ->with('message', 'La carta ya está en este set.');
+        }
 
         $userSet->cards()->attach($cardId);
 
@@ -83,19 +100,33 @@ class UserSetController extends Controller
 
         return redirect()->route('user-sets.show', $userSetId)
             ->with('success', 'Carta añadida correctamente al set');
-
     }
 
     // Eliminar una carta de un set
     public function removeCard($userSetId, $cardId)
     {
-        $userSet = UserSet::findOrFail($userSetId);
+        $userSet = UserSet::find($userSetId);
+        $card = Card::find($cardId);
 
-        $userSet->cards()->detach($cardId);
+        if (!$userSet) {
+            return redirect()->route('user-sets.index')
+                ->with('message', 'El set no existe.');
+        }
 
-        $userSet->decrement('card_count');
+        if (!$card) {
+            return redirect()->route('user-sets.show', $userSetId)
+                ->with('message', 'La carta no existe.');
+        }
+
+        if ($userSet->cards()->where('card_id', $cardId)->exists()) {
+            $userSet->cards()->detach($cardId);
+            $userSet->decrement('card_count');
+        } else {
+            return redirect()->route('user-sets.show', $userSetId)
+                ->with('message', 'La carta no se encuentra en el set.');
+        }
 
         return redirect()->route('user-sets.show', $userSetId)
-            ->with('success', 'Carta eliminada correctamente al set');;
+            ->with('success', 'Carta eliminada correctamente del set');
     }
 }
