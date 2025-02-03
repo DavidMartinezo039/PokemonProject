@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Página Pokémon')</title>
     <!-- Enlazando el CSS -->
-    <link rel="stylesheet" href="{{ asset('View/css/styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('View/css/welcome.css') }}">
     <!-- Agrega otros archivos CSS si es necesario -->
 </head>
 <body>
@@ -23,5 +23,6 @@
 
 <!-- Enlazando el JS -->
 <script src="{{ asset('View/js/scripts.js') }}"></script>
+@yield('additional-js')
 </body>
 </html>

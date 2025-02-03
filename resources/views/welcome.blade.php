@@ -2,6 +2,12 @@
 
 @section('title', 'Inicio') <!-- Título de la página -->
 
+@section('additional-js')
+
+    <script src="{{ asset('View/js/navbar.js') }}"></script>
+
+@endsection
+
 @section('content')
     <x-navbar />
 

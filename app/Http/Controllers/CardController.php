@@ -9,7 +9,7 @@ class CardController extends Controller
 {
     public function index()
     {
-        $cards = Card::paginate(50);
+        $cards = Card::paginate(25);
         $message = $cards->isEmpty() ? 'No cards available' : null;
 
         // Pasa siempre la variable $cards a la vista

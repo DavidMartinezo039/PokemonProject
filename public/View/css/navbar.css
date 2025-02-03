@@ -1,8 +1,10 @@
-
+body {
+    font-family: 'Jost', sans-serif;
+}
 
 /* Barra de navegación fija en la parte superior */
 .navbar {
-    background-color: #212529;
+    background-color: rgba(33, 37, 41, 0.9);
     padding: 10px 20px;
     position: fixed;
     top: 0;
@@ -64,4 +66,48 @@
 /* Asegura que el contenido debajo del navbar no quede oculto */
 body {
     padding-top: 100px;
+}
+
+.hidden {
+    display: none;
+}
+
+.dropdown-menu {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 8px;
+    border-radius: 4px;
+    z-index: 1000;
+}
+
+.text {
+    margin-top: 15px;
+}
+
+.login-button {
+    display: inline-block;
+    padding: 14px 28px !important;
+    background-color: white;
+    text-transform: uppercase;
+    text-align: center;
+    border-radius: 8px;
+    color: #cca000 !important;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.login-button:hover {
+    background-color: #cca000;
+    color: white !important;
+    border-color: white;
+    transform: translateY(-3px) translateX(3px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+}
+
+.login-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(204, 160, 0, 0.4);
 }

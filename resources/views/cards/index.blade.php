@@ -3,13 +3,9 @@
 @section('title', 'Cards')
 
 @section('additional-css')
-    <link rel="stylesheet" href="{{ asset('View/css/cards.css') }}">
+    <link rel="stylesheet" href="{{ asset('View/css/cards/cards.css') }}">
     <link rel="stylesheet" href="{{ asset('View/css/navigation.css') }}">
     <link rel="stylesheet" href="{{ asset('View/css/error-message.css') }}">
-@endsection
-
-@section('additional-js')
-    <script src="{{ asset('View/js/cards.js') }}"></script>
 @endsection
 
 @section('content')

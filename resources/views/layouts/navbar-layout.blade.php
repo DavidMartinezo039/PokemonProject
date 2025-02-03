@@ -8,13 +8,14 @@
     <link rel="stylesheet" href="{{ asset('View/css/navbar.css') }}">
     <!-- Agrega otros archivos CSS si es necesario -->
     @yield('additional-css')
+
 </head>
 <body>
 <x-navbar/>
 @yield('content')
 
 <!-- Enlazando el JS -->
-<script src="{{ asset('') }}"></script>
+<script src="{{ asset('/View/js/navbar.js') }}"></script>
 @yield('additional-js')
 </body>
 </html>

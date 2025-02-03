@@ -1,13 +1,11 @@
 body {
-    background-image: url("../assets/img/CartasFondo.jpg");
+    background-image: url("../../assets/img/CartasFondo.jpg");
     background-attachment: fixed; /* Esto hace que el fondo se quede fijo mientras se hace scroll */
     background-position: center center; /* Centra la imagen */
     background-size: cover; /* Asegura que el fondo cubra toda la pantalla */
     height: 100vh; /* Hace que el fondo ocupe toda la altura de la pantalla */
     margin-top: 100px;
 }
-
-
 
 .cards-row {
     display: flex;
