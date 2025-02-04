@@ -1,0 +1,173 @@
+/* General Styles */
+body {
+    font-family: 'Inter', sans-serif;
+    margin-top: 100px;
+    background-color: #f3f4f6;
+    color: #374151;
+    margin-left: 10vw;
+}
+
+/* Header */
+header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+header p {
+    margin-top: 0.25rem;
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+
+/* Sections */
+section {
+    background-color: #ffffff;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Input & Textarea */
+input, textarea {
+    width: 80%;
+    margin-right: 20%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    background-color: #f9fafb;
+    transition: border 0.2s, background-color 0.2s;
+}
+
+input:focus, textarea:focus {
+    border-color: #2563eb;
+    background-color: #ffffff;
+    outline: none;
+    box-shadow: 0 0 4px rgba(37, 99, 235, 0.4);
+}
+
+label {
+    font-weight: 500;
+    color: #374151;
+}
+
+/* Buttons */
+button, .x-primary-button, .x-danger-button, .x-secondary-button {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease-in-out;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+/* Primary Button */
+button, .x-primary-button {
+    background-color: #2563eb;
+    color: white;
+    border: none;
+}
+
+button:hover, .x-primary-button:hover {
+    background-color: #1e40af;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(37, 99, 235, 0.2);
+}
+
+/* Danger Button */
+.x-danger-button {
+    background-color: #dc2626;
+    color: white;
+    border: none;
+}
+
+.x-danger-button:hover {
+    background-color: #b91c1c;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(185, 28, 28, 0.2);
+}
+
+/* Secondary Button */
+.x-secondary-button {
+    background-color: #e5e7eb;
+    color: #374151;
+}
+
+.x-secondary-button:hover {
+    background-color: #9ca3af;
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 10px;
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    min-width: 180px;
+    padding: 8px 0;
+    z-index: 1000;
+}
+
+/* Dropdown Links */
+.dropdown-menu button {
+    display: block;
+    width: 90%; /* Ajustado al 90% */
+    margin: 5px auto;
+    padding: 10px;
+    color: #374151;
+    background: none;
+    border: none;
+    text-align: left;
+    font-size: 14px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease-in-out;
+}
+
+/* Hover Effect */
+.dropdown-menu button:hover {
+    background-color: #f3f4f6;
+    color: #1e40af;
+    font-weight: bold;
+}
+
+/* Error Messages */
+.text-gray-600, .text-gray-400 {
+    font-size: 0.875rem;
+}
+
+input + .mt-2, .x-input-error {
+    color: #dc2626;
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+/* Modal Styles */
+.modal {
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    max-width: 500px;
+    margin: auto;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Responsive Fixes */
+@media (max-width: 768px) {
+    body {
+        margin-top: 80px;
+    }
+
+    .dropdown-menu {
+        right: 5px;
+        min-width: 150px;
+    }
+}
