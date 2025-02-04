@@ -2,6 +2,12 @@
 
 @section('title', 'Inicio') <!-- Título de la página -->
 
+@section('additional-css')
+
+    <link rel="stylesheet" href="{{ asset('View/css/navbar.css') }}">
+
+@endsection
+
 @section('additional-js')
 
     <script src="{{ asset('View/js/navbar.js') }}"></script>

@@ -7,6 +7,7 @@
     <!-- Enlazando el CSS -->
     <link rel="stylesheet" href="{{ asset('View/css/welcome.css') }}">
     <!-- Agrega otros archivos CSS si es necesario -->
+    @yield('additional-css')
 </head>
 <body>
 <header>

@@ -35,23 +35,26 @@
                         </svg>
                     </button>
 
-                    <div class="dropdown-menu hidden" id="user-dropdown-menu">
+                        <div class="dropdown-menu hidden" id="user-dropdown-menu">
                             <div class="py-1">
-                                <x-dropdown-link :href="route('profile.edit')">
-                                    {{ __('Profile') }}
-                                </x-dropdown-link>
-
-                                <form method="POST" action="{{ route('logout') }}">
+                                <!-- Enlace al perfil -->
+                                <form action="{{ route('profile.edit') }}" method="GET">
                                     @csrf
+                                    <button type="submit" class="block w-[90%] mx-auto px-4 py-2 text-gray-700 rounded-md hover:bg-gray-100 text-left">
+                                        {{ __('Profile') }}
+                                    </button>
+                                </form>
 
-                                    <x-dropdown-link :href="route('logout')"
-                                                     onclick="event.preventDefault();
-                                         this.closest('form').submit();">
+                                <!-- Formulario de cierre de sesión -->
+                                <form method="POST" action="{{ route('logout') }}" class="mt-1">
+                                    @csrf
+                                    <button type="submit" class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 rounded">
                                         {{ __('Log Out') }}
-                                    </x-dropdown-link>
+                                    </button>
                                 </form>
                             </div>
                         </div>
+
                     </li>
                 @else
                     <li class="nav-item">

@@ -1,5 +1,4 @@
 body {
-    font-family: 'Jost', sans-serif;
     overflow-x: hidden;
 }
 
@@ -17,105 +16,7 @@ body {
 
 /* Navbar con fondo oscuro y animación al hacer scroll */
 #mainNav.navbar-shrink {
-    background-color: rgba(33, 37, 41, 0.9);
-}
-
-/* Oculta el botón de menú en pantallas grandes */
-.navbar-toggler {
-    display: none;
-}
-
-/* Contenedor flexbox para alinear los elementos */
-.container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-}
-
-/* Ajuste de elementos del navbar */
-.navbar-nav {
-    display: flex;
-    gap: 30px;
-    margin: 0;
-}
-
-/* Quitamos el estilo predeterminado de la lista */
-.navbar-nav .nav-item {
-    list-style: none;
-}
-
-/* Añadimos margen al último elemento de la lista para que no se salga de la pantalla */
-.navbar-nav .nav-item:last-child {
-    margin-right: 50px;
-}
-
-/* Estilo para los enlaces */
-.navbar-nav .nav-link {
-    color: white;
-    font-size: 1rem;
-    text-transform: uppercase;
-    padding: 5px 10px;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-/* La pestaña activa se ve en amarillo */
-.navbar-nav .nav-link.active {
-    color: #cca000;
-}
-
-/* Cambio de color al pasar el ratón */
-.navbar-nav .nav-link:hover {
-    color: #cca000;
-}
-
-/* Ocultar elementos con la clase hidden */
-.hidden {
-    display: none;
-}
-
-/* Estilos para el menú desplegable */
-.dropdown-menu {
-    position: absolute;
-    background-color: white;
-    border: 1px solid #ccc;
-    padding: 8px;
-    border-radius: 4px;
-    z-index: 1000;
-}
-
-/* Margen superior para el texto */
-.text {
-    margin-top: 15px;
-}
-
-/* Botón de login */
-.login-button {
-    display: inline-block;
-    padding: 14px 28px !important;
-    background-color: white;
-    text-transform: uppercase;
-    text-align: center;
-    border-radius: 8px;
-    color: #cca000 !important;
-    font-size: 1rem;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-}
-
-.login-button:hover {
-    background-color: #cca000;
-    color: white !important;
-    border-color: white;
-    transform: translateY(-3px) translateX(3px);
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
-}
-
-.login-button:focus {
-    outline: none;
-    box-shadow: 0 0 0 4px rgba(204, 160, 0, 0.4);
+    background-color: rgba(33, 37, 41, 0.5);
 }
 
 /* Cuando hay barra lateral, se ajusta el masthead */

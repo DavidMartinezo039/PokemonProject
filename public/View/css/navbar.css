@@ -4,7 +4,7 @@ body {
 
 /* Barra de navegación fija en la parte superior */
 .navbar {
-    background-color: rgba(33, 37, 41, 0.9);
+    background-color: rgba(33, 37, 41, 0.6);
     padding: 10px 20px;
     position: fixed;
     top: 0;
@@ -63,22 +63,48 @@ body {
     color: #cca000;
 }
 
-/* Asegura que el contenido debajo del navbar no quede oculto */
-body {
-    padding-top: 100px;
-}
-
 .hidden {
     display: none;
 }
 
+/* Estilos generales del menú desplegable */
 .dropdown-menu {
     position: absolute;
+    top: 100%; /* Justo debajo del botón */
+    right: 50px; /* Desplazado ligeramente hacia la izquierda */
     background-color: white;
     border: 1px solid #ccc;
-    padding: 8px;
-    border-radius: 4px;
+    padding: 10px;
+    border-radius: 6px;
     z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra elegante */
+    min-width: 150px; /* Ajuste del ancho */
+}
+
+/* Mostrar el menú cuando está activo */
+.dropdown-menu.show {
+    display: block;
+}
+
+/* Estilos de los enlaces dentro del menú */
+.dropdown-menu button {
+    display: block;
+    width: 100%;
+    padding: 8px 12px;
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease-in-out;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.dropdown-menu button:hover {
+    background-color: #0056b3; /* Azul oscuro */
+    color: white; /* Hace que el texto resalte */
 }
 
 .text {
