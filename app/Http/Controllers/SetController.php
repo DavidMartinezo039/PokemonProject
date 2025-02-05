@@ -9,13 +9,17 @@ class SetController extends Controller
 {
     public function index()
     {
-        $sets = Set::all();
+        // Obtener los sets ordenados por fecha de lanzamiento
+        $sets = Set::orderBy('releaseDate', 'desc')->get();
+
+        // Agrupar los sets por serie
+        $setsBySeries = $sets->groupBy('series');
 
         if ($sets->isEmpty()) {
             return view('sets.index')->with('message', 'No sets available');
         }
 
-        return view('sets.index', compact('sets'));
+        return view('sets.index', compact('setsBySeries'));
     }
 
     public function show($id)

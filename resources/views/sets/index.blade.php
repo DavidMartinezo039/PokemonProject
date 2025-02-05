@@ -1,31 +1,33 @@
-@extends('layouts.navbar-layout') <!-- Extiende la plantilla principal -->
+@extends('layouts.navbar-layout')
 
-@section('title', 'Sets')
+@section('title', 'sets')
 
 @section('additional-css')
-    <link rel="stylesheet" href="{{ asset('css/sets.css') }}">
+    <link rel="stylesheet" href="{{ asset('View/css/Sets/sets.css') }}">
 @endsection
 
 @section('content')
-
-    <h1>Lista de Sets</h1>
-
-@if(isset($message))
-    <div class="alert alert-info">
-        {{ $message }}
+    <div class="sets-container">
+        @if(isset($message))
+            <div class="alert alert-info">
+                {{ $message }}
+            </div>
+        @else
+            @foreach ($setsBySeries as $serieName => $sets)
+                <div class="serie-group">
+                    <div class="serie-name">{{ $serieName }}</div>
+                    <div class="sets-grid">
+                        @foreach ($sets as $set)
+                            <a href="{{ route('sets.show', $set->id) }}" class="set-card">
+                                <div>
+                                    <img src="{{ $set->images['logo'] }}" alt="{{ $set->name }}">
+                                    <p>{{ $set->name }}</p>
+                                </div>
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+            @endforeach
+        @endif
     </div>
-@else
-    <ul>
-        @foreach ($sets as $set)
-            <li>
-                <a href="{{ route('sets.show', $set->id) }}">
-                    <img src="{{ $set->images['logo'] }}" alt="Logo de {{ $set->name }}" style="width: 100px; height: 100px; object-fit: contain;">
-                </a>
-            </li>
-        @endforeach
-    </ul>
-@endif
-
-<a href="{{ route('sets.create') }}">Crear nuevo set</a>
-
 @endsection

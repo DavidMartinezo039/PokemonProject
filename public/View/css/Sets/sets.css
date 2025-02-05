@@ -1,0 +1,85 @@
+body {
+    background-image: url("../../assets/img/CartasFondo.jpg");
+    background-attachment: fixed;
+    background-position: center center;
+    background-size: cover;
+    height: 100vh;
+    margin-top: 100px;
+}
+
+.serie-group {
+    margin-bottom: 30px;
+}
+
+.serie-name {
+    width: 90%;
+    margin-left: 5%;
+    font-size: 24px;
+    font-weight: bold;
+    color: #ffffff;
+    text-align: center;
+    padding: 5px;
+    margin-bottom: 20px; /* Separación de los sets debajo */
+    letter-spacing: 1px; /* Un poco de espacio entre las letras */
+    border-bottom: 2px solid white;
+}
+
+.sets-container {
+    text-align: center;
+    padding: 20px;
+}
+
+.sets-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+}
+
+.set-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(174, 174, 174, 0.4); /* Color más suave y transparente */
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease-in-out;
+    text-decoration: none;
+    color: white;
+}
+
+.set-card:hover {
+    transform: scale(1.05);
+}
+
+.set-card img {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+}
+
+.set-card p {
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.create-set {
+    margin-top: 20px;
+}
+
+.create-set .btn {
+    background: #ffcc00;
+    color: #000;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.create-set .btn:hover {
+    background: #e6b800;
+}
