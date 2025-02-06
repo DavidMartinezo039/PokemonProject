@@ -7,6 +7,26 @@ body {
     margin-top: 100px;
 }
 
+.set-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.set-logo {
+    width: auto;
+    height: 150px;
+    cursor: pointer;
+    margin: 40px;
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.set-logo:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+}
+
 .cards-row {
     display: flex;
     flex-wrap: wrap;

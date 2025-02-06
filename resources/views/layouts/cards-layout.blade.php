@@ -14,9 +14,9 @@
 @include('layouts.navbar-layout')
 
 <main>
+
     <x-card-list :cards="$cards"/>
 
-    @yield('content')
 </main>
 
 <script src="{{ asset('/View/js/cards.js') }}"></script>
