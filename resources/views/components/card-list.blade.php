@@ -1,7 +1,7 @@
 <div class="cards-row">
-    @if($cards->isEmpty())
+    @if(session('message'))
         <div class="error-message">
-            <p>No hay cartas disponibles.</p>
+            <p>{{ session('message') }}</p>
         </div>
     @else
     @foreach ($cards as $card)

@@ -10,10 +10,11 @@ class CardController extends Controller
     public function index()
     {
         $cards = Card::paginate(25);
-        $message = $cards->isEmpty() ? 'No cards available' : null;
+        if ($cards->isEmpty()) {
+            session()->flash('message', 'No hay cartas disponibles.');
+        }
 
-        // Pasa siempre la variable $cards a la vista
-        return view('cards.index', compact('cards', 'message'));
+        return view('cards.index', compact('cards'));
     }
 
 

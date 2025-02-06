@@ -32,10 +32,34 @@ class SetController extends Controller
     {
         $set = Set::findOrFail($id);
 
-        $cards = $set->cards()->orderByRaw('CAST(number AS UNSIGNED)')->get();
+        $cards = $set->cards()->get();
+
+        // Ordenamos las cartas en PHP después de obtenerlas
+        $cards = $cards->sort(function ($a, $b) {
+            // Primero intentamos comparar las cartas numéricas
+            if (preg_match('/^\d+$/', $a->number) && preg_match('/^\d+$/', $b->number)) {
+                return (int)$a->number <=> (int)$b->number;
+            }
+
+            // Si ambos tienen letras, primero comparamos las letras y luego los números
+            if (preg_match('/^[a-zA-Z]+[0-9]+$/', $a->number) && preg_match('/^[a-zA-Z]+[0-9]+$/', $b->number)) {
+                $lettersA = preg_replace('/[^a-zA-Z]/', '', $a->number);
+                $numbersA = (int)preg_replace('/\D/', '', $a->number);
+                $lettersB = preg_replace('/[^a-zA-Z]/', '', $b->number);
+                $numbersB = (int)preg_replace('/\D/', '', $b->number);
+
+                if ($lettersA == $lettersB) {
+                    return $numbersA <=> $numbersB;
+                }
+
+                return strcmp($lettersA, $lettersB);
+            }
+
+            return 0;
+        });
 
         if ($cards->isEmpty()) {
-            return view('sets.cards', compact('set', 'cards'))->with('message', 'No hay cartas disponibles.');
+            session()->flash('message', 'No hay cartas disponibles.');
         }
 
         return view('sets.cards', compact('set', 'cards'));
