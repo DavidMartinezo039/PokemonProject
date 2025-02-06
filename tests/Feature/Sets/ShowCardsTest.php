@@ -1,59 +1,42 @@
 <?php
 
-namespace Sets;
-
 use App\Models\Card;
 use App\Models\Set;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
-class ShowCardsTest extends TestCase
-{
-    use RefreshDatabase;
+it('returns a successful response when showing cards', function () {
+    $set = Set::factory()->create();
+    $cards = Card::factory(5)->create(['set_id' => $set->id]);
 
-    /** @test */
-    public function test_show_cards_returns_successful_response()
-    {
-        $set = Set::factory()->create();
-        $cards = Card::factory(5)->create(['set_id' => $set->id]);
+    $response = $this->get(route('sets.cards', $set));
 
-        $response = $this->get(route('sets.cards', $set, $cards));
+    $response->assertStatus(200);
+});
 
-        $response->assertStatus(200);
+it('displays the correct cards', function () {
+    $set = Set::factory()->create();
+    $cards = Card::factory(3)->create(['set_id' => $set->id]);
+
+    $response = $this->get(route('sets.cards', $set));
+
+    foreach ($cards as $card) {
+        $response->assertSee($card->name);
+        $response->assertSee($card->images['small']);
     }
+});
 
-    /** @test */
-    public function test_show_cards_displays_correct_cards()
-    {
-        $set = Set::factory()->create();
-        $cards = Card::factory(3)->create(['set_id' => $set->id]);
+it('displays a message when no cards are available', function () {
+    $set = Set::factory()->create();
 
-        $response = $this->get(route('sets.cards', $set, $cards));
+    $response = $this->get(route('sets.cards', $set));
 
-        foreach ($cards as $card) {
-            $response->assertSee($card->name);
-            $response->assertSee($card->images['small']);
-        }
-    }
+    $response->assertStatus(200);
+    $response->assertSee('No hay cartas disponibles.');
+});
 
-    /** @test */
-    public function test_show_cards_displays_no_cards_message_when_empty()
-    {
-        $set = Set::factory()->create();
+it('returns a 404 for a nonexistent set', function () {
+    $nonExistentSetId = 999;
 
-        $response = $this->get(route('sets.cards', $set));
+    $response = $this->get(route('sets.cards', $nonExistentSetId));
 
-        $response->assertStatus(200);
-        $response->assertSee('No hay cartas disponibles.');
-    }
-
-    /** @test */
-    public function test_show_cards_returns_404_for_nonexistent_set()
-    {
-        $nonExistentSetId = 999;
-
-        $response = $this->get(route('sets.cards', $nonExistentSetId));
-
-        $response->assertStatus(404);
-    }
-}
+    $response->assertStatus(404);
+});

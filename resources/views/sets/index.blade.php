@@ -18,7 +18,7 @@
                     <div class="serie-name">{{ $serieName }}</div>
                     <div class="sets-grid">
                         @foreach ($sets as $set)
-                            <a href="{{ route('sets.show', $set->id) }}" class="set-card">
+                            <a href="{{ route('sets.cards', $set->id) }}" class="set-card">
                                 <div>
                                     <img src="{{ $set->images['logo'] }}" alt="{{ $set->name }}">
                                     <p>{{ $set->name }}</p>

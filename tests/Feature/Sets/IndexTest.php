@@ -48,8 +48,8 @@ class IndexTest extends TestCase
 
         $response->assertStatus(200);
 
-        $response->assertSeeHtml('<a href="' . route('sets.show', $set->id) . '">');
-        $response = $this->get(route('sets.show', $set->id));
+        $response->assertSeeHtml('<a href="' . route('sets.cards', $set->id) . '" class="set-card">');
+        $response = $this->get(route('sets.cards', $set->id));
 
         $response->assertStatus(200);
     }

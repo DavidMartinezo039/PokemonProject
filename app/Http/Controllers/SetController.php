@@ -32,8 +32,7 @@ class SetController extends Controller
     {
         $set = Set::findOrFail($id);
 
-        $cards = $set->cards()->paginate(50);
-
+        $cards = $set->cards()->orderByRaw('CAST(number AS UNSIGNED)')->get();
 
         if ($cards->isEmpty()) {
             return view('sets.cards', compact('set', 'cards'))->with('message', 'No hay cartas disponibles.');

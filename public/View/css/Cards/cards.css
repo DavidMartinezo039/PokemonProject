@@ -10,7 +10,7 @@ body {
 .cards-row {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: 20px;
     margin: 0 auto;
     max-width: 1200px;
@@ -45,15 +45,10 @@ body {
 }
 
 .card-img:hover {
-    transform: scale(1.1); /* Aumento de tamaño de la imagen al pasar el cursor */
+    transform: scale(1.15); /* Aumento de tamaño de la imagen al pasar el cursor */
     filter: brightness(1.05); /* Brillo más fuerte */
 }
 
-.card:hover {
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5); /* Aumenta la sombra para resaltar */
-    transform: scale(1.05); /* Incremento del tamaño al pasar el cursor */
-}
-
-.card:hover .card-img {
-    transform: scale(1.15); /* Aumento más grande de la imagen al hacer hover */
+.no-hover .card-img:hover {
+    transform: none;
 }

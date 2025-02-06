@@ -16,7 +16,9 @@
     @endif
 </div>
 
+@if ($cards instanceof \Illuminate\Pagination\LengthAwarePaginator && $cards->hasPages())
+    <div class="pagination-container">
+        {{ $cards->links('vendor.pagination.tailwind') }}
+    </div>
+@endif
 
-<div class="pagination-container">
-    {{ $cards->links('vendor.pagination.tailwind') }}
-</div>
