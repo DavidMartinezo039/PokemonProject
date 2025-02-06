@@ -64,6 +64,8 @@ class SetController extends Controller
 
         return view('sets.cards', compact('set', 'cards'));
     }
+    /*
+
 
     public function create()
     {
@@ -103,4 +105,7 @@ class SetController extends Controller
         $set->delete();
         return redirect()->route('sets.index')->with('success', 'Set eliminado correctamente');
     }
+
+
+    */
 }
