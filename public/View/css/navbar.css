@@ -38,6 +38,11 @@ body {
     list-style: none;
 }
 
+/* Añadimos margen al logo para que quede mas centrado */
+.navbar-brand {
+    margin-left: 25px;
+}
+
 /* Añadimos margen al ultimo elemento de la lista para que no se salga de la pantalla */
 .navbar-nav .nav-item:last-child {
     margin-right: 50px;

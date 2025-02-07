@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Página Pokémon')</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('View/assets/img/logo.png') }}">
+
     <!-- Enlazando el CSS -->
     <link rel="stylesheet" href="{{ asset('View/css/navbar.css') }}">
     <!-- Agrega otros archivos CSS si es necesario -->

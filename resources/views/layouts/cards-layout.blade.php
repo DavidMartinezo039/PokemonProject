@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title')</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('View/assets/img/logo.png') }}">
 
     <link rel="stylesheet" href="{{ asset('View/css/Cards/cards.css') }}">
     <link rel="stylesheet" href="{{ asset('View/css/navigation.css') }}">
