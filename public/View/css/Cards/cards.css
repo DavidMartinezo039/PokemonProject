@@ -50,6 +50,7 @@ body {
     transform-style: preserve-3d; /* Mantiene la preservación 3D */
     border-radius: 8px;
     transform: scale(1); /* Mantiene el tamaño por defecto */
+    cursor: pointer;
 }
 
 .card-link {
@@ -71,4 +72,106 @@ body {
 
 .no-hover .card-img:hover {
     transform: none;
+}
+
+/* Estilos del modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    justify-content: center;
+    align-items: center;
+}
+
+/* Contenedor del contenido del modal */
+.modal-content {
+    position: relative; /* Permite posicionar la X dentro */
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    max-width: 600px;
+    width: 90%;
+    height: 55vh;
+    gap: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Botón de cerrar (X) */
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 30px; /* Más grande */
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.close:hover {
+    color: red;
+    transform: scale(1.2);
+}
+
+/* Imagen de la carta */
+.modal-card-img {
+    max-width: 45%;
+    height: auto;
+    border-radius: 17px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.7);
+}
+
+/* Contenedor de los detalles de la carta */
+.modal-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra todo en su espacio */
+    justify-content: center;
+    text-align: center;
+}
+
+/* Título del modal */
+.modal-details h2 {
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+/* Información de la carta */
+.modal-details p {
+    font-size: 1rem;
+    margin: 5px 0;
+    color: #555;
+}
+
+/* Botón más alto y centrado */
+.modal-details .view-card-button {
+    display: block;
+    width: 70%; /* Centra mejor el botón */
+    padding: 14px 20px;
+    margin-top: 15px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-align: center;
+    background-color: #ffcc00;
+    color: #000;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.modal-details .view-card-button:hover {
+    background-color: #e6b800;
+    transform: scale(1.05);
 }

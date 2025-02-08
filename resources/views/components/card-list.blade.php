@@ -4,15 +4,21 @@
             <p>{{ session('message') }}</p>
         </div>
     @else
-    @foreach ($cards as $card)
-        <div class="card-container">
-            <a href="{{ route('cards.show', $card->id) }}" class="card-link">
-                <div class="card">
-                    <img src="{{ $card->images['small'] }}" alt="Imagen de {{ $card->name }}" class="card-img">
+        @foreach ($cards as $card)
+            <div class="card-container">
+                <div class="card-link"
+                     data-id="{{ $card->id }}"
+                     data-name="{{ $card->name }}"
+                     data-image="{{ $card->images['large'] }}"
+                     data-rarity="{{ $card->rarity->name ?? 'No tiene rareza' }}"
+                     data-set="{{ $card->set->name ?? 'No asignado' }}"
+                     onclick="openModal(this)">
+                    <div class="card">
+                        <img src="{{ $card->images['small'] }}" alt="Imagen de {{ $card->name }}" class="card-img">
+                    </div>
                 </div>
-            </a>
-        </div>
-    @endforeach
+            </div>
+        @endforeach
     @endif
 </div>
 
@@ -21,4 +27,25 @@
         {{ $cards->links('vendor.pagination.tailwind') }}
     </div>
 @endif
+
+<!-- Modal para mostrar la carta en grande -->
+<div id="cardModal" class="modal" onclick="clickOutside(event)">
+    <div class="modal-content">
+        <!-- Imagen de la carta -->
+        <img id="modalCardImage" src="" alt="Carta" class="modal-card-img">
+
+        <!-- Contenedor de los detalles -->
+        <div class="modal-details">
+            <h2 id="modalCardName"></h2>
+            <p><strong>Rareza:</strong> <span id="modalCardRarity"></span></p>
+            <p><strong>Set:</strong> <span id="modalCardSet"></span></p>
+
+            <!-- Botón grande y llamativo -->
+            <a id="viewCardButton" class="view-card-button" href="#">Ver más detalles</a>
+        </div>
+
+        <!-- Botón de cerrar -->
+        <span class="close" onclick="closeModal()">&times;</span>
+    </div>
+</div>
 
