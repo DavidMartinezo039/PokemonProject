@@ -20,7 +20,7 @@ class CardController extends Controller
 
     public function show($id)
     {
-        $card = Card::with('set')->findOrFail($id);
+        $card = Card::with(['set', 'types', 'subtypes'])->findOrFail($id);
         return view('cards.show', compact('card'));
     }
 
