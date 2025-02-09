@@ -4,12 +4,13 @@
 
 @section('additional-css')
     <link rel="stylesheet" href="{{ asset('View/css/Sets/sets.css') }}">
+    <link rel="stylesheet" href="{{ asset('View/css/error-message.css') }}">
 @endsection
 
 @section('content')
     <div class="sets-container">
         @if(isset($message))
-            <div class="alert alert-info">
+            <div class="error-message">
                 {{ $message }}
             </div>
         @else

@@ -1,25 +1,37 @@
-<div class="container">
-    <h1>Detalles del Set: {{ $set->name }}</h1>
+@extends('layouts.navbar-layout')
 
-    <!-- Información del Set -->
-    <div class="card">
-        <div class="card-body">
-            <h3>{{ $set->name }}</h3>
-            <p><strong>Fecha de lanzamiento:</strong> {{ $set->releaseDate }}</p>
-            <p><strong>Serie:</strong> {{ $set->series }}</p>
-            <p><strong>Cartas totales:</strong> {{ $set->printedTotal }}</p>
-            <p><strong>Cartas totales incluyendo especiales:</strong> {{ $set->total }}</p>
-            <p><strong>Codigo de coleccion de TCG:</strong> {{ $set->ptcgoCode }}</p>
+@section('title', 'Set Details')
 
-            <!-- Mostrar las imágenes con tamaño ajustado -->
-            <div class="mb-4">
-                <h4>Logo:</h4>
-                <img src="{{ $set->images['logo'] }}" alt="Logo de {{ $set->name }}" style="width: 100px; height: 100px; object-fit: contain;">
-            </div>
-            <div>
-                <h4>Símbolo:</h4>
-                <img src="{{ $set->images['symbol'] }}" alt="Símbolo de {{ $set->name }}" style="width: 100px; height: 100px; object-fit: contain;">
+@section('additional-css')
+    <link rel="stylesheet" href="{{ asset('View/css/Sets/show-set.css') }}">
+    <link rel="stylesheet" href="{{ asset('View/css/navigation.css') }}">
+    <link rel="stylesheet" href="{{ asset('View/css/error-message.css') }}">
+@endsection
+
+@section('content')
+    <div class="show-container">
+        <div class="card">
+            <div class="img-container">
+                <img src="{{ $set->images['logo'] }}" alt="Logo de {{ $set->name }}" class="img-fluid">
             </div>
         </div>
+        <div class="info-box">
+            <h1>{{ $set->name }}</h1>
+
+            <div class="inline-info">
+                <p><strong>Fecha de lanzamiento:</strong> {{ $set->releaseDate }}</p>
+                <p><strong>Serie:</strong> {{ $set->series }}</p>
+                <p><strong>Cartas totales:</strong> {{ $set->printedTotal }}</p>
+                <p><strong>Cartas totales incluyendo especiales:</strong> {{ $set->total }}</p>
+                <p><strong>Código de coleccion de TCG:</strong> {{ $set->ptcgoCode }}</p>
+            </div>
+
+            <h4>Símbolo:</h4>
+            <div class="set-symbol-img-container">
+                <img src="{{ $set->images['symbol'] }}" alt="Símbolo de {{ $set->name }}" class="set-symbol-img">
+            </div>
+
+            <a href="{{ route('sets.index') }}" class="btn btn-primary">Back to list</a>
+        </div>
     </div>
-</div>
+@endsection
