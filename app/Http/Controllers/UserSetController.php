@@ -63,35 +63,11 @@ class UserSetController extends Controller
         return view('user-sets.show', compact('userSet'));
     }
 
-    public function showCards($id)
+    public function showCards($userSetId)
     {
-        $userSet = UserSet::findOrFail($id);
+        $userSet = UserSet::findOrFail($userSetId);
 
-        $cards = $userSet->cards()->get();
-
-        // Ordenamos las cartas en PHP después de obtenerlas
-        $cards = $cards->sort(function ($a, $b) {
-            // Primero intentamos comparar las cartas numéricas
-            if (preg_match('/^\d+$/', $a->number) && preg_match('/^\d+$/', $b->number)) {
-                return (int)$a->number <=> (int)$b->number;
-            }
-
-            // Si ambos tienen letras, primero comparamos las letras y luego los números
-            if (preg_match('/^[a-zA-Z]+[0-9]+$/', $a->number) && preg_match('/^[a-zA-Z]+[0-9]+$/', $b->number)) {
-                $lettersA = preg_replace('/[^a-zA-Z]/', '', $a->number);
-                $numbersA = (int)preg_replace('/\D/', '', $a->number);
-                $lettersB = preg_replace('/[^a-zA-Z]/', '', $b->number);
-                $numbersB = (int)preg_replace('/\D/', '', $b->number);
-
-                if ($lettersA == $lettersB) {
-                    return $numbersA <=> $numbersB;
-                }
-
-                return strcmp($lettersA, $lettersB);
-            }
-
-            return 0;
-        });
+        $cards = $userSet->cards()->orderBy('user_set_cards.order_number')->get();
 
         if ($cards->isEmpty()) {
             session()->flash('message', 'No hay cartas disponibles.');
@@ -99,6 +75,7 @@ class UserSetController extends Controller
 
         return view('user-sets.cards', compact('userSet', 'cards'));
     }
+
 
     // Mostrar el formulario para editar un set
     public function edit($id)
@@ -175,7 +152,10 @@ class UserSetController extends Controller
                 ->with('message', 'La carta ya está en este set.');
         }
 
-        $userSet->cards()->attach($cardId);
+        $lastOrderNumber = $userSet->cards()->max('order_number');
+        $newOrderNumber = $lastOrderNumber ? $lastOrderNumber + 1 : 1;
+
+        $userSet->cards()->attach($cardId, ['order_number' => $newOrderNumber]);
 
         $userSet->increment('card_count');
 
@@ -187,10 +167,11 @@ class UserSetController extends Controller
     {
         $userSet = UserSet::findOrFail($userSetId);
 
+        $userSet->cards()->orderBy('user_set_cards.order_number')->get();
+
         return view('user-sets.my-cards', compact('userSet'));
     }
 
-    // Eliminar una carta de un set
     public function removeCard($userSetId, $cardId)
     {
         $userSet = UserSet::find($userSetId);
@@ -206,15 +187,26 @@ class UserSetController extends Controller
                 ->with('message', 'La carta no existe.');
         }
 
+        // Verificar si la carta está en el set
         if ($userSet->cards()->where('card_id', $cardId)->exists()) {
+            // Desasociar la carta del set
             $userSet->cards()->detach($cardId);
             $userSet->decrement('card_count');
+
+            // Obtener las cartas restantes, ordenadas por el número de orden
+            $remainingCards = $userSet->cards()->orderBy('order_number')->get();
+
+            // Reajustar el número de orden
+            foreach ($remainingCards as $index => $card) {
+                // Aquí actualizamos el order_number de las cartas restantes
+                $userSet->cards()->updateExistingPivot($card->id, ['order_number' => $index + 1]);
+            }
+
+            return redirect()->route('user-sets.cards', $userSetId)
+                ->with('success', 'Carta eliminada correctamente del set');
         } else {
             return redirect()->route('user-sets.cards', $userSetId)
                 ->with('message', 'La carta no se encuentra en el set.');
         }
-
-        return redirect()->route('user-sets.cards', $userSetId)
-            ->with('success', 'Carta eliminada correctamente del set');
     }
 }

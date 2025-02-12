@@ -15,8 +15,10 @@ class UserSet extends Model
 
     public function cards(): BelongsToMany
     {
-        return $this->belongsToMany(Card::class, 'user_set_cards', 'user_set_id', 'card_id');
+        return $this->belongsToMany(Card::class, 'user_set_cards', 'user_set_id', 'card_id')
+            ->withPivot('order_number');
     }
+
 
     public function user(): belongsTo
     {
