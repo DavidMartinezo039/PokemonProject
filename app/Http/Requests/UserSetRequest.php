@@ -22,7 +22,7 @@ class UserSetRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Tamaño máximo de 2MB
+            'image' => 'nullable|mimes:jpeg,jpg,png',
         ];
     }
 
@@ -37,7 +37,6 @@ class UserSetRequest extends FormRequest
             'name.max' => 'El nombre no puede superar los 255 caracteres.',
             'image.image' => 'El archivo debe ser una imagen.',
             'image.mimes' => 'La imagen debe estar en formato jpeg, png, jpg o gif.',
-            'image.max' => 'La imagen no puede superar los 2MB.',
             'description.string' => 'La descripción debe ser una cadena de texto.',
         ];
     }

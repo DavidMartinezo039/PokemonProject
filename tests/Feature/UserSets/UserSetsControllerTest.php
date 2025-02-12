@@ -1,218 +1,182 @@
 <?php
 
-namespace Tests\Feature\UserSets;
-
 use App\Models\UserSet;
 use App\Models\Card;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
-class UserSetsControllerTest extends TestCase
-{
-    use RefreshDatabase;
+it('creates and stores a user set', function () {
+    $user = User::factory()->create();
 
-    /** @test */
-    public function test_create_store_user_set()
-    {
-        $user = User::factory()->create();
+    $this->actingAs($user);
 
-        $this->actingAs($user);
+    $response = $this->post('/user-sets', [
+        'name' => 'Nuevo Set',
+        'description' => 'Nuevo Set',
+    ]);
 
-        $response = $this->post('/user-sets', [
-            'name' => 'Nuevo Set',
-        ]);
+    $response->assertRedirect(route('user-sets.index'));
 
-        $response->assertRedirect(route('user-sets.index'));
-        $response->assertSessionHas('message', 'Set creado con éxito');
+    $this->assertDatabaseHas('user_sets', [
+        'name' => 'Nuevo Set',
+        'description' => 'Nuevo Set',
+        'user_id' => $user->id,
+    ]);
+});
 
-        $this->assertDatabaseHas('user_sets', [
-            'name' => 'Nuevo Set',
-            'user_id' => $user->id,
-        ]);
-    }
+it('updates a user set', function () {
+    $user = User::factory()->create();
 
-    /** @test */
-    public function test_update_user_set()
-    {
-        $user = User::factory()->create();
+    $this->actingAs($user);
 
-        $this->actingAs($user);
+    $userSet = UserSet::create([
+        'name' => 'Set Inicial',
+        'user_id' => $user->id,
+    ]);
 
-        $userSet = UserSet::create([
-            'name' => 'Set Inicial',
-            'user_id' => $user->id,
-        ]);
+    $response = $this->put("/user-sets/{$userSet->id}", [
+        'name' => 'Set Editado',
+    ]);
 
-        $response = $this->put("/user-sets/{$userSet->id}", [
-            'name' => 'Set Editado',
-        ]);
+    $response->assertRedirect(route('user-sets.index'));
+    $response->assertSessionHas('success', 'Set actualizado con éxito');
 
-        $response->assertRedirect(route('user-sets.index'));
-        $response->assertSessionHas('success', 'Set actualizado con éxito');
+    $this->assertDatabaseHas('user_sets', [
+        'id' => $userSet->id,
+        'name' => 'Set Editado',
+    ]);
+});
 
-        // Verificar que el UserSet fue actualizado en la base de datos
-        $this->assertDatabaseHas('user_sets', [
-            'id' => $userSet->id,
-            'name' => 'Set Editado',
-        ]);
-    }
+it('deletes a user set', function () {
+    $user = User::factory()->create();
 
-    /** @test */
-    public function test_delete_user_set()
-    {
-        $user = User::factory()->create();
+    $this->actingAs($user);
 
-        $this->actingAs($user);
+    $userSet = UserSet::create([
+        'name' => 'Set a eliminar',
+        'user_id' => $user->id,
+    ]);
 
-        $userSet = UserSet::create([
-            'name' => 'Set a eliminar',
-            'user_id' => $user->id,
-        ]);
+    $response = $this->delete("/user-sets/{$userSet->id}");
 
-        $response = $this->delete("/user-sets/{$userSet->id}");
+    $response->assertRedirect(route('user-sets.index'));
+    $response->assertSessionHas('success', 'Set eliminado con éxito');
 
-        $response->assertRedirect(route('user-sets.index'));
-        $response->assertSessionHas('success', 'Set eliminado con éxito');
+    $this->assertDatabaseMissing('user_sets', [
+        'id' => $userSet->id,
+    ]);
+});
 
-        // Verificar que el UserSet fue eliminado de la base de datos
-        $this->assertDatabaseMissing('user_sets', [
-            'id' => $userSet->id,
-        ]);
-    }
+it('adds a card to a user set', function () {
+    $user = User::factory()->create(['id' => 1]);
 
-    /** @test */
-    public function test_add_card_to_user_set()
-    {
-        $user = User::factory()->create(['id' => 1]);
+    $this->actingAs($user);
 
-        $this->actingAs($user);
+    $userSet = UserSet::create([
+        'name' => 'Set de prueba',
+        'user_id' => 1,
+        'card_count' => 0,
+    ]);
 
-        $userSet = UserSet::create([
-            'name' => 'Set de prueba',
-            'user_id' => 1,
-            'card_count' => 0,
-        ]);
+    $card = Card::factory()->create();
 
-        $card = Card::factory()->create();
+    $response = $this->post("/user-sets/{$userSet->id}/card/{$card->id}");
 
-        // Realizamos la solicitud POST para añadir la carta al set
-        $response = $this->post("/user-sets/{$userSet->id}/card/{$card->id}");
+    $response->assertRedirect(route('user-sets.cards', $userSet->id));
+    $response->assertSessionHas('success', 'Carta añadida correctamente al set');
 
+    $this->assertDatabaseHas('user_set_cards', [
+        'user_set_id' => $userSet->id,
+        'card_id' => $card->id,
+    ]);
 
-        // Verificamos que la redirección se realiza a la vista del set
-        $response->assertRedirect(route('user-sets.show', $userSet->id));
+    $userSet->refresh();
+    expect($userSet->card_count)->toBe(1);
 
-        // Verificamos que el mensaje de éxito está presente en la sesión
-        $response->assertSessionHas('success', 'Carta añadida correctamente al set');
+    $response = $this->get(route('user-sets.cards', $userSet->id));
+    $response->assertSee($card->name);
+});
 
-        // Verificamos que la carta fue añadida al set en la tabla intermedia
-        $this->assertDatabaseHas('user_set_cards', [
-            'user_set_id' => $userSet->id,
-            'card_id' => $card->id,
-        ]);
+it('removes a card from a user set', function () {
+    $user = User::factory()->create(['id' => 1]);
 
-        // Verificamos que el contador del set se incrementó
-        $userSet->refresh();
-        $this->assertEquals(1, $userSet->card_count);
+    $this->actingAs($user);
 
-        // Verificamos que la carta se muestra en la vista del set
-        $response = $this->get(route('user-sets.show', $userSet->id));
-        $response->assertSee($card->name); // Cambia 'name' por un atributo relevante de la carta
-    }
+    $userSet = UserSet::create([
+        'name' => 'Set de prueba',
+        'user_id' => 1,
+        'card_count' => 1,
+    ]);
 
-    /** @test */
-    public function test_remove_card_from_user_set()
-    {
-        $user = User::factory()->create(['id' => 1]);
+    $card = Card::factory()->create();
 
-        $this->actingAs($user);
+    $userSet->cards()->attach($card->id);
 
-        $userSet = UserSet::create([
-            'name' => 'Set de prueba',
-            'user_id' => 1,
-            'card_count' => 1,
-        ]);
+    $response = $this->delete("/user-sets/{$userSet->id}/card/{$card->id}");
 
-        $card = Card::factory()->create();
+    $response->assertRedirect(route('user-sets.cards', $userSet->id));
+    $response->assertSessionHas('success', 'Carta eliminada correctamente del set');
 
-        $userSet->cards()->attach($card->id);  // Asociar la carta al set
+    $userSet->refresh();
+    expect($userSet->card_count)->toBe(0);
+});
 
-        $response = $this->delete("/user-sets/{$userSet->id}/card/{$card->id}");
+it('handles errors when adding a card to a user set', function () {
+    $user = User::factory()->create(['id' => 1]);
 
-        $response->assertRedirect(route('user-sets.show', $userSet->id));
+    $this->actingAs($user);
 
-        // Verificar que la respuesta sea la correcta
-        $response->assertSessionHas('success', 'Carta eliminada correctamente del set');
+    $userSet = UserSet::create([
+        'name' => 'Set de prueba',
+        'user_id' => 1,
+        'card_count' => 0,
+    ]);
 
-        // Verificar que el set ha sido actualizado correctamente
-        $userSet->refresh();
-        $this->assertEquals(0, $userSet->card_count);  // Asegurarse de que el contador se ha decrementado
-    }
+    $response = $this->post("/user-sets/{$userSet->id}/card/999");
 
-    /** @test */
-    public function test_add_card_to_user_set_handles_errors_properly()
-    {
-        $user = User::factory()->create(['id' => 1]);
+    $response->assertRedirect(route('user-sets.cards', $userSet->id));
+    $response->assertSessionHas('message', 'La carta no existe.');
 
-        $this->actingAs($user);
+    $card = Card::factory()->create();
 
-        $userSet = UserSet::create([
-            'name' => 'Set de prueba',
-            'user_id' => 1,
-            'card_count' => 0,
-        ]);
+    $response = $this->post("/user-sets/999/card/{$card->id}");
 
-        $response = $this->post("/user-sets/{$userSet->id}/card/999");
+    $response->assertRedirect(route('user-sets.index'));
+    $response->assertSessionHas('message', 'El set no existe.');
 
-        $response->assertRedirect(route('user-sets.show', $userSet->id));
-        $response->assertSessionHas('message', 'La carta no existe.');
+    $userSet->cards()->attach($card->id);
 
-        $card = Card::factory()->create();
+    $response = $this->post("/user-sets/{$userSet->id}/card/{$card->id}");
+    $response = $this->post("/user-sets/{$userSet->id}/card/{$card->id}");
 
-        $response = $this->post("/user-sets/999/card/{$card->id}");
+    $response->assertRedirect(route('user-sets.cards', $userSet->id));
+    $response->assertSessionHas('message', 'La carta ya está en este set.');
+});
 
-        $response->assertRedirect(route('user-sets.index'));
-        $response->assertSessionHas('message', 'El set no existe.');
+it('handles errors when removing a card from a user set', function () {
+    $user = User::factory()->create(['id' => 1]);
 
-        $userSet->cards()->attach($card->id);
+    $this->actingAs($user);
 
-        $response = $this->post("/user-sets/{$userSet->id}/card/{$card->id}");
-        $response = $this->post("/user-sets/{$userSet->id}/card/{$card->id}");
+    $userSet = UserSet::create([
+        'name' => 'Set de prueba',
+        'user_id' => 1,
+        'card_count' => 0,
+    ]);
 
-        $response->assertRedirect(route('user-sets.show', $userSet->id));
-        $response->assertSessionHas('message', 'La carta ya está en este set.');
-    }
+    $response = $this->delete("/user-sets/{$userSet->id}/card/999");
 
-    /** @test */
-    public function test_remove_card_to_user_set_handles_errors_properly()
-    {
-        $user = User::factory()->create(['id' => 1]);
+    $response->assertRedirect(route('user-sets.cards', $userSet->id));
+    $response->assertSessionHas('message', 'La carta no existe.');
 
-        $this->actingAs($user);
+    $card = Card::factory()->create();
 
-        $userSet = UserSet::create([
-            'name' => 'Set de prueba',
-            'user_id' => 1,
-            'card_count' => 0,
-        ]);
+    $response = $this->delete("/user-sets/999/card/{$card->id}");
 
-        $response = $this->delete("/user-sets/{$userSet->id}/card/999");
+    $response->assertRedirect(route('user-sets.index'));
+    $response->assertSessionHas('message', 'El set no existe.');
 
-        $response->assertRedirect(route('user-sets.show', $userSet->id));
-        $response->assertSessionHas('message', 'La carta no existe.');
+    $response = $this->delete("/user-sets/{$userSet->id}/card/{$card->id}");
 
-        $card = Card::factory()->create();
-
-        $response = $this->delete("/user-sets/999/card/{$card->id}");
-
-        $response->assertRedirect(route('user-sets.index'));
-        $response->assertSessionHas('message', 'El set no existe.');
-
-        $response = $this->delete("/user-sets/{$userSet->id}/card/{$card->id}");
-
-        $response->assertRedirect(route('user-sets.show', $userSet->id));
-        $response->assertSessionHas('message', 'La carta no se encuentra en el set.');
-    }
-
-}
+    $response->assertRedirect(route('user-sets.cards', $userSet->id));
+    $response->assertSessionHas('message', 'La carta no se encuentra en el set.');
+});

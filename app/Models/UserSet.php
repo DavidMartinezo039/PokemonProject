@@ -11,7 +11,7 @@ class UserSet extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'images', 'user_id', 'card_count'];
+    protected $fillable = ['name', 'description', 'image', 'user_id', 'card_count'];
 
     public function cards(): BelongsToMany
     {

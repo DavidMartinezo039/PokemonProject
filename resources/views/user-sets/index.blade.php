@@ -1,32 +1,23 @@
 @extends('layouts.navbar-layout')
 
-@section('title', 'Lista de Sets')
+@section('title', 'Mis Sets')
+
+@section('additional-css')
+    <link rel="stylesheet" href="{{ asset('View/css/Sets/sets.css') }}">
+    <link rel="stylesheet" href="{{ asset('View/css/error-message.css') }}">
+    <link rel="stylesheet" href="{{ asset('View/css/User-Sets/user-sets.css') }}">
+@endsection
 
 @section('content')
-    <h1>Lista de Sets</h1>
 
-    @if(session('message'))
-        <div class="alert alert-info">
-            {{ session('message') }}
+    <div class="sets-container">
+        <div class="create-set-container">
+            <a href="{{ route('user-sets.create') }}" class="create-set-button">
+                <span class="plus-symbol">+</span>
+            </a>
         </div>
-    @endif
+        <div class="serie-name">My Sets</div>
 
-    <ul>
-        @foreach ($sets as $set)
-            <li>
-                <a href="{{ route('user-sets.show', $set->id) }}">
-                    <img src="{{ $set->image }}" alt="Logo de {{ $set->name }}" style="width: 100px; height: 100px; object-fit: contain;">
-                    {{ $set->name }}
-                </a>
-                <a href="{{ route('user-sets.edit', $set->id) }}">Editar</a>
-                <form action="{{ route('user-sets.destroy', $set->id) }}" method="POST" style="display:inline;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit">Eliminar</button>
-                </form>
-            </li>
-        @endforeach
-    </ul>
-
-    <a href="{{ route('user-sets.create') }}">Crear nuevo set</a>
+        @livewire('UserSetSearch')
+    </div>
 @endsection

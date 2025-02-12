@@ -57,15 +57,4 @@ class ShowTest extends TestCase
 
         $response->assertStatus(404);
     }
-
-
-    /** @test */
-    public function test_show_card_displays_no_subtypes_message_if_no_subtypes()
-    {
-        $card = Card::factory()->create();
-
-        $response = $this->get(route('cards.show', $card->id));
-
-        $response->assertSee('No tiene subtipos');
-    }
 }

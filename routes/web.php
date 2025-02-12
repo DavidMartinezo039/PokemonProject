@@ -25,8 +25,11 @@ Route::middleware('auth')->group(function () {
 
 
     Route::resource('user-sets', UserSetController::class);
+    Route::get('user-sets/{userSetId}/cards', [UserSetController::class, 'showCards'])->name('user-sets.cards');
 
+    Route::get('user-sets/{userSetId}/select-card', [UserSetController::class, 'selectCard'])->name('user-sets.select-card');
     Route::post('user-sets/{userSetId}/card/{cardId}', [UserSetController::class, 'addCard'])->name('user-sets.add-card');
+    Route::get('user-sets/{userSetId}/my-cards', [UserSetController::class, 'myCards'])->name('user-sets.my-cards');
     Route::delete('user-sets/{userSetId}/card/{cardId}', [UserSetController::class, 'removeCard'])->name('user-sets.remove-card');
 });
 

@@ -20,7 +20,9 @@
                 <p><strong>Type:</strong> {{ $card->types->isNotEmpty() ? implode(', ', $card->types->pluck('name')->toArray()) : 'N/A' }}</p>
                 <p><strong>Subtypes:</strong> {{ $card->subtypes->isNotEmpty() ? implode(', ', $card->subtypes->pluck('name')->toArray()) : 'N/A' }}</p>
                 <p><strong>HP:</strong> {{ $card->hp ?? 'N/A' }}</p>
-                @if ($card->evolvesFrom)
+                <p><strong>Rarity:</strong> {{ $card->rarity->name ?? 'N/A' }}</p>
+
+            @if ($card->evolvesFrom)
                     <p><strong>Evolves from:</strong> {{ $card->evolvesFrom }}</p>
                 @endif
 
