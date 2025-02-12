@@ -23,8 +23,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-
     Route::resource('user-sets', UserSetController::class);
+
     Route::get('user-sets/{userSetId}/cards', [UserSetController::class, 'showCards'])->name('user-sets.cards');
 
     Route::get('user-sets/{userSetId}/select-card', [UserSetController::class, 'selectCard'])->name('user-sets.select-card');

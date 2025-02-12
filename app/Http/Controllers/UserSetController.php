@@ -9,20 +9,11 @@ use Illuminate\Support\Str;
 
 class UserSetController extends Controller
 {
-// Mostrar la lista de sets
     public function index()
     {
-        $userSets = UserSet::orderBy('created_at', 'desc')->get();
-
-
-        if ($userSets->isEmpty()) {
-            return view('user-sets.index')->with('message', 'No sets available');
-        }
-
-        return view('user-sets.index', compact('userSets'));
+        return view('user-sets.index');
     }
 
-    // Mostrar el formulario para crear un nuevo set
     public function create()
     {
         return view('user-sets.create');
@@ -59,13 +50,28 @@ class UserSetController extends Controller
     // Mostrar los detalles de un set
     public function show($userSetId)
     {
-        $userSet = UserSet::with('cards')->findOrFail($userSetId); // Cargar las cartas asociadas al set
+        $user = auth()->user();
+
+        $userSet = UserSet::with('cards')->find($userSetId);
+
+        if (!$userSet || !$user->can('view', $userSet)) {
+            abort(404, 'El set solicitado no fue encontrado o no tienes permiso para verlo.');
+        }
+
+
         return view('user-sets.show', compact('userSet'));
     }
 
     public function showCards($userSetId)
     {
-        $userSet = UserSet::findOrFail($userSetId);
+        $user = auth()->user();
+
+        $userSet = UserSet::find($userSetId);
+
+        if (!$userSet || !$user->can('view', $userSet)) {
+            abort(404, 'El set solicitado no fue encontrado o no tienes permiso para verlo.');
+        }
+
 
         $cards = $userSet->cards()->orderBy('user_set_cards.order_number')->get();
 
@@ -80,16 +86,31 @@ class UserSetController extends Controller
     // Mostrar el formulario para editar un set
     public function edit($id)
     {
-        $userSet = UserSet::findOrFail($id);
+        $user = auth()->user();
+
+        $userSet = UserSet::find($id);
+
+        if (!$userSet || !$user->can('view', $userSet)) {
+            abort(404, 'El set solicitado no fue encontrado o no tienes permiso para verlo.');
+        }
+
+
         return view('user-sets.edit', compact('userSet'));
     }
 
     // Actualizar un set
     public function update(UserSetRequest $request, $id)
     {
+        $user = auth()->user();
+
         $validated = $request->validated();
 
-        $userSet = UserSet::findOrFail($id);
+        $userSet = UserSet::find($id);
+
+        if (!$userSet || !$user->can('view', $userSet)) {
+            abort(404, 'El set solicitado no fue encontrado o no tienes permiso para verlo.');
+        }
+
 
         if ($request->hasFile('image')) {
 
@@ -115,7 +136,14 @@ class UserSetController extends Controller
     // Eliminar un set
     public function destroy($id)
     {
-        $userSet = UserSet::findOrFail($id);
+        $user = auth()->user();
+
+        $userSet = UserSet::find($id);
+
+        if (!$userSet || !$user->can('view', $userSet)) {
+            abort(404, 'El set solicitado no fue encontrado o no tienes permiso para verlo.');
+        }
+
 
         $userSet->delete();
 
@@ -124,7 +152,15 @@ class UserSetController extends Controller
 
     public function selectCard($userSetId)
     {
-        $userSet = UserSet::findOrFail($userSetId);
+        $user = auth()->user();
+
+        $userSet = UserSet::find($userSetId);
+
+        if (!$userSet || !$user->can('view', $userSet)) {
+            abort(404, 'El set solicitado no fue encontrado o no tienes permiso para verlo.');
+        }
+
+
         $cards = Card::paginate(25);
 
         return view('user-sets.select-card', compact('userSet', 'cards'));
@@ -134,18 +170,7 @@ class UserSetController extends Controller
     // Añadir una carta a un set
     public function addCard($userSetId,  $cardId)
     {
-        $userSet = UserSet::find($userSetId);
-        $card = Card::find($cardId);
-
-        if (!$userSet) {
-            return redirect()->route('user-sets.index')
-                ->with('message', 'El set no existe.');
-        }
-
-        if (!$card) {
-            return redirect()->route('user-sets.cards', $userSetId)
-                ->with('message', 'La carta no existe.');
-        }
+        $userSet = $this->checkPermissionsAndExistence($userSetId, $cardId);
 
         if ($userSet->cards()->where('card_id', $cardId)->exists()) {
             return redirect()->route('user-sets.cards', $userSetId)
@@ -165,7 +190,14 @@ class UserSetController extends Controller
 
     public function myCards($userSetId)
     {
-        $userSet = UserSet::findOrFail($userSetId);
+        $user = auth()->user();
+
+        $userSet = UserSet::find($userSetId);
+
+        if (!$userSet || !$user->can('view', $userSet)) {
+            abort(404, 'El set solicitado no fue encontrado o no tienes permiso para verlo.');
+        }
+
 
         $userSet->cards()->orderBy('user_set_cards.order_number')->get();
 
@@ -174,31 +206,15 @@ class UserSetController extends Controller
 
     public function removeCard($userSetId, $cardId)
     {
-        $userSet = UserSet::find($userSetId);
-        $card = Card::find($cardId);
+        $userSet = $this->checkPermissionsAndExistence($userSetId, $cardId);
 
-        if (!$userSet) {
-            return redirect()->route('user-sets.index')
-                ->with('message', 'El set no existe.');
-        }
-
-        if (!$card) {
-            return redirect()->route('user-sets.cards', $userSetId)
-                ->with('message', 'La carta no existe.');
-        }
-
-        // Verificar si la carta está en el set
         if ($userSet->cards()->where('card_id', $cardId)->exists()) {
-            // Desasociar la carta del set
             $userSet->cards()->detach($cardId);
             $userSet->decrement('card_count');
 
-            // Obtener las cartas restantes, ordenadas por el número de orden
             $remainingCards = $userSet->cards()->orderBy('order_number')->get();
 
-            // Reajustar el número de orden
             foreach ($remainingCards as $index => $card) {
-                // Aquí actualizamos el order_number de las cartas restantes
                 $userSet->cards()->updateExistingPivot($card->id, ['order_number' => $index + 1]);
             }
 
@@ -208,5 +224,25 @@ class UserSetController extends Controller
             return redirect()->route('user-sets.cards', $userSetId)
                 ->with('message', 'La carta no se encuentra en el set.');
         }
+    }
+
+    private function checkPermissionsAndExistence($userSetId, $cardId = null)
+    {
+        $user = auth()->user();
+        $userSet = UserSet::find($userSetId);
+
+        if (!$userSet || !$user->can('view', $userSet)) {
+            abort(404, 'El set solicitado no fue encontrado o no tienes permiso para verlo.');
+        }
+
+        if ($cardId) {
+            $card = Card::find($cardId);
+            if (!$card) {
+                return redirect()->route('user-sets.cards', $userSetId)
+                    ->with('message', 'La carta no existe.');
+            }
+        }
+
+        return $userSet;
     }
 }
