@@ -8,7 +8,7 @@ use App\Models\Supertype;
 use App\Models\Rarity;
 use App\Models\Subtype;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Http;
+use GuzzleHttp\Client;
 
 class CardSupportDataSeeder extends Seeder
 {
@@ -72,9 +72,12 @@ class CardSupportDataSeeder extends Seeder
      */
     private function getSetsFromApi()
     {
-        $response = Http::timeout(30) // Aumentar el tiempo de espera a 30 segundos
-        ->get('https://api.pokemontcg.io/v2/sets');
-        return $response->json('data');
+        $client = new Client([
+            'verify' => false,
+        ]);
+
+        $response = $client->get('https://api.pokemontcg.io/v2/sets');
+        return json_decode($response->getBody()->getContents(), true)['data'];
     }
 
     /**
@@ -84,8 +87,12 @@ class CardSupportDataSeeder extends Seeder
      */
     private function getTypesFromApi()
     {
-        $response = Http::get('https://api.pokemontcg.io/v2/types');
-        return $response->json('data');
+        $client = new Client([
+            'verify' => false,
+        ]);
+
+        $response = $client->get('https://api.pokemontcg.io/v2/types');
+        return json_decode($response->getBody()->getContents(), true)['data'];
     }
 
     /**
@@ -95,8 +102,12 @@ class CardSupportDataSeeder extends Seeder
      */
     private function getSupertypesFromApi()
     {
-        $response = Http::get('https://api.pokemontcg.io/v2/supertypes');
-        return $response->json('data');
+        $client = new Client([
+            'verify' => false,
+        ]);
+
+        $response = $client->get('https://api.pokemontcg.io/v2/supertypes');
+        return json_decode($response->getBody()->getContents(), true)['data'];
     }
 
     /**
@@ -106,8 +117,12 @@ class CardSupportDataSeeder extends Seeder
      */
     private function getRaritiesFromApi()
     {
-        $response = Http::get('https://api.pokemontcg.io/v2/rarities');
-        return $response->json('data');
+        $client = new Client([
+            'verify' => false,
+        ]);
+
+        $response = $client->get('https://api.pokemontcg.io/v2/rarities');
+        return json_decode($response->getBody()->getContents(), true)['data'];
     }
 
     /**
@@ -117,7 +132,11 @@ class CardSupportDataSeeder extends Seeder
      */
     private function getSubtypesFromApi()
     {
-        $response = Http::get('https://api.pokemontcg.io/v2/subtypes');
-        return $response->json('data');
+        $client = new Client([
+            'verify' => false,
+        ]);
+
+        $response = $client->get('https://api.pokemontcg.io/v2/subtypes');
+        return json_decode($response->getBody()->getContents(), true)['data'];
     }
 }

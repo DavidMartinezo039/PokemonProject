@@ -8,7 +8,7 @@ use App\Models\Supertype;
 use App\Models\Type;
 use App\Models\Subtype;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Http;
+use GuzzleHttp\Client;
 use Illuminate\Support\Facades\DB;
 
 class CardSeeder extends Seeder
@@ -30,32 +30,35 @@ class CardSeeder extends Seeder
         $perPage = 250;
         $totalCards = 0;
 
-        // Cargar mapas de supertypes y rarities una vez
         $supertypes = Supertype::pluck('id', 'name')->toArray();
         $rarities = Rarity::pluck('id', 'name')->toArray();
         $types = Type::pluck('id', 'name')->toArray();
         $subtypes = Subtype::pluck('id', 'name')->toArray();
 
+        $client = new Client([
+            'verify' => false,
+        ]);
+
         do {
-            $response = Http::timeout(30)->get('https://api.pokemontcg.io/v2/cards', [
-                'page' => $page,
-                'pageSize' => $perPage,
+            $response = $client->get('https://api.pokemontcg.io/v2/cards', [
+                'query' => [
+                    'page' => $page,
+                    'pageSize' => $perPage,
+                ],
             ]);
 
-            $cards = $response->json('data');
+            $cards = json_decode($response->getBody()->getContents(), true)['data'];
 
             if (!$cards) {
                 break;
             }
 
-            // Insertar todas las cartas en una transacción
             DB::transaction(function () use ($cards, $supertypes, $rarities, $types, $subtypes) {
                 foreach ($cards as $cardData) {
                     $this->createCard($cardData, $supertypes, $rarities, $types, $subtypes);
                 }
             });
 
-            // Reconectar base de datos para liberar memoria
             DB::disconnect();
             DB::reconnect();
 
@@ -74,7 +77,6 @@ class CardSeeder extends Seeder
      */
     private function createCard(array $cardData, array $supertypes, array $rarities, array $types, array $subtypes)
     {
-        // Validar y obtener los IDs de supertypes y rarities desde los mapas
         $supertypeId = isset($cardData['supertype']) && array_key_exists($cardData['supertype'], $supertypes)
             ? $supertypes[$cardData['supertype']]
             : null;
@@ -83,7 +85,6 @@ class CardSeeder extends Seeder
             ? $rarities[$cardData['rarity']]
             : null;
 
-        // Insert the card
         $card = Card::Create(
             [
                 'id' => $cardData['id'],
@@ -112,7 +113,6 @@ class CardSeeder extends Seeder
             ]
         );
 
-        // Relacionar tipos y subtipos
         $typeIds = isset($cardData['types']) && is_array($cardData['types'])
             ? array_map(fn($type) => $types[$type] ?? null, $cardData['types'])
             : [];
@@ -121,11 +121,9 @@ class CardSeeder extends Seeder
             ? array_map(fn($subtype) => $subtypes[$subtype] ?? null, $cardData['subtypes'])
             : [];
 
-        // Filtrar IDs nulos
         $typeIds = array_filter($typeIds);
         $subtypeIds = array_filter($subtypeIds);
 
-        // Sincronizar relaciones
         if (!empty($typeIds)) {
             $card->types()->sync($typeIds);
         }
