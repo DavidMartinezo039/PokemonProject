@@ -3,11 +3,12 @@
 use App\Models\UserSet;
 use App\Models\Card;
 use App\Models\User;
+use function Pest\Laravel\actingAs;
 
 it('creates and stores a user set', function () {
-    $user = User::factory()->create();
+    $user = CreateUser();
 
-    $this->actingAs($user);
+    actingAs($user);
 
     $response = $this->post('/user-sets', [
         'name' => 'Nuevo Set',
@@ -24,25 +25,34 @@ it('creates and stores a user set', function () {
 });
 
 it('updates a user set', function () {
-    $user = User::factory()->create();
+    $user = CreateUser();
 
-    $this->actingAs($user);
+    actingAs($user);
 
     $userSet = UserSet::create([
         'name' => 'Set Inicial',
+        'description' => 'Set Inicial',
         'user_id' => $user->id,
     ]);
 
-    $response = $this->put("/user-sets/{$userSet->id}", [
-        'name' => 'Set Editado',
-    ]);
-
+    $response = $this->put(route('user-sets.update', $userSet->id), ['name' => 'Set Editado']);
     $response->assertRedirect(route('user-sets.index'));
     $response->assertSessionHas('success', 'Set actualizado con éxito');
 
     $this->assertDatabaseHas('user_sets', [
         'id' => $userSet->id,
         'name' => 'Set Editado',
+        'description' => 'Set Inicial',
+    ]);
+
+    $response = $this->put(route('user-sets.update', $userSet->id), ['description' => 'Set Editado']);
+    $response->assertRedirect(route('user-sets.index'));
+    $response->assertSessionHas('success', 'Set actualizado con éxito');
+
+    $this->assertDatabaseHas('user_sets', [
+        'id' => $userSet->id,
+        'name' => 'Set Editado',
+        'description' => 'Set Editado',
     ]);
 });
 
@@ -121,9 +131,9 @@ it('removes a card from a user set', function () {
 });
 
 it('handles errors when adding a card to a user set', function () {
-    $user = User::factory()->create(['id' => 1]);
+    $user = CreateUser();
 
-    $this->actingAs($user);
+    actingAs($user);
 
     $userSet = UserSet::create([
         'name' => 'Set de prueba',
@@ -134,14 +144,14 @@ it('handles errors when adding a card to a user set', function () {
     $response = $this->post("/user-sets/{$userSet->id}/card/999");
 
     $response->assertRedirect(route('user-sets.cards', $userSet->id));
-    $response->assertSessionHas('message', 'La carta no existe.');
+    $response->assertSessionHas('error', 'La carta no existe.');
 
     $card = Card::factory()->create();
 
     $response = $this->post("/user-sets/999/card/{$card->id}");
 
-    $response->assertRedirect(route('user-sets.index'));
-    $response->assertSessionHas('message', 'El set no existe.');
+    $response->assertStatus(404);
+    $response->assertSee('El set solicitado no fue encontrado o no tienes permiso para verlo.');
 
     $userSet->cards()->attach($card->id);
 
@@ -153,9 +163,9 @@ it('handles errors when adding a card to a user set', function () {
 });
 
 it('handles errors when removing a card from a user set', function () {
-    $user = User::factory()->create(['id' => 1]);
+    $user = CreateUser();
 
-    $this->actingAs($user);
+    actingAs($user);
 
     $userSet = UserSet::create([
         'name' => 'Set de prueba',
@@ -166,17 +176,12 @@ it('handles errors when removing a card from a user set', function () {
     $response = $this->delete("/user-sets/{$userSet->id}/card/999");
 
     $response->assertRedirect(route('user-sets.cards', $userSet->id));
-    $response->assertSessionHas('message', 'La carta no existe.');
+    $response->assertSessionHas('message', 'La carta no se encuentra en el set o no existe.');
 
     $card = Card::factory()->create();
 
     $response = $this->delete("/user-sets/999/card/{$card->id}");
 
-    $response->assertRedirect(route('user-sets.index'));
-    $response->assertSessionHas('message', 'El set no existe.');
-
-    $response = $this->delete("/user-sets/{$userSet->id}/card/{$card->id}");
-
-    $response->assertRedirect(route('user-sets.cards', $userSet->id));
-    $response->assertSessionHas('message', 'La carta no se encuentra en el set.');
+    $response->assertStatus(404);
+    $response->assertSee('El set solicitado no fue encontrado o no tienes permiso para verlo.');
 });

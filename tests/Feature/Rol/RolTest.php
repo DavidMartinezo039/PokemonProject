@@ -37,18 +37,16 @@ it('grants permissions through roles', function () {
 });
 
 it('allows an admin to see all user sets', function () {
-    $admin = User::factory()->create();
-    $user1 = User::factory()->create();
-    $user2 = User::factory()->create();
+    $admin = CreateUser('admin');
+    $user1 = CreateUser();
+    $user2 = CreateUser();
 
-    $adminRole = Role::create(['name' => 'admin']);
-    $admin->assignRole('admin');
-
-    UserSet::factory()->create(['user_id' => $user1->id]);
-    UserSet::factory()->create(['user_id' => $user2->id]);
+    UserSet::factory()->create(['name' => 'lo', 'user_id' => $user1->id]);
+    UserSet::factory()->create(['name' => 'veo','user_id' => $user2->id]);
 
     $this->actingAs($admin)
         ->get(route('user-sets.index'))
         ->assertStatus(200)
-        ->assertViewHas('userSets', fn ($sets) => $sets->count() === 2);
+        ->assertSee('lo')
+        ->assertSee('veo');
 });

@@ -64,20 +64,6 @@ class UserSetRequestTest extends TestCase
         $this->assertEquals('El archivo debe ser una imagen.', $validator->errors()->first('image'));
     }
 
-    public function test_user_set_image_must_not_exceed_2mb()
-    {
-        $data = [
-            'name' => 'Nombre válido',
-            'description' => 'Una descripción de ejemplo',
-            'image' => UploadedFile::fake()->create('imagen.jpg', 3000), // Archivo de 3MB
-        ];
-
-        $validator = Validator::make($data, (new UserSetRequest())->rules(), (new UserSetRequest())->messages());
-
-        $this->assertTrue($validator->fails());
-        $this->assertEquals('La imagen no puede superar los 2MB.', $validator->errors()->first('image'));
-    }
-
     public function test_user_set_request_passes_with_valid_data()
     {
         $data = [

@@ -123,8 +123,8 @@ class UserSetController extends Controller
 
         }
 
-        $userSet->name = $validated['name'];
-        $userSet->description = $validated['description'];
+        $userSet->name = $validated['name'] ?? $userSet->name;
+        $userSet->description = $validated['description'] ?? $userSet->description;
 
         // Guardar los cambios
         $userSet->save();
@@ -170,7 +170,18 @@ class UserSetController extends Controller
     // Añadir una carta a un set
     public function addCard($userSetId,  $cardId)
     {
-        $userSet = $this->checkPermissionsAndExistence($userSetId, $cardId);
+        $userSet = UserSet::find($userSetId);
+
+        $card = Card::find($cardId);
+
+        if (!$userSet) {
+            abort(404, 'El set solicitado no fue encontrado o no tienes permiso para verlo.');
+        }
+
+        if (!$card) {
+            return redirect()->route('user-sets.cards', $userSetId)
+                ->with('error', 'La carta no existe.');
+        }
 
         if ($userSet->cards()->where('card_id', $cardId)->exists()) {
             return redirect()->route('user-sets.cards', $userSetId)
@@ -206,7 +217,13 @@ class UserSetController extends Controller
 
     public function removeCard($userSetId, $cardId)
     {
-        $userSet = $this->checkPermissionsAndExistence($userSetId, $cardId);
+        $userSet = UserSet::find($userSetId);
+
+        $card = Card::find($cardId);
+
+        if (!$userSet) {
+            abort(404, 'El set solicitado no fue encontrado o no tienes permiso para verlo.');
+        }
 
         if ($userSet->cards()->where('card_id', $cardId)->exists()) {
             $userSet->cards()->detach($cardId);
@@ -222,7 +239,7 @@ class UserSetController extends Controller
                 ->with('success', 'Carta eliminada correctamente del set');
         } else {
             return redirect()->route('user-sets.cards', $userSetId)
-                ->with('message', 'La carta no se encuentra en el set.');
+                ->with('message', 'La carta no se encuentra en el set o no existe.');
         }
     }
 

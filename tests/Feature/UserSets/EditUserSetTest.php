@@ -5,6 +5,7 @@ use App\Models\UserSet;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
+use function Pest\Laravel\actingAs;
 
 
 it('actualiza el nombre del set', function () {
@@ -35,25 +36,24 @@ it('actualiza el nombre del set', function () {
 
 it('updates a user set successfully with image', function () {
     // Crear un usuario y autenticarlo
-    $user = User::factory()->create();
+    $user = CreateUser();
 
     $userSet = UserSet::factory()->create([
         'name' => 'Set Original',
         'description' => 'Descripción original',
-        'image' => 'user_sets/old.jpg'
+        'image' => 'user_sets/old.jpg',
+        'user_id' => $user->id,
     ]);
 
     $image1 = UploadedFile::fake()->image('image.jpg');
 
-    // Datos para actualizar el conjunto con imagen
     $data = [
         'name' => 'Updated Set with Image',
         'description' => 'Description with image.',
         'image' => $image1,
     ];
 
-    // Autenticar al usuario antes de hacer la solicitud
-    $this->actingAs($user);
+    actingAs($user);
 
 
     // Hacer una solicitud PUT para actualizar el conjunto con imagen
@@ -70,20 +70,19 @@ it('updates a user set successfully with image', function () {
 
 
 it('no actualiza el set si los datos no son válidos', function () {
-    // Crea un set de prueba
+    $user = CreateUser();
+
+    actingAs($user);
+
     $userSet = UserSet::factory()->create();
 
-    // Realiza la petición para actualizar el set con datos inválidos
-    $response = $this->actingAs($userSet->user)
-        ->put(route('user-sets.update', $userSet->id), [
-            'name' => '', // Nombre vacío (inválido)
-            'description' => 'Descripción actualizada',
+    $response = $this->put(route('user-sets.update', $userSet->id), [
+            'image' => 'lobro.pdf',
         ]);
 
-    // Verifica que el sistema no haya actualizado el set
     $userSet->refresh();
     expect($userSet->name)->not->toBe('');
 
     // Verifica que el error sea mostrado
-    $response->assertSessionHasErrors('name');
+    $response->assertSessionHasErrors('image');
 });

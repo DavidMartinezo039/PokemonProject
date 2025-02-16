@@ -22,7 +22,7 @@ class UserSetSearch extends Component
             })
                 ->orderBy('created_at', 'desc')
                 ->get();
-            
+
         } else {
 
             $userSets = UserSet::where('user_id', $user->id)

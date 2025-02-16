@@ -19,11 +19,17 @@ class UserSetRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rules = [
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'image' => 'nullable|mimes:jpeg,jpg,png',
+            'image' => 'nullable|image|mimes:jpeg,jpg,png',
         ];
+
+        if ($this->isMethod('put')) {
+            $rules['name'] = 'nullable|string|max:255';
+        }
+
+        return $rules;
     }
 
     /**
