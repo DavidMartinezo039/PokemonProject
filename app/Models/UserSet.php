@@ -13,6 +13,18 @@ class UserSet extends Model
 
     protected $fillable = ['name', 'description', 'image', 'user_id', 'card_count'];
 
+    public function scopeForUser($query, $user)
+    {
+        return $user->can('viewAny', UserSet::class)
+            ? $query
+            : $query->where('user_id', $user->id);
+    }
+
+    public function scopeSearch($query, $term)
+    {
+        return $query->when($term, fn($q) => $q->where('name', 'LIKE', "%$term%"));
+    }
+
     public function cards(): BelongsToMany
     {
         return $this->belongsToMany(Card::class, 'user_set_cards', 'user_set_id', 'card_id')
