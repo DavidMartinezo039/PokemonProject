@@ -19,6 +19,19 @@ div a {
     line-height: 50px; /* Centra el símbolo + verticalmente */
 }
 
+.btn-danger {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-danger:hover {
+    background-color: darkred;
+}
+
 .plus-symbol {
     display: inline-block;
     transition: all 0.3s ease;

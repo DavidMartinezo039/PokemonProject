@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CardController;
+use App\Http\Controllers\PDFController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SetController;
 use App\Http\Controllers\UserSetController;
@@ -24,6 +25,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('user-sets', UserSetController::class);
+
+    Route::get('user-sets/{userSetId}/generar-pdf', [PDFController::class, 'generatePDF'])->name('generar-pdf');
 
     Route::get('user-sets/{userSetId}/cards', [UserSetController::class, 'showCards'])->name('user-sets.cards');
 

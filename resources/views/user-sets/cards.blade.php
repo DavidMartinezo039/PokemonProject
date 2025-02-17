@@ -19,10 +19,16 @@
             </a>
         @endif
 
-        <a href="{{ route('user-sets.show', $userSet->id) }}">
-            <img src="{{ asset('storage/' . $userSet->image) }}" alt="Imagen del set" class="set-logo">
-            <h2 class="set-name">{{ $userSet->name }}</h2>
-        </a>
+        <div style="text-align: center">
+
+            <form action="{{ route('generar-pdf', ['userSetId' => $userSet->id]) }}" method="GET">
+                <button type="submit" class="btn btn-danger">Generar PDF</button>
+            </form>
+            <a href="{{ route('user-sets.show', $userSet->id) }}">
+                <img src="{{ asset('storage/' . $userSet->image) }}" alt="Imagen del set" class="set-logo">
+                <h2 class="set-name">{{ $userSet->name }}</h2>
+            </a>
+        </div>
 
         <div class="create-set-container">
             <<a href="{{ route('user-sets.select-card', ['userSetId' => $userSet->id]) }}" class="create-set-button">
