@@ -4,44 +4,30 @@ namespace Tests\Feature\Models;
 
 use App\Models\Card;
 use App\Models\Subtype;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
-class SubtypeTest extends TestCase
-{
-    use RefreshDatabase;
+it('belongs to many cards', function () {
+    $subtype = Subtype::factory()->create();
+    $cards = Card::factory(3)->create();
 
-    /** @test */
-    public function it_belongs_to_many_cards()
-    {
-        $subtype = Subtype::factory()->create();
+    $subtype->cards()->attach($cards);
 
-        $cards = Card::factory(3)->create();
+    expect($subtype->cards)->toHaveCount(3);
+    expect($subtype->cards->contains($cards->first()))->toBeTrue();
+});
 
-        $subtype->cards()->attach($cards);
+it('handles empty cards', function () {
+    $subtype = Subtype::factory()->create();
 
-        $this->assertCount(3, $subtype->cards);
-        $this->assertTrue($subtype->cards->contains($cards->first()));
-    }
+    expect($subtype->cards)->toHaveCount(0);
+});
 
-    /** @test */
-    public function it_handles_empty_cards()
-    {
-        $subtype = Subtype::factory()->create();
+it('creates a subtype and associates cards', function () {
+    $subtype = Subtype::factory()->create();
+    $cards = Card::factory(2)->create();
 
-        $this->assertCount(0, $subtype->cards);
-    }
+    $subtype->cards()->attach($cards);
 
-    /** @test */
-    public function it_creates_a_subtype_and_associates_cards()
-    {
-        $subtype = Subtype::factory()->create();
-        $cards = Card::factory(2)->create();
-
-        $subtype->cards()->attach($cards);
-
-        $this->assertDatabaseHas('subtypes', ['id' => $subtype->id]);
-        $this->assertCount(2, $subtype->cards);
-        $this->assertTrue($subtype->cards->contains($cards->first()));
-    }
-}
+    expect(\DB::table('subtypes')->where('id', $subtype->id)->exists())->toBeTrue();
+    expect($subtype->cards)->toHaveCount(2);
+    expect($subtype->cards->contains($cards->first()))->toBeTrue();
+});

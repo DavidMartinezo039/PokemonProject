@@ -3,55 +3,41 @@
 namespace Sets;
 
 use App\Models\Set;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
-class IndexTest extends TestCase
-{
-    use RefreshDatabase;
+it('returns a successful response on index', function () {
+    $response = $this->get(route('sets.index'));
 
-    /** @test */
-    public function test_index_returns_successful_response()
-    {
-        $response = $this->get(route('sets.index'));
+    $response->assertStatus(200);
+});
 
-        $response->assertStatus(200);
+it('returns correct data on index', function () {
+    Set::factory(5)->create();
+
+    $response = $this->get(route('sets.index'));
+
+    $response->assertStatus(200);
+
+    foreach (Set::all() as $set) {
+        $response->assertSee($set->name);
+        $response->assertSee($set->images['logo']);
     }
+});
 
-    public function test_index_returns_correct_data()
-    {
-        Set::factory(5)->create();
+it('shows a message when no sets are available', function () {
+    $response = $this->get(route('sets.index'));
 
-        $response = $this->get(route('sets.index'));
+    $response->assertSee('No sets available');
+});
 
-        $response->assertStatus(200);
+it('redirects image to the show page', function () {
+    $set = Set::factory()->create();
 
-        foreach (Set::all() as $set) {
-            $response->assertSee($set->name);
+    $response = $this->get(route('sets.index'));
 
-            $response->assertSee($set->images['logo']);
-        }
-    }
+    $response->assertStatus(200);
 
-    public function test_index_shows_message_when_no_sets_are_available()
-    {
-        $response = $this->get(route('sets.index'));
+    $response->assertSeeHtml('<a href="' . route('sets.cards', $set->id) . '" class="set-card">');
+    $response = $this->get(route('sets.cards', $set->id));
 
-        $response->assertSee('No sets available');
-    }
-
-    public function test_image_redirects_to_show_page()
-    {
-        $set = Set::factory()->create();
-
-        $response = $this->get(route('sets.index'));
-
-        $response->assertStatus(200);
-
-        $response->assertSeeHtml('<a href="' . route('sets.cards', $set->id) . '" class="set-card">');
-        $response = $this->get(route('sets.cards', $set->id));
-
-        $response->assertStatus(200);
-    }
-
-}
+    $response->assertStatus(200);
+});

@@ -10,124 +10,87 @@ use App\Models\Type;
 use App\Models\Subtype;
 use App\Models\User;
 use App\Models\UserSet;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
-class CardTest extends TestCase
-{
-    use RefreshDatabase;
+it('belongs to a set', function () {
+    $set = Set::factory()->create();
+    $card = Card::factory()->create(['set_id' => $set->id]);
 
-    /** @test */
-    public function it_belongs_to_a_set()
-    {
-        $set = Set::factory()->create();
-        $card = Card::factory()->create(['set_id' => $set->id]);
+    expect($card->set)->toBeInstanceOf(Set::class);
+    expect($card->set->id)->toEqual($set->id);
+});
 
-        $this->assertInstanceOf(Set::class, $card->set);
-        $this->assertEquals($set->id, $card->set->id);
-    }
+it('belongs to a supertype', function () {
+    $supertype = Supertype::factory()->create();
+    $card = Card::factory()->create(['supertype_id' => $supertype->id]);
 
-    /** @test */
-    public function it_belongs_to_a_supertype()
-    {
-        $supertype = Supertype::factory()->create();
-        $card = Card::factory()->create(['supertype_id' => $supertype->id]);
+    expect($card->supertype)->toBeInstanceOf(Supertype::class);
+    expect($card->supertype->id)->toEqual($supertype->id);
+});
 
-        $this->assertInstanceOf(Supertype::class, $card->supertype);
-        $this->assertEquals($supertype->id, $card->supertype->id);
-    }
+it('belongs to a rarity', function () {
+    $rarity = Rarity::factory()->create();
+    $card = Card::factory()->create(['rarity_id' => $rarity->id]);
 
-    /** @test */
-    public function it_belongs_to_a_rarity()
-    {
-        $rarity = Rarity::factory()->create();
-        $card = Card::factory()->create(['rarity_id' => $rarity->id]);
+    expect($card->rarity)->toBeInstanceOf(Rarity::class);
+    expect($card->rarity->id)->toEqual($rarity->id);
+});
 
-        $this->assertInstanceOf(Rarity::class, $card->rarity);
-        $this->assertEquals($rarity->id, $card->rarity->id);
-    }
+it('belongs to many types', function () {
+    $card = Card::factory()->create();
+    $types = Type::factory(3)->create();
 
-    /** @test */
-    public function it_belongs_to_many_types()
-    {
-        $card = Card::factory()->create();
-        $types = Type::factory(3)->create();
+    $card->types()->attach($types);
 
-        $card->types()->attach($types);
+    expect($card->types)->toHaveCount(3);
+    expect($card->types->contains($types->first()))->toBeTrue();
+});
 
-        $this->assertCount(3, $card->types);
-        $this->assertTrue($card->types->contains($types->first()));
-    }
+it('belongs to many subtypes', function () {
+    $card = Card::factory()->create();
+    $subtypes = Subtype::factory(2)->create();
 
-    /** @test */
-    public function it_belongs_to_many_subtypes()
-    {
-        $card = Card::factory()->create();
-        $subtypes = Subtype::factory(2)->create();
+    $card->subtypes()->attach($subtypes);
 
-        $card->subtypes()->attach($subtypes);
+    expect($card->subtypes)->toHaveCount(2);
+    expect($card->subtypes->contains($subtypes->first()))->toBeTrue();
+});
 
-        $this->assertCount(2, $card->subtypes);
-        $this->assertTrue($card->subtypes->contains($subtypes->first()));
-    }
+it('handles empty types and subtypes', function () {
+    $card = Card::factory()->create();
 
-    /** @test */
-    public function it_handles_empty_types_and_subtypes()
-    {
-        $card = Card::factory()->create();
+    expect($card->types)->toHaveCount(0);
+    expect($card->subtypes)->toHaveCount(0);
+});
 
-        $this->assertCount(0, $card->types);
-        $this->assertCount(0, $card->subtypes);
-    }
+it('deleting a card does not affect related sets or supertypes', function () {
+    $set = Set::factory()->create();
+    $supertype = Supertype::factory()->create();
+    $card = Card::factory()->create(['set_id' => $set->id, 'supertype_id' => $supertype->id]);
 
-    /** @test */
-    public function deleting_a_card_does_not_affect_related_sets_or_supertypes()
-    {
-        $set = Set::factory()->create();
-        $supertype = Supertype::factory()->create();
-        $card = Card::factory()->create(['set_id' => $set->id, 'supertype_id' => $supertype->id]);
+    $card->delete();
 
-        $card->delete();
+    expect(\DB::table('sets')->where('id', $set->id)->exists())->toBeTrue();
+    expect(\DB::table('supertypes')->where('id', $supertype->id)->exists())->toBeTrue();
+});
 
-        $this->assertDatabaseHas('sets', ['id' => $set->id]);
-        $this->assertDatabaseHas('supertypes', ['id' => $supertype->id]);
-    }
+it('belongs to many user sets', function () {
+    $user = User::factory()->create();
+    $userSet = UserSet::factory()->create(['user_id' => $user->id]);
 
-    /** @test */
-    public function it_belongs_to_many_user_sets()
-    {
-        // Crea un usuario y un UserSet
-        $user = User::factory()->create();
-        $userSet = UserSet::factory()->create(['user_id' => $user->id]);
+    $card = Card::factory()->create();
+    $userSet->cards()->attach($card);
 
-        // Crea una carta y asocia esa carta con el UserSet
-        $card = Card::factory()->create();
-        $userSet->cards()->attach($card);
+    expect($userSet->cards)->toHaveCount(1);
+    expect($userSet->cards->contains($card))->toBeTrue();
+    expect($card->userSets->contains($userSet))->toBeTrue();
+});
 
-        // Verifica que la carta esté asociada al UserSet
-        $this->assertCount(1, $userSet->cards);
-        $this->assertTrue($userSet->cards->contains($card));
+it('associates a card to a user set', function () {
+    $userSet = UserSet::factory()->create();
+    $card = Card::factory()->create();
 
-        // Verifica que la carta también pertenezca al UserSet correspondiente
-        $this->assertTrue($card->userSets->contains($userSet));
-    }
+    $userSet->cards()->attach($card);
 
-    /** @test */
-    public function it_associates_a_card_to_a_user_set()
-    {
-        // Crear un userSet
-        $userSet = UserSet::factory()->create();
-
-        // Crear una carta
-        $card = Card::factory()->create();
-
-        // Asociar la carta al userSet
-        $userSet->cards()->attach($card);
-
-        // Comprobar que la carta está asociada correctamente al userSet
-        $this->assertTrue($userSet->cards->contains($card));
-
-        // Comprobar que el número de cartas en el userSet es 1
-        $this->assertEquals(1, $userSet->cards()->count());
-    }
-}
+    expect($userSet->cards->contains($card))->toBeTrue();
+    expect($userSet->cards()->count())->toEqual(1);
+});

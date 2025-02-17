@@ -4,45 +4,30 @@ namespace Tests\Feature\Models;
 
 use App\Models\Card;
 use App\Models\Type;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
-class TypeTest extends TestCase
-{
-    use RefreshDatabase;
+it('belongs to many cards', function () {
+    $type = Type::factory()->create();
+    $cards = Card::factory(3)->create();
 
-    /** @test */
-    public function it_belongs_to_many_cards()
-    {
-        // Crear un Type
-        $type = Type::factory()->create();
+    $type->cards()->attach($cards);
 
-        $cards = Card::factory(3)->create();
+    expect($type->cards)->toHaveCount(3);
+    expect($type->cards->contains($cards->first()))->toBeTrue();
+});
 
-        $type->cards()->attach($cards);
+it('handles empty cards', function () {
+    $type = Type::factory()->create();
 
-        $this->assertCount(3, $type->cards);
-        $this->assertTrue($type->cards->contains($cards->first()));
-    }
+    expect($type->cards)->toHaveCount(0);
+});
 
-    /** @test */
-    public function it_handles_empty_cards()
-    {
-        $type = Type::factory()->create();
+it('creates a type and associates cards', function () {
+    $type = Type::factory()->create();
+    $cards = Card::factory(2)->create();
 
-        $this->assertCount(0, $type->cards);
-    }
+    $type->cards()->attach($cards);
 
-    /** @test */
-    public function it_creates_a_type_and_associates_cards()
-    {
-        $type = Type::factory()->create();
-        $cards = Card::factory(2)->create();
-
-        $type->cards()->attach($cards);
-
-        $this->assertDatabaseHas('types', ['id' => $type->id]);
-        $this->assertCount(2, $type->cards);
-        $this->assertTrue($type->cards->contains($cards->first()));
-    }
-}
+    expect(\DB::table('types')->where('id', $type->id)->exists())->toBeTrue();
+    expect($type->cards)->toHaveCount(2);
+    expect($type->cards->contains($cards->first()))->toBeTrue();
+});

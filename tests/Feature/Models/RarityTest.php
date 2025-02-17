@@ -4,39 +4,25 @@ namespace Tests\Feature\Models;
 
 use App\Models\Card;
 use App\Models\Rarity;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
-class RarityTest extends TestCase
-{
-    use RefreshDatabase;
+it('has many cards', function () {
+    $rarity = Rarity::factory()->create();
+    $cards = Card::factory(3)->create(['rarity_id' => $rarity->id]);
 
-    /** @test */
-    public function it_has_many_cards()
-    {
-        $rarity = Rarity::factory()->create();
-        $cards = Card::factory(3)->create(['rarity_id' => $rarity->id]);
+    expect($rarity->cards)->toHaveCount(3);
+    expect($rarity->cards->contains($cards->first()))->toBeTrue();
+});
 
-        $this->assertCount(3, $rarity->cards);
-        $this->assertTrue($rarity->cards->contains($cards->first()));
-    }
+it('a rarity can be created with a name', function () {
+    $rarity = Rarity::factory()->create(['name' => 'Rare']);
 
-    /** @test */
-    public function a_rarity_can_be_created_with_a_name()
-    {
-        $rarity = Rarity::factory()->create(['name' => 'Rare']);
+    expect($rarity->name)->toEqual('Rare');
+    expect(\DB::table('rarities')->where('name', 'Rare')->exists())->toBeTrue();
+});
 
-        $this->assertEquals('Rare', $rarity->name);
-        $this->assertDatabaseHas('rarities', ['name' => 'Rare']);
-    }
+it('prevents duplicate rarity names', function () {
+    Rarity::factory()->create(['name' => 'Rare']);
 
-    /** @test */
-    public function it_prevents_duplicate_rarity_names()
-    {
-        Rarity::factory()->create(['name' => 'Rare']);
-
-        $this->expectException(\Illuminate\Database\QueryException::class);
-        Rarity::factory()->create(['name' => 'Rare']);
-    }
-}
+    expect(fn() => Rarity::factory()->create(['name' => 'Rare']))
+        ->toThrow(\Illuminate\Database\QueryException::class);
+});

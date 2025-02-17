@@ -4,40 +4,27 @@ namespace Tests\Feature\Models;
 
 use App\Models\User;
 use App\Models\UserSet;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
-class UserTest extends TestCase
-{
-    use RefreshDatabase;
+it('has many user sets', function () {
+    $user = User::factory()->create();
 
-    /** @test */
-    public function it_has_many_user_sets()
-    {
-        $user = User::factory()->create();
+    $userSets = UserSet::factory(3)->create(['user_id' => $user->id]);
 
-        $userSets = UserSet::factory(3)->create(['user_id' => $user->id]);
+    expect($user->userSets)->toHaveCount(3);
+    expect($user->userSets->contains($userSets->first()))->toBeTrue();
+});
 
-        $this->assertCount(3, $user->userSets);
-        $this->assertTrue($user->userSets->contains($userSets->first()));
-    }
+it('handles empty user sets', function () {
+    $user = User::factory()->create();
 
-    /** @test */
-    public function it_handles_empty_user_sets()
-    {
-        $user = User::factory()->create();
+    expect($user->userSets)->toHaveCount(0);
+});
 
-        $this->assertCount(0, $user->userSets);
-    }
+it('creates a user and associates user sets', function () {
+    $user = User::factory()->create();
+    $userSets = UserSet::factory(2)->create(['user_id' => $user->id]);
 
-    /** @test */
-    public function it_creates_a_user_and_associates_user_sets()
-    {
-        $user = User::factory()->create();
-        $userSets = UserSet::factory(2)->create(['user_id' => $user->id]);
-
-        $this->assertDatabaseHas('users', ['id' => $user->id]);
-        $this->assertCount(2, $user->userSets);
-        $this->assertTrue($user->userSets->contains($userSets->first()));
-    }
-}
+    expect(\DB::table('users')->where('id', $user->id)->exists())->toBeTrue();
+    expect($user->userSets)->toHaveCount(2);
+    expect($user->userSets->contains($userSets->first()))->toBeTrue();
+});

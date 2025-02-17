@@ -4,56 +4,41 @@ namespace Tests\Feature\Models;
 
 use App\Models\User;
 use App\Models\UserSet;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
-class UserSetTest extends TestCase
-{
-    use RefreshDatabase;
+it('a user set belongs to a user', function () {
+    $user = User::factory()->create();
+    $userSet = UserSet::factory()->create(['user_id' => $user->id]);
 
-    /** @test */
-    public function a_user_set_belongs_to_a_user()
-    {
-        $user = User::factory()->create();
-        $userSet = UserSet::factory()->create(['user_id' => $user->id]);
+    expect($userSet->user)->toBeInstanceOf(User::class);
+    expect($userSet->user->id)->toBe($user->id);
+});
 
-        $this->assertInstanceOf(User::class, $userSet->user);
-        $this->assertEquals($user->id, $userSet->user->id);
-    }
+it('can create user sets with factory', function () {
+    $user = User::factory()->create();
+    $userSet = UserSet::factory()->create(['user_id' => $user->id]);
 
-    /** @test */
-    public function it_can_create_user_sets_with_factory()
-    {
-        $user = User::factory()->create();
-        $userSet = UserSet::factory()->create(['user_id' => $user->id]);
+    expect(\DB::table('user_sets')->where([
+        'id' => $userSet->id,
+        'name' => $userSet->name,
+        'description' => $userSet->description,
+        'image' => $userSet->image,
+        'user_id' => $user->id,
+    ])->exists())->toBeTrue();
+});
 
-        $this->assertDatabaseHas('user_sets', [
-            'id' => $userSet->id,
-            'name' => $userSet->name,
-            'description' => $userSet->description,
-            'image' => $userSet->image,
-            'user_id' => $user->id,
-        ]);
-    }
+it('can retrieve user sets for a user', function () {
+    $user = User::factory()->create();
+    $userSets = UserSet::factory(3)->create(['user_id' => $user->id]);
 
-    /** @test */
-    public function it_can_retrieve_user_sets_for_a_user()
-    {
-        $user = User::factory()->create();
-        $userSets = UserSet::factory(3)->create(['user_id' => $user->id]);
+    expect($user->userSets)->toHaveCount(3);
+    expect($user->userSets->contains($userSets->first()))->toBeTrue();
+});
 
-        $this->assertCount(3, $user->userSets);
-        $this->assertTrue($user->userSets->contains($userSets->first()));
-    }
+it('deleting a user deletes its user sets', function () {
+    $user = User::factory()->create();
+    $userSet = UserSet::factory()->create(['user_id' => $user->id]);
 
-    /** @test */
-    public function deleting_a_user_deletes_its_user_sets()
-    {
-        $user = User::factory()->create();
-        $userSet = UserSet::factory()->create(['user_id' => $user->id]);
+    $user->delete();
 
-        $user->delete();
-
-        $this->assertDatabaseMissing('user_sets', ['id' => $userSet->id]);
-    }
-}
+    expect(\DB::table('user_sets')->where('id', $userSet->id)->exists())->toBeFalse();
+});

@@ -4,40 +4,26 @@ namespace Tests\Feature\Models;
 
 use App\Models\Card;
 use App\Models\Supertype;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
-class SupertypeTest extends TestCase
-{
-    use RefreshDatabase;
+it('has many cards', function () {
+    $supertype = Supertype::factory()->create();
+    $cards = Card::factory(3)->create(['supertype_id' => $supertype->id]);
 
-    /** @test */
-    public function it_has_many_cards()
-    {
-        $supertype = Supertype::factory()->create();
+    expect($supertype->cards)->toHaveCount(3);
+    expect($supertype->cards->contains($cards->first()))->toBeTrue();
+});
 
-        $cards = Card::factory(3)->create(['supertype_id' => $supertype->id]);
+it('handles empty cards', function () {
+    $supertype = Supertype::factory()->create();
 
-        $this->assertCount(3, $supertype->cards);
-        $this->assertTrue($supertype->cards->contains($cards->first()));
-    }
+    expect($supertype->cards)->toHaveCount(0);
+});
 
-    /** @test */
-    public function it_handles_empty_cards()
-    {
-        $supertype = Supertype::factory()->create();
+it('creates a supertype and associates cards', function () {
+    $supertype = Supertype::factory()->create();
+    $cards = Card::factory(2)->create(['supertype_id' => $supertype->id]);
 
-        $this->assertCount(0, $supertype->cards);
-    }
-
-    /** @test */
-    public function it_creates_a_supertype_and_associates_cards()
-    {
-        $supertype = Supertype::factory()->create();
-        $cards = Card::factory(2)->create(['supertype_id' => $supertype->id]);
-
-        $this->assertDatabaseHas('supertypes', ['id' => $supertype->id]);
-        $this->assertCount(2, $supertype->cards);
-        $this->assertTrue($supertype->cards->contains($cards->first()));
-    }
-}
+    expect(\DB::table('supertypes')->where('id', $supertype->id)->exists())->toBeTrue();
+    expect($supertype->cards)->toHaveCount(2);
+    expect($supertype->cards->contains($cards->first()))->toBeTrue();
+});
