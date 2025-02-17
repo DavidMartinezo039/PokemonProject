@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserSetUpdated;
 use App\Http\Requests\UserSetRequest;
 use App\Models\Card;
 use App\Models\UserSet;
@@ -41,6 +42,8 @@ class UserSetController extends Controller
         $userSet->image = $imagePath;
         $userSet->user_id = auth()->id();
         $userSet->save();
+
+        event(new UserSetUpdated(auth()->user(), $userSet, 'created'));
 
         return redirect()->route('user-sets.index');
     }
@@ -195,6 +198,8 @@ class UserSetController extends Controller
 
         $userSet->increment('card_count');
 
+        event(new UserSetUpdated(auth()->user(), $userSet, 'added_card', $cardId));
+
         return redirect()->route('user-sets.cards', $userSetId)
             ->with('success', 'Carta añadida correctamente al set');
     }
@@ -234,6 +239,8 @@ class UserSetController extends Controller
             foreach ($remainingCards as $index => $card) {
                 $userSet->cards()->updateExistingPivot($card->id, ['order_number' => $index + 1]);
             }
+
+            event(new UserSetUpdated(auth()->user(), $userSet, 'removed_card', $cardId));
 
             return redirect()->route('user-sets.cards', $userSetId)
                 ->with('success', 'Carta eliminada correctamente del set');
