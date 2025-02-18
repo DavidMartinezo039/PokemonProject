@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\UserSetUpdated;
 use App\Http\Requests\UserSetRequest;
-use App\Jobs\DownloadImagesForPDF;
+use App\Jobs\GenerateUserSetPdf;
 use App\Models\Card;
 use App\Models\UserSet;
 use Illuminate\Support\Str;
@@ -82,7 +82,7 @@ class UserSetController extends Controller
             session()->flash('message', 'No hay cartas disponibles.');
         }
 
-        DownloadImagesForPDF::dispatch($userSet);
+        GenerateUserSetPdf::dispatch($userSet);
 
 
         return view('user-sets.cards', compact('userSet', 'cards'));

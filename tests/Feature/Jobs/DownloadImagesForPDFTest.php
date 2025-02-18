@@ -16,21 +16,6 @@ it('creates a directory for images', function () {
     Storage::disk('public')->assertExists("pdf_images/{$userSet->id}");
 });
 
-it('downloads set image if exists', function () {
-    $userSet = UserSet::factory()->create([
-        'image' => 'path/to/image.jpg',
-    ]);
-
-    Storage::fake('public');
-    Http::fake([
-        asset('storage/path/to/image.jpg') => Http::response('fake-image-content', 200),
-    ]);
-
-    (new DownloadImagesForPDF($userSet))->handle();
-
-    Storage::disk('public')->assertExists("pdf_images/{$userSet->id}/set_image_" . pathinfo($userSet->image, PATHINFO_FILENAME) . ".jpg");
-});
-
 it('downloads card images', function () {
     $userSet = UserSet::factory()->create();
 

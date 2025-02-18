@@ -24,7 +24,7 @@
 
 <div class="set-container">
     <h2>{{ $userSet->name }}</h2>
-    <img src="{{ public_path($imageDirectory . 'set_image' . pathinfo($userSet->image, PATHINFO_FILENAME) . '.jpg') }}" alt="Imagen del set" class="set-logo">
+    <img src="{{ public_path($imageDirectory . 'set_image_' . pathinfo($userSet->image, PATHINFO_FILENAME) . '.jpg') }}" alt="Imagen del set" class="set-logo">
 </div>
 
 <table style="width: 100%; text-align: center; border-collapse: collapse;">

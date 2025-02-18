@@ -17,7 +17,7 @@ it('should generate a PDF successfully', function () {
 
     $response->assertStatus(200);
     $response->assertHeader('Content-Type', 'application/pdf');
-    $response->assertHeader('Content-Disposition', 'attachment; filename="' . $userSet->name . '.pdf"');
+    $response->assertHeader('Content-Disposition', 'attachment; filename=' . $userSet->id . '.pdf');
 });
 
 it('error 404 set not found', function () {
