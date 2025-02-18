@@ -38,12 +38,12 @@ class DownloadImagesForPDF implements ShouldQueue
 
         if ($this->userSet->image) {
             $imageUrl = asset('storage/' . $this->userSet->image);
-            $this->downloadImage($imageUrl, "{$directory}set_image.jpg");
+            $this->downloadImage($imageUrl, "{$directory}set_image_" . pathinfo($this->userSet->image, PATHINFO_FILENAME) . ".jpg");
         }
 
         foreach ($this->userSet->cards as $index => $card) {
             if (isset($card->images['small'])) {
-                $this->downloadImage($card->images['small'], "{$directory}card_{$index}.jpg");
+                $this->downloadImage($card->images['small'], "{$directory}card_{$index}_{$card->id}.jpg");
             }
         }
     }

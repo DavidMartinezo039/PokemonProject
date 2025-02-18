@@ -24,14 +24,14 @@
 
 <div class="set-container">
     <h2>{{ $userSet->name }}</h2>
-    <img src="{{ public_path($imageDirectory . 'set_image.jpg') }}" alt="Imagen del set" class="set-logo">
+    <img src="{{ public_path($imageDirectory . 'set_image' . pathinfo($userSet->image, PATHINFO_FILENAME) . '.jpg') }}" alt="Imagen del set" class="set-logo">
 </div>
 
 <table style="width: 100%; text-align: center; border-collapse: collapse;">
     <tr>
         @foreach ($userSet->cards as $index => $card)
             <td style="padding: 10px;">
-                <img src="{{ public_path($imageDirectory . 'card_' . $index . '.jpg') }}"
+                <img src="{{ public_path($imageDirectory . 'card_' . $index . '_' . $card->id . '.jpg') }}"
                      alt="{{ $card->name }}"
                      style="max-width: 120px; height: auto;">
             </td>

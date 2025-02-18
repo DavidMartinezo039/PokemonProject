@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\UserSetUpdated;
 use App\Http\Requests\UserSetRequest;
+use App\Jobs\DownloadImagesForPDF;
 use App\Models\Card;
 use App\Models\UserSet;
 use Illuminate\Support\Str;
@@ -75,12 +76,14 @@ class UserSetController extends Controller
             abort(404, 'El set solicitado no fue encontrado o no tienes permiso para verlo.');
         }
 
-
         $cards = $userSet->cards()->orderBy('user_set_cards.order_number')->get();
 
         if ($cards->isEmpty()) {
             session()->flash('message', 'No hay cartas disponibles.');
         }
+
+        DownloadImagesForPDF::dispatch($userSet);
+
 
         return view('user-sets.cards', compact('userSet', 'cards'));
     }

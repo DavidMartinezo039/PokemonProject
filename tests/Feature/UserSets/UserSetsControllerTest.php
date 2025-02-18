@@ -103,7 +103,7 @@ it('adds a card to a user set', function () {
     expect($userSet->card_count)->toBe(1);
 
     $response = $this->get(route('user-sets.cards', $userSet->id));
-    $response->assertSee($card->name);
+    $response->assertSee($card->image);
 });
 
 it('removes a card from a user set', function () {
