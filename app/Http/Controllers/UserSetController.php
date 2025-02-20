@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserSetCreated;
 use App\Events\UserSetUpdated;
 use App\Http\Requests\UserSetRequest;
 use App\Jobs\GenerateUserSetPdf;
@@ -46,6 +47,7 @@ class UserSetController extends Controller
         $userSet->save();
 
         event(new UserSetUpdated(auth()->user(), $userSet, 'created'));
+        event(new UserSetCreated($userSet));
 
         return redirect()->route('user-sets.index');
     }

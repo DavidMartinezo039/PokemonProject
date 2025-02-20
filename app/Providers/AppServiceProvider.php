@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Event;
+use App\Events\UserSetCreated;
+use App\Listeners\SendUserSetCreatedNotification;
 use App\Events\UserSetUpdated;
 use App\Listeners\NotifyUserSetChange;
-use Illuminate\Support\Facades\Event;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,8 +22,9 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot()
+    public function boot(): void
     {
-        Event::listen(NotifyUserSetChange::class);
+        Event::listen(UserSetCreated::class, SendUserSetCreatedNotification::class);
+        Event::listen(UserSetUpdated::class, NotifyUserSetChange::class);
     }
 }
