@@ -20,5 +20,5 @@ it('loads the welcome page with the correct layout and content', function () {
 
     $response->assertSeeHtml('<title>Inicio</title>');
 
-    $response->assertSeeHtml('href="http://localhost/View/css/navbar.css"');
+    $response->assertSeeHtml('href="http://poketproject.test/View/css/navbar.css');
 });
