@@ -37,11 +37,11 @@
         <!-- Contenedor de los detalles -->
         <div class="modal-details">
             <h2 id="modalCardName"></h2>
-            <p><strong>Rareza:</strong> <span id="modalCardRarity"></span></p>
-            <p><strong>Set:</strong> <span id="modalCardSet"></span></p>
+            <p><strong>{{__('Rarity')}}:</strong> <span id="modalCardRarity"></span></p>
+            <p><strong>{{__('Set')}}:</strong> <span id="modalCardSet"></span></p>
 
             <!-- Botón grande y llamativo -->
-            <a id="viewCardButton" class="view-card-button" href="#">Ver más detalles</a>
+            <a id="viewCardButton" class="view-card-button" href="#">{{__('See More Details')}}</a>
         </div>
 
         <!-- Botón de cerrar -->

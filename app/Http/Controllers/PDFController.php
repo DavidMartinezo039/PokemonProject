@@ -1,13 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\UserSet;
 use Illuminate\Support\Facades\Storage;
 
 class PDFController extends Controller
 {
-    public function generatePDF($userSetId)
+    public function generatePDF(UserSet $userSet)
     {
-        $filePath = "pdfs/user_sets/{$userSetId}.pdf";
+        $filePath = "pdfs/user_sets/{$userSet->id}.pdf";
 
         if (!Storage::disk('public')->exists($filePath)) {
             abort(404, "El archivo no existe.");

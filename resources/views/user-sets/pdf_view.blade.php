@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>{{ $userSet->id }} - Cards</title>
+    <title>{{ $userSet->id }} - {{__('Cards')}}</title>
     <style>
         body {
             font-family: Arial, sans-serif;

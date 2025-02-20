@@ -13,24 +13,24 @@
 @endsection
 
 @section('header')
-    <h1 class="text-2xl font-bold">Bienvenido a tu perfil, {{ Auth::user()->name }}</h1>
+    <h1 class="text-2xl font-bold">{{__('Welcome to Your Profile')}}, {{ Auth::user()->name }}</h1>
 @endsection
 
 @section('content')
     <div class="space-y-6">
         <div class="card">
-            <h2 class="section-title">Información de tu perfil</h2>
+            <h2 class="section-title">{{__('Profile Information')}}</h2>
             <!-- Aquí puedes incluir contenido dinámico -->
             @include('profile.partials.update-profile-information-form')
         </div>
 
         <div class="card">
-            <h2 class="section-title">Cambiar contraseña</h2>
+            <h2 class="section-title">{{__('Update Password')}}</h2>
             @include('profile.partials.update-password-form')
         </div>
 
         <div class="card">
-            <h2 class="section-title">Eliminar cuenta</h2>
+            <h2 class="section-title">{{__('Delete Account')}}</h2>
             @include('profile.partials.delete-user-form')
         </div>
     </div>

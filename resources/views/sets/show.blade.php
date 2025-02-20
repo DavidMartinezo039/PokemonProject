@@ -19,19 +19,19 @@
             <h1>{{ $set->name }}</h1>
 
             <div class="inline-info">
-                <p><strong>Fecha de lanzamiento:</strong> {{ $set->releaseDate }}</p>
-                <p><strong>Serie:</strong> {{ $set->series }}</p>
-                <p><strong>Cartas totales:</strong> {{ $set->printedTotal }}</p>
-                <p><strong>Cartas totales incluyendo especiales:</strong> {{ $set->total }}</p>
-                <p><strong>Código de coleccion de TCG:</strong> {{ $set->ptcgoCode }}</p>
+                <p><strong>{{__('Release date')}}:</strong> {{ $set->releaseDate }}</p>
+                <p><strong>{{__('Series')}}:</strong> {{ $set->series }}</p>
+                <p><strong>{{__('Total Cards')}}:</strong> {{ $set->printedTotal }}</p>
+                <p><strong>{{__('Total cards including specials')}}:</strong> {{ $set->total }}</p>
+                <p><strong>{{__('TCG Collection Code')}}:</strong> {{ $set->ptcgoCode }}</p>
             </div>
 
-            <h4>Símbolo:</h4>
+            <h4>{{__('Symbol')}}:</h4>
             <div class="set-symbol-img-container">
                 <img src="{{ $set->images['symbol'] }}" alt="Símbolo de {{ $set->name }}" class="set-symbol-img">
             </div>
 
-            <a href="{{ route('sets.index') }}" class="btn btn-primary">Back to list</a>
+            <a href="{{ route('sets.index') }}" class="btn btn-primary">{{__('Return')}}</a>
         </div>
     </div>
 @endsection

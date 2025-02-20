@@ -12,17 +12,17 @@
             <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
                 <li class="nav-item text">
                     <a class="nav-link {{ request()->is('cards') ? 'active' : '' }}" href="{{ route('cards.index') }}">
-                        Cards
+                        {{__('Cards')}}
                     </a>
                 </li>
                 <li class="nav-item text">
                     <a class="nav-link {{ request()->is('sets') ? 'active' : '' }}" href="{{ route('sets.index') }}">
-                        Sets
+                        {{__('Sets')}}
                     </a>
                 </li>
                 <li class="nav-item text">
                     <a class="nav-link {{ request()->is('user-sets') ? 'active' : '' }}" href="{{ route('user-sets.index') }}">
-                        My Sets
+                        {{__('My Sets')}}
                     </a>
                 @if(Auth::check())
                     <li class="nav-item">
@@ -59,7 +59,7 @@
                 @else
                     <li class="nav-item">
                         <a class="nav-link login-button {{ request()->is('login') ? 'active' : '' }}" href="{{ route('login') }}" id="login-link">
-                            Login/Register
+                            {{__('Login')}}/{{__('Register')}}
                         </a>
                     </li>
                 @endif

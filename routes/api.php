@@ -22,8 +22,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::resource('user-sets', UserSetController::class);
 
-    Route::get('user-sets/{userSetId}/select-card', [UserSetController::class, 'selectCard']);
-    Route::post('user-sets/{userSetId}/card/{cardId}', [UserSetController::class, 'addCard']);
-    Route::get('user-sets/{userSetId}/my-cards', [UserSetController::class, 'myCards']);
-    Route::delete('user-sets/{userSetId}/card/{cardId}', [UserSetController::class, 'removeCard']);
+    Route::get('user-sets/{userSet}/select-card', [UserSetController::class, 'selectCard']);
+    Route::post('user-sets/{userSet}/card/{card}', [UserSetController::class, 'addCard']);
+    Route::get('user-sets/{userSet}/my-cards', [UserSetController::class, 'myCards']);
+    Route::delete('user-sets/{userSet}/card/{card}', [UserSetController::class, 'removeCard']);
 });

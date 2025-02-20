@@ -24,7 +24,7 @@
 </main>
 
 <footer class="bg-gray-900 text-white text-center py-4">
-    <p>&copy; {{ date('Y') }} Tu Proyecto. Todos los derechos reservados.</p>
+    <p>&copy; {{ date('Y') }} {{__('Your Project. All rights reserved')}} .</p>
 </footer>
 
 <script src="{{ asset('/View/js/navbar.js') }}"></script>

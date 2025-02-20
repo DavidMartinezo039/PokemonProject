@@ -16,7 +16,7 @@
                 <span class="plus-symbol">+</span>
             </a>
         </div>
-        <div class="serie-name">My Sets</div>
+        <div class="serie-name">{{__('My Sets')}}</div>
 
         @livewire('UserSetSearch')
     </div>

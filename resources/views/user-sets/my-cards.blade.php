@@ -9,14 +9,14 @@
 @endsection
 
 @section('content')
-    <a href="{{ url()->previous() }}" class="back-button">Volver</a>
+    <a href="{{ url()->previous() }}" class="back-button">{{__('Return')}}</a>
 
     <div class="cards-row">
         @foreach ($userSet->cards as $card)
             <div class="card-container">
 
 
-                <form action="{{ route('user-sets.remove-card', ['userSetId' => $userSet->id, 'cardId' => $card->id]) }}" method="POST">
+                <form action="{{ route('user-sets.remove-card', ['userSet' => $userSet, 'card' => $card]) }}" method="POST">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="remove-card-button"><div class="card">

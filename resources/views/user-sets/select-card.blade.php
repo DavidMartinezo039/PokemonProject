@@ -9,12 +9,12 @@
 @endsection
 
 @section('content')
-    <a href="{{ url()->previous() }}" class="back-button">Volver</a>
+    <a href="{{ url()->previous() }}" class="back-button">{{__('Return')}}</a>
 
     <div class="cards-row">
         @foreach ($cards as $card)
             <div class="card-container">
-                <form action="{{ route('user-sets.add-card', ['userSetId' => $userSet->id, 'cardId' => $card->id]) }}" method="POST">
+                <form action="{{ route('user-sets.add-card', ['userSet' => $userSet, 'card' => $card]) }}" method="POST">
                     @csrf
                     <button type="submit" class="add-card-button"><div class="card">
                             <img src="{{ $card->images['small'] }}" alt="Imagen de {{ $card->name }}" class="card-img">

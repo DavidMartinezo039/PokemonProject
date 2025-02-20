@@ -19,12 +19,12 @@
             <h1>{{ $userSet->name }}</h1>
 
             <div class="inline-info">
-                <p><strong>Description:</strong> {{ $userSet->description }}</p>
-                <p><strong>Cartas totales:</strong> {{ $userSet->card_count }}</p>
+                <p><strong>{{__('Description')}}:</strong> {{ $userSet->description }}</p>
+                <p><strong>{{__('Total Cards')}}:</strong> {{ $userSet->card_count }}</p>
                 <form action="{{ route('user-sets.destroy', $userSet->id) }}" method="POST" style="display: inline;">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="create-set-button" onclick="return confirm('¿Estás seguro de que deseas eliminar este set?')">
+                    <button type="submit" class="create-set-button" onclick="return confirm('{{__('Are you sure you want to delete this set?')}}')">
                         <span class="plus-symbol">-</span>
                     </button>
                 </form>
@@ -33,7 +33,7 @@
                 </a>
             </div>
 
-            <a href="{{ route('user-sets.index') }}" class="btn btn-primary">Back to list</a>
+            <a href="{{ route('user-sets.index') }}" class="btn btn-primary">{{__('Return')}}</a>
         </div>
     </div>
 @endsection
