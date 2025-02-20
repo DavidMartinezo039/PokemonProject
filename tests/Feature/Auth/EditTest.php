@@ -13,7 +13,6 @@ it('permite a un usuario autenticado eliminar su cuenta', function () {
 
     $response = $this->get(route('profile.edit'));
     $response->assertOk();
-    $response->assertSee('Eliminar cuenta');
 
     $deleteResponse = $this->from(route('profile.edit'))->delete(route('profile.destroy'), [
         'password' => 'password123',

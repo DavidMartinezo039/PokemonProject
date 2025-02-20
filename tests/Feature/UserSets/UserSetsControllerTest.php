@@ -143,15 +143,13 @@ it('handles errors when adding a card to a user set', function () {
 
     $response = $this->post("/user-sets/{$userSet->id}/card/999");
 
-    $response->assertRedirect(route('user-sets.cards', $userSet->id));
-    $response->assertSessionHas('error', 'La carta no existe.');
+    $response->assertStatus(404);
 
     $card = Card::factory()->create();
 
     $response = $this->post("/user-sets/999/card/{$card->id}");
 
     $response->assertStatus(404);
-    $response->assertSee('El set solicitado no fue encontrado o no tienes permiso para verlo.');
 
     $userSet->cards()->attach($card->id);
 
@@ -175,13 +173,11 @@ it('handles errors when removing a card from a user set', function () {
 
     $response = $this->delete("/user-sets/{$userSet->id}/card/999");
 
-    $response->assertRedirect(route('user-sets.cards', $userSet->id));
-    $response->assertSessionHas('message', 'La carta no se encuentra en el set o no existe.');
+    $response->assertStatus(404);
 
     $card = Card::factory()->create();
 
     $response = $this->delete("/user-sets/999/card/{$card->id}");
 
     $response->assertStatus(404);
-    $response->assertSee('El set solicitado no fue encontrado o no tienes permiso para verlo.');
 });

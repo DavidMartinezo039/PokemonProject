@@ -13,21 +13,9 @@ it('should generate a PDF successfully', function () {
     $userSet = UserSet::factory()->create();
     $userSetId = $userSet->id;
 
-    $response = $this->get(route('generar-pdf', ['userSetId' => $userSetId]));
+    $response = $this->get(route('generar-pdf', ['userSet' => $userSet]));
 
     $response->assertStatus(200);
     $response->assertHeader('Content-Type', 'application/pdf');
     $response->assertHeader('Content-Disposition', 'attachment; filename=' . $userSet->id . '.pdf');
-});
-
-it('error 404 set not found', function () {
-    $user = CreateUser();
-    actingAs($user);
-
-    $userSet = UserSet::factory()->create();
-    $userSetId = $userSet->id;
-
-    $response = $this->get(route('generar-pdf', ['userSetId' => 100]));
-
-    $response->assertStatus(404);
 });

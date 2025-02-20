@@ -13,7 +13,7 @@
                     <a href="{{ route('user-sets.cards', $set->id) }}" class="set-card">
                         <img src="{{ $set->image ?? asset('images/default-set.png') }}" alt="{{ $set->name }}" class="user-set-img">
                         <p>{{ $set->name }}</p>
-                        <p>Cartas: {{ $set->card_count }}</p>
+                        <p>{{__('Cards')}}: {{ $set->card_count }}</p>
                     </a>
                 @endforeach
             </div>

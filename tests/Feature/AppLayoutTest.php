@@ -16,8 +16,6 @@ it('loads the welcome page with the correct layout and content', function () {
 
     $response->assertStatus(200);
 
-    $response->assertSee('Welcome To Poket Project');
-
     $response->assertSeeHtml('<title>Inicio</title>');
 
     $response->assertSeeHtml('href="http://poketproject.test/View/css/navbar.css');

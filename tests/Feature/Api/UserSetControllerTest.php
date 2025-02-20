@@ -3,6 +3,8 @@
 use App\Models\Card;
 use App\Models\User;
 use App\Models\UserSet;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use function Pest\Laravel\actingAs;
 
 test('puede listar todos los user sets', function () {
@@ -16,13 +18,17 @@ test('puede listar todos los user sets', function () {
 });
 
 test('puede crear un user set con imagen', function () {
+    Storage::fake('public');
+
     $user = User::factory()->create();
     $this->actingAs($user);
+
+    $image = UploadedFile::fake()->image('image.png');
 
     $data = [
         'name' => 'Mi colección',
         'description' => 'Una colección de prueba',
-        'image' => 'path/to/image.png',
+        'image' => $image,
     ];
 
     $response = $this->postJson('/api/user-sets', $data);
@@ -32,6 +38,9 @@ test('puede crear un user set con imagen', function () {
         'name' => 'Mi colección',
         'description' => 'Una colección de prueba',
     ]);
+
+    $userSet = UserSet::latest()->first();
+    Storage::disk('public')->assertExists($userSet->image);
 });
 
 test('puede crear un user set', function () {
