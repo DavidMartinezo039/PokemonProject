@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Events\GeneratePDF;
+use App\Listeners\GeneratePDFListener;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Event;
 use App\Events\UserSetCreated;
@@ -24,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Event::listen(GeneratePDF::class, GeneratePDFListener::class);
         Event::listen(UserSetCreated::class, SendUserSetCreatedNotification::class);
         Event::listen(UserSetUpdated::class, NotifyUserSetChange::class);
     }

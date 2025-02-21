@@ -69,9 +69,6 @@ class UserSetController extends Controller
             session()->flash('message', 'No hay cartas disponibles.');
         }
 
-        GenerateUserSetPdf::dispatch($userSet);
-
-
         return view('user-sets.cards', compact('userSet', 'cards'));
     }
 
@@ -145,6 +142,7 @@ class UserSetController extends Controller
         $userSet->increment('card_count');
 
         event(new UserSetUpdated(auth()->user(), $userSet, 'added_card', $card->id));
+        event(new GenerateUserSetPdf($userSet));
 
         return redirect()->route('user-sets.cards', $userSet->id)
             ->with('success', 'Carta añadida correctamente al set');
@@ -172,6 +170,7 @@ class UserSetController extends Controller
             }
 
             event(new UserSetUpdated(auth()->user(), $userSet, 'removed_card', $card->id));
+            event(new GenerateUserSetPdf($userSet));
 
             return redirect()->route('user-sets.cards', $userSet->id)
                 ->with('success', 'Carta eliminada correctamente del set');

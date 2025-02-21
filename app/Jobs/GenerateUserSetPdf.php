@@ -32,8 +32,6 @@ class GenerateUserSetPdf implements ShouldQueue
      */
     public function handle()
     {
-        Log::info("Generando PDF para el UserSet ID: {$this->userSet->id}");
-
         $userSet = UserSet::with('cards')->find($this->userSet->id);
 
         $imageDirectory = "storage/cards/";
@@ -42,7 +40,5 @@ class GenerateUserSetPdf implements ShouldQueue
 
         $pdfPath = "pdfs/user_sets/{$userSet->id}.pdf";
         Storage::disk('public')->put($pdfPath, $pdf->output());
-
-        Log::info("PDF generado y guardado en: {$pdfPath}");
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\GeneratePDF;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,6 +13,12 @@ class UserSet extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'description', 'image', 'user_id', 'card_count'];
+
+    protected static function booted()
+    {
+        static::updated(fn($set) => event(new GeneratePDF($set)));
+        static::created(fn($set) => event(new GeneratePDF($set)));
+    }
 
     public function scopeForUser($query, $user)
     {
