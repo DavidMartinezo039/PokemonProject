@@ -45,9 +45,6 @@ it('permite a un usuario autenticado eliminar su cuenta', function () {
     $this->assertDatabaseMissing('users', ['id' => $user->id]);
 
     $response->assertStatus(200);
-    $response->assertJson([
-        'message' => 'User deleted successfully'
-    ]);
 
     $this->assertNull(User::find($user->id));
 

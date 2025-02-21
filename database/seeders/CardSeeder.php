@@ -10,6 +10,7 @@ use App\Models\Subtype;
 use Illuminate\Database\Seeder;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class CardSeeder extends Seeder
 {
@@ -85,34 +86,43 @@ class CardSeeder extends Seeder
             ? $rarities[$cardData['rarity']]
             : null;
 
-        $card = Card::Create(
-            [
-                'id' => $cardData['id'],
-                'name' => $cardData['name'],
-                'supertype_id' => $supertypeId,
-                'level' => $cardData['level'] ?? null,
-                'hp' => $cardData['hp'] ?? null,
-                'evolvesFrom' => $cardData['evolvesFrom'] ?? null,
-                'evolvesTo' => $cardData['evolvesTo'] ?? null,
-                'attacks' => $cardData['attacks'] ?? null,
-                'weaknesses' => $cardData['weaknesses'] ?? null,
-                'resistances' => $cardData['resistances'] ?? null,
-                'retreatCost' => $cardData['retreatCost'] ?? null,
-                'convertedRetreatCost' => $cardData['convertedRetreatCost'] ?? null,
-                'set_id' => $cardData['set']['id'] ?? null,
-                'number' => $cardData['number'] ?? null,
-                'artist' => $cardData['artist'] ?? null,
-                'rarity_id' => $rarityId,
-                'flavorText' => $cardData['flavorText'] ?? null,
-                'nationalPokedexNumbers' => $cardData['nationalPokedexNumbers'] ?? null,
-                'legalities' => $cardData['legalities'] ?? null,
-                'regulationMark' => $cardData['regulationMark'] ?? null,
-                'images' => $cardData['images'] ?? null,
-                'tcgplayer' => $cardData['tcgplayer'] ?? null,
-                'cardmarket' => $cardData['cardmarket'] ?? null,
-            ]
-        );
+        $imagePaths = [];
 
+        if (isset($cardData['images']['large'])) {
+            $imagePaths['large'] = $this->downloadImage($cardData['images']['large'], $cardData['id'] . '_large');
+        }
+
+        if (isset($cardData['images']['small'])) {
+            $imagePaths['small'] = $this->downloadImage($cardData['images']['small'], $cardData['id'] . '_small');
+        }
+
+        $card = Card::create([
+            'id' => $cardData['id'],
+            'name' => $cardData['name'],
+            'supertype_id' => $supertypeId,
+            'level' => $cardData['level'] ?? null,
+            'hp' => $cardData['hp'] ?? null,
+            'evolvesFrom' => $cardData['evolvesFrom'] ?? null,
+            'evolvesTo' => $cardData['evolvesTo'] ?? null,
+            'attacks' => $cardData['attacks'] ?? null,
+            'weaknesses' => $cardData['weaknesses'] ?? null,
+            'resistances' => $cardData['resistances'] ?? null,
+            'retreatCost' => $cardData['retreatCost'] ?? null,
+            'convertedRetreatCost' => $cardData['convertedRetreatCost'] ?? null,
+            'set_id' => $cardData['set']['id'] ?? null,
+            'number' => $cardData['number'] ?? null,
+            'artist' => $cardData['artist'] ?? null,
+            'rarity_id' => $rarityId,
+            'flavorText' => $cardData['flavorText'] ?? null,
+            'nationalPokedexNumbers' => $cardData['nationalPokedexNumbers'] ?? null,
+            'legalities' => $cardData['legalities'] ?? null,
+            'regulationMark' => $cardData['regulationMark'] ?? null,
+            'images' => $imagePaths ?? null,
+            'tcgplayer' => $cardData['tcgplayer'] ?? null,
+            'cardmarket' => $cardData['cardmarket'] ?? null,
+        ]);
+
+        // Asociar tipos y subtipos
         $typeIds = isset($cardData['types']) && is_array($cardData['types'])
             ? array_map(fn($type) => $types[$type] ?? null, $cardData['types'])
             : [];
@@ -131,5 +141,27 @@ class CardSeeder extends Seeder
         if (!empty($subtypeIds)) {
             $card->subtypes()->sync($subtypeIds);
         }
+    }
+
+    private function downloadImage($imageUrl, $imageName)
+    {
+        $client = new Client([
+            'verify' => false,
+        ]);
+        $response = $client->get($imageUrl);
+
+        $directory = 'cards';
+        if (!Storage::exists($directory)) {
+            Storage::makeDirectory($directory);
+        }
+
+        $path = $directory . '/' . $imageName . '.png';
+
+        echo "Ruta: {$imageUrl} guardando en {$path}\n";
+
+        Storage::disk('public')->put($path, $response->getBody());
+
+        // Retornar la ruta pública de la imagen
+        return Storage::url($path);
     }
 }
