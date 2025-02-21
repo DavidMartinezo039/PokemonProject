@@ -31,7 +31,7 @@
     <tr>
         @foreach ($userSet->cards as $index => $card)
             <td style="padding: 10px;">
-                <img src="{{ public_path($imageDirectory . 'card_' . $index . '_' . $card->id . '.jpg') }}"
+                <img src="{{ public_path($imageDirectory . $card->id . '_small.png') }}"
                      alt="{{ $card->name }}"
                      style="max-width: 120px; height: auto;">
             </td>

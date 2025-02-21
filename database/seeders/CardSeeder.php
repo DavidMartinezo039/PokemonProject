@@ -40,7 +40,6 @@ class CardSeeder extends Seeder
             'verify' => false,
         ]);
 
-        do {
             $response = $client->get('https://api.pokemontcg.io/v2/cards', [
                 'query' => [
                     'page' => $page,
@@ -50,23 +49,14 @@ class CardSeeder extends Seeder
 
             $cards = json_decode($response->getBody()->getContents(), true)['data'];
 
-            if (!$cards) {
-                break;
-            }
-
             DB::transaction(function () use ($cards, $supertypes, $rarities, $types, $subtypes) {
                 foreach ($cards as $cardData) {
                     $this->createCard($cardData, $supertypes, $rarities, $types, $subtypes);
                 }
             });
 
-            DB::disconnect();
-            DB::reconnect();
-
             $totalCards += count($cards);
             echo "Cartas procesadas hasta ahora: {$totalCards}\n";
-            $page++;
-        } while (count($cards) === $perPage);
 
         echo "Total de cartas insertadas: {$totalCards}\n";
     }
@@ -161,7 +151,6 @@ class CardSeeder extends Seeder
 
         Storage::disk('public')->put($path, $response->getBody());
 
-        // Retornar la ruta pública de la imagen
         return Storage::url($path);
     }
 }
