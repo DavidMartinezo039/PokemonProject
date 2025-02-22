@@ -12,7 +12,7 @@
     <div class="show-container">
         <div class="card">
             <div class="img-container">
-                <img src="{{ asset('storage/' . $userSet->image) }}" alt="Imagen del set" class="set-logo">
+                <img src="{{ asset($userSet->image) }}" alt="Imagen del set" class="set-logo">
             </div>
         </div>
         <div class="info-box">

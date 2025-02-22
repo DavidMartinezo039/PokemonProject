@@ -32,8 +32,8 @@ class UserSetController extends Controller
             $imagePath = $request->file('image')->storeAs('user_sets', $imageName, 'public');
         } else {
             $defaultImages = [
-                'user_sets/predetermined/default1.png',
-                'user_sets/predetermined/default2.png'
+                'View/predetermined/default1.png',
+                'View/predetermined/default2.png'
             ];
 
             $imagePath = $defaultImages[array_rand($defaultImages)];
@@ -66,7 +66,7 @@ class UserSetController extends Controller
         $cards = $userSet->cards()->orderBy('user_set_cards.order_number')->get();
 
         if ($cards->isEmpty()) {
-            session()->flash('message', 'No hay cartas disponibles.');
+            session()->flash('message', __('No cards available'));
         }
 
         return view('user-sets.cards', compact('userSet', 'cards'));
@@ -102,7 +102,7 @@ class UserSetController extends Controller
 
         $userSet->save();
 
-        return redirect()->route('user-sets.index')->with('success', 'Set actualizado con éxito');
+        return redirect()->route('user-sets.index')->with('success', __('Set successfully updated'));
     }
 
 
@@ -113,7 +113,7 @@ class UserSetController extends Controller
 
         $userSet->delete();
 
-        return redirect()->route('user-sets.index')->with('success', 'Set eliminado con éxito');
+        return redirect()->route('user-sets.index')->with('success', __('Set successfully removed'));
     }
 
     public function selectCard(UserSet $userSet)
@@ -131,7 +131,7 @@ class UserSetController extends Controller
     {
         if ($userSet->cards()->where('card_id', $card->id)->exists()) {
             return redirect()->route('user-sets.cards', $userSet->id)
-                ->with('message', 'La carta ya está en este set.');
+                ->with('message', __('The card is already in the set'));
         }
 
         $lastOrderNumber = $userSet->cards()->max('order_number');
@@ -145,7 +145,7 @@ class UserSetController extends Controller
         event(new GenerateUserSetPdf($userSet));
 
         return redirect()->route('user-sets.cards', $userSet->id)
-            ->with('success', 'Carta añadida correctamente al set');
+            ->with('success', __('Card successfully added to the set'));
     }
 
     public function myCards(UserSet $userSet)
@@ -173,10 +173,10 @@ class UserSetController extends Controller
             event(new GenerateUserSetPdf($userSet));
 
             return redirect()->route('user-sets.cards', $userSet->id)
-                ->with('success', 'Carta eliminada correctamente del set');
+                ->with('success', __('Card successfully removed from the set'));
         } else {
             return redirect()->route('user-sets.cards', $userSet->id)
-                ->with('message', 'La carta no se encuentra en el set o no existe.');
+                ->with('message', __('The card is not in the set or does not exist'));
         }
     }
 }

@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -42,9 +43,13 @@ class RoleUserSeeder extends Seeder
         $userRole->givePermissionTo(['view own sets', 'edit own sets', 'delete own sets']);
 
         $user = User::find(1);
+        $token = $user->createToken('admin')->plainTextToken;
+        echo "Admin Token {$token}\n";
         $user->assignRole('admin');
 
         $user = User::find(2);
+        $token = $user->createToken('user')->plainTextToken;
+        echo "User Token {$token}\n";
         $user->assignRole('user');
     }
 }

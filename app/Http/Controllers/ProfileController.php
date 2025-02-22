@@ -48,7 +48,7 @@ class ProfileController extends Controller
         ]);
 
         if (!Hash::check($request->password, $request->user()->password)) {
-            return back()->withErrors(['password' => 'La contraseña es incorrecta.']);
+            return back()->withErrors(['password' => __('The password is incorrect')]);
         }
 
         $user = $request->user();

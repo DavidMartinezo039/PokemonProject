@@ -26,7 +26,7 @@ it('returns correct data on index', function () {
 it('shows a message when no sets are available', function () {
     $response = $this->get(route('sets.index'));
 
-    $response->assertSee('No sets available');
+    $response->assertSee(__('No sets available'));
 });
 
 it('redirects image to the show page', function () {

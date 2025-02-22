@@ -30,7 +30,7 @@ it('displays a message when no cards are available', function () {
     $response = $this->get(route('sets.cards', $set));
 
     $response->assertStatus(200);
-    $response->assertSee('No hay cartas disponibles.');
+    $response->assertSee(__('No cards available'));
 });
 
 it('returns a 404 for a nonexistent set', function () {

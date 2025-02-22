@@ -106,7 +106,7 @@ class ProfileController extends Controller
 
         if (!Hash::check($request->password, $user->password)) {
             return response()->json([
-                'errors' => ['password' => ['La contraseña es incorrecta.']]
+                'errors' => ['password' => [__('The password is incorrect')]]
             ], 422);
         }
 
@@ -115,7 +115,7 @@ class ProfileController extends Controller
 
         Auth::forgetGuards();
 
-        return response()->json(['message' => 'Usuario eliminado correctamente']);
+        return response()->json(['message' => __('User deleted successfully')]);
     }
 
     /**
@@ -146,14 +146,24 @@ class ProfileController extends Controller
      */
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
 
         if (Auth::attempt($credentials)) {
-            return response()->json(Auth::user());
+            $user = Auth::user();
+            $token = $user->createToken('auth_token')->plainTextToken;
+
+            return response()->json([
+                'user' => $user,
+                'token' => $token,
+            ], 200);
         }
 
-        return response()->json(['message' => 'Credenciales incorrectas'], 401);
+        return response()->json(['message' => __('Incorrect credentials')], 401);
     }
+
 
     /**
      * Registrar un nuevo usuario.
@@ -194,6 +204,11 @@ class ProfileController extends Controller
         $data['password'] = Hash::make($data['password']);
         $user = User::create($data);
 
-        return response()->json($user, 201);
+        $token = $user->createToken('user')->plainTextToken;
+
+        return response()->json([
+            'user' => $user,
+            'token' => $token,
+        ], 201);
     }
 }

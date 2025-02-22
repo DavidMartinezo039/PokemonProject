@@ -31,7 +31,7 @@ it('actualiza el nombre del set', function () {
 
     // Verifica que la redirección sea a la lista de sets
     $response->assertRedirect(route('user-sets.index'));
-    $response->assertSessionHas('success', 'Set actualizado con éxito');
+    $response->assertSessionHas('success', __('Set successfully updated'));
 });
 
 it('updates a user set successfully with image', function () {

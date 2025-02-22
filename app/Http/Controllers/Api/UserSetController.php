@@ -112,7 +112,11 @@ class UserSetController extends Controller
      */
     public function index()
     {
-        return response()->json(UserSet::with('cards')->get());
+        $user = auth()->user();
+
+        $userSets = UserSet::where('user_id', $user->id)->get();
+
+        return response()->json($userSets);
     }
 
     /**
@@ -176,10 +180,9 @@ class UserSetController extends Controller
      *     @OA\Response(response=404, description="User set not found")
      * )
      */
-    public function show($id)
+    public function show(UserSet $userSet)
     {
-        $userSet = UserSet::with('cards')->findOrFail($id);
-        return response()->json($userSet);
+        return response()->json($userSet->load('cards'));
     }
 
     /**

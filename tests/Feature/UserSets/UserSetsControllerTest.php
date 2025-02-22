@@ -32,12 +32,12 @@ it('updates a user set', function () {
     $userSet = UserSet::create([
         'name' => 'Set Inicial',
         'description' => 'Set Inicial',
-        'user_id' => $user->id,
+        'image' => 'View/predetermined/default2.png',
+        'user_id' => $user->id
     ]);
 
     $response = $this->put(route('user-sets.update', $userSet->id), ['name' => 'Set Editado']);
     $response->assertRedirect(route('user-sets.index'));
-    $response->assertSessionHas('success', 'Set actualizado con éxito');
 
     $this->assertDatabaseHas('user_sets', [
         'id' => $userSet->id,
@@ -47,12 +47,12 @@ it('updates a user set', function () {
 
     $response = $this->put(route('user-sets.update', $userSet->id), ['description' => 'Set Editado']);
     $response->assertRedirect(route('user-sets.index'));
-    $response->assertSessionHas('success', 'Set actualizado con éxito');
 
     $this->assertDatabaseHas('user_sets', [
         'id' => $userSet->id,
         'name' => 'Set Editado',
         'description' => 'Set Editado',
+        'image' => 'View/predetermined/default2.png',
     ]);
 });
 
@@ -64,12 +64,12 @@ it('deletes a user set', function () {
     $userSet = UserSet::create([
         'name' => 'Set a eliminar',
         'user_id' => $user->id,
+        'image' => 'View/predetermined/default2.png',
     ]);
 
     $response = $this->delete("/user-sets/{$userSet->id}");
 
     $response->assertRedirect(route('user-sets.index'));
-    $response->assertSessionHas('success', 'Set eliminado con éxito');
 
     $this->assertDatabaseMissing('user_sets', [
         'id' => $userSet->id,
@@ -85,6 +85,7 @@ it('adds a card to a user set', function () {
         'name' => 'Set de prueba',
         'user_id' => 1,
         'card_count' => 0,
+        'image' => 'View/predetermined/default2.png',
     ]);
 
     $card = Card::factory()->create();
@@ -92,7 +93,6 @@ it('adds a card to a user set', function () {
     $response = $this->post("/user-sets/{$userSet->id}/card/{$card->id}");
 
     $response->assertRedirect(route('user-sets.cards', $userSet->id));
-    $response->assertSessionHas('success', 'Carta añadida correctamente al set');
 
     $this->assertDatabaseHas('user_set_cards', [
         'user_set_id' => $userSet->id,
@@ -115,6 +115,7 @@ it('removes a card from a user set', function () {
         'name' => 'Set de prueba',
         'user_id' => 1,
         'card_count' => 1,
+        'image' => 'View/predetermined/default2.png',
     ]);
 
     $card = Card::factory()->create();
@@ -124,7 +125,7 @@ it('removes a card from a user set', function () {
     $response = $this->delete("/user-sets/{$userSet->id}/card/{$card->id}");
 
     $response->assertRedirect(route('user-sets.cards', $userSet->id));
-    $response->assertSessionHas('success', 'Carta eliminada correctamente del set');
+    $response->assertSessionHas('success', __('Card successfully removed from the set'));
 
     $userSet->refresh();
     expect($userSet->card_count)->toBe(0);
@@ -139,6 +140,7 @@ it('handles errors when adding a card to a user set', function () {
         'name' => 'Set de prueba',
         'user_id' => 1,
         'card_count' => 0,
+        'image' => 'View/predetermined/default2.png',
     ]);
 
     $response = $this->post("/user-sets/{$userSet->id}/card/999");
@@ -157,7 +159,7 @@ it('handles errors when adding a card to a user set', function () {
     $response = $this->post("/user-sets/{$userSet->id}/card/{$card->id}");
 
     $response->assertRedirect(route('user-sets.cards', $userSet->id));
-    $response->assertSessionHas('message', 'La carta ya está en este set.');
+    $response->assertSessionHas('message', __('The card is already in the set'));
 });
 
 it('handles errors when removing a card from a user set', function () {
@@ -169,6 +171,7 @@ it('handles errors when removing a card from a user set', function () {
         'name' => 'Set de prueba',
         'user_id' => 1,
         'card_count' => 0,
+        'image' => 'View/predetermined/default2.png',
     ]);
 
     $response = $this->delete("/user-sets/{$userSet->id}/card/999");

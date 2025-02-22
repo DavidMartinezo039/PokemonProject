@@ -25,7 +25,7 @@
                 <button type="submit" class="btn btn-danger">{{__('Generate')}} PDF</button>
             </form>
             <a href="{{ route('user-sets.show', $userSet) }}">
-                <img src="{{ asset('storage/' . $userSet->image) }}" alt="Imagen del set" class="set-logo">
+                <img src="{{ asset($userSet->image) }}" alt="Imagen del set" class="set-logo">
                 <h2 class="set-name">{{ $userSet->name }}</h2>
             </a>
         </div>

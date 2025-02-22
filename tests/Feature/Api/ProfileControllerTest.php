@@ -99,9 +99,12 @@ it('permite a un usuario iniciar sesión con credenciales correctas', function (
 
     $response->assertStatus(200)
         ->assertJson([
-            'id' => $user->id,
-            'email' => $user->email,
+            'user' => [
+                'id' => $user->id,
+                'email' => $user->email,
+            ]
         ]);
+
 
     expect(auth()->check())->toBeTrue();
 });
@@ -136,14 +139,21 @@ it('permite registrar un usuario con datos válidos', function () {
 
     $response->assertStatus(201)
         ->assertJson([
-            'name' => 'Nuevo Usuario',
-            'email' => 'nuevo@example.com',
+            'user' => [
+                'name' => 'Nuevo Usuario',
+                'email' => 'nuevo@example.com',
+            ],
+        ])
+        ->assertJsonStructure([
+            'user' => ['id', 'name', 'email', 'created_at', 'updated_at'],
+            'token'
         ]);
 
     $this->assertDatabaseHas('users', [
         'email' => 'nuevo@example.com',
     ]);
 });
+
 
 it('no permite registrar un usuario sin nombre', function () {
     $response = postJson('/api/register', [

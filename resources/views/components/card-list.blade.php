@@ -1,25 +1,25 @@
 <div class="cards-row">
-    @if(session('message'))
-        <div class="error-message">
-            <p>{{ session('message') }}</p>
-        </div>
-    @else
-        @foreach ($cards as $card)
-            <div class="card-container">
-                <div class="card-link"
-                     data-id="{{ $card->id }}"
-                     data-name="{{ $card->name }}"
-                     data-image="{{ $card->images['large'] }}"
-                     data-rarity="{{ $card->rarity->name ?? 'No tiene rareza' }}"
-                     data-set="{{ $card->set->name ?? 'No asignado' }}"
-                     onclick="openModal(this)">
-                    <div class="card">
-                        <img src="{{ $card->images['small'] }}" alt="Imagen de {{ $card->name }}" class="card-img">
-                    </div>
+    @forelse ($cards as $card)
+        <div class="card-container">
+            <div class="card-link"
+                 data-id="{{ $card->id }}"
+                 data-name="{{ $card->name }}"
+                 data-image="{{ $card->images['large'] }}"
+                 data-rarity="{{ $card->rarity->name ?? __('It has no rarity') }}"
+                 data-set="{{ $card->set->name ?? __('It has no set') }}"
+                 onclick="openModal(this)">
+                <div class="card">
+                    <img src="{{ $card->images['small'] }}" alt="Imagen de {{ $card->name }}" class="card-img">
                 </div>
             </div>
-        @endforeach
-    @endif
+        </div>
+    @empty
+        @if(session('message'))
+            <div class="error-message">
+                <p>{{ session('message') }}</p>
+            </div>
+        @endif
+    @endforelse
 </div>
 
 @if ($cards instanceof \Illuminate\Pagination\LengthAwarePaginator && $cards->hasPages())

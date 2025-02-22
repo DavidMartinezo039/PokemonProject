@@ -10,12 +10,16 @@ use function Pest\Laravel\actingAs;
 test('puede listar todos los user sets', function () {
     $user = User::factory()->create();
     actingAs($user, 'sanctum');
-    $userSets = UserSet::factory()->count(3)->create();
+
+    $userSets = UserSet::factory()->count(3)->create([
+        'user_id' => $user->id,
+    ]);
 
     $response = $this->getJson('/api/user-sets');
 
     $response->assertOk()->assertJsonCount(3);
 });
+
 
 test('puede crear un user set con imagen', function () {
     Storage::fake('public');

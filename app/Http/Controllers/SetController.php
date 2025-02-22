@@ -16,7 +16,7 @@ class SetController extends Controller
         $setsBySeries = $sets->groupBy('series');
 
         if ($sets->isEmpty()) {
-            return view('sets.index')->with('message', 'No sets available');
+            return view('sets.index')->with('message', __('No sets available'));
         }
 
         return view('sets.index', compact('setsBySeries'));
@@ -59,7 +59,7 @@ class SetController extends Controller
         });
 
         if ($cards->isEmpty()) {
-            session()->flash('message', 'No hay cartas disponibles.');
+            session()->flash('message', __('No cards available'));
         }
 
         return view('sets.cards', compact('set', 'cards'));
