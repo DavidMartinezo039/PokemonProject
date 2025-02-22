@@ -11,27 +11,25 @@ use Illuminate\Support\Facades\Auth;
 /**
  * @OA\Tag(
  *     name="Profile",
- *     description="Endpoints para gestionar el perfil del usuario"
+ *     description="Endpoints to manage user profiles"
  * )
  */
 class ProfileController extends Controller
 {
     /**
-     * Obtener el perfil del usuario autenticado.
-     *
      * @OA\Get(
      *     path="/api/profile",
-     *     summary="Obtener el perfil del usuario autenticado",
+     *     summary="Get the profile of the authenticated user",
      *     tags={"Profile"},
      *     security={{ "sanctum": {} }},
      *     @OA\Response(
      *         response=200,
-     *         description="Perfil del usuario obtenido correctamente",
+     *         description="User profile successfully obtained",
      *         @OA\JsonContent(ref="#/components/schemas/User")
      *     ),
      *     @OA\Response(
      *         response=401,
-     *         description="No autenticado"
+     *         description="Not authenticated"
      *     )
      * )
      */
@@ -41,11 +39,9 @@ class ProfileController extends Controller
     }
 
     /**
-     * Actualizar el perfil del usuario autenticado.
-     *
      * @OA\Put(
      *     path="/api/profile",
-     *     summary="Actualizar el perfil del usuario autenticado",
+     *     summary="Update the profile of the authenticated user",
      *     tags={"Profile"},
      *     security={{ "sanctum": {} }},
      *     @OA\RequestBody(
@@ -58,12 +54,12 @@ class ProfileController extends Controller
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Perfil actualizado correctamente",
+     *         description="Profile updated successfully",
      *         @OA\JsonContent(ref="#/components/schemas/User")
      *     ),
      *     @OA\Response(
      *         response=422,
-     *         description="Datos de entrada no válidos"
+     *         description="Invalid input data"
      *     )
      * )
      */
@@ -76,11 +72,9 @@ class ProfileController extends Controller
     }
 
     /**
-     * Eliminar la cuenta del usuario autenticado.
-     *
      * @OA\Delete(
      *     path="/api/profile",
-     *     summary="Eliminar la cuenta del usuario",
+     *     summary="Delete user account",
      *     tags={"Profile"},
      *     security={{ "sanctum": {} }},
      *     @OA\RequestBody(
@@ -92,11 +86,11 @@ class ProfileController extends Controller
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Usuario eliminado correctamente"
+     *         description="User deleted successfully"
      *     ),
      *     @OA\Response(
      *         response=422,
-     *         description="Contraseña incorrecta"
+     *         description="The password is incorrect"
      *     )
      * )
      */
@@ -119,11 +113,9 @@ class ProfileController extends Controller
     }
 
     /**
-     * Iniciar sesión y obtener el usuario autenticado.
-     *
      * @OA\Post(
      *     path="/api/login",
-     *     summary="Iniciar sesión",
+     *     summary="Login",
      *     tags={"Auth"},
      *     @OA\RequestBody(
      *         required=true,
@@ -140,7 +132,7 @@ class ProfileController extends Controller
      *     ),
      *     @OA\Response(
      *         response=401,
-     *         description="Credenciales incorrectas"
+     *         description="Incorrect credentials"
      *     )
      * )
      */
@@ -166,11 +158,9 @@ class ProfileController extends Controller
 
 
     /**
-     * Registrar un nuevo usuario.
-     *
      * @OA\Post(
      *     path="/api/register",
-     *     summary="Registrar un nuevo usuario",
+     *     summary="Register",
      *     tags={"Auth"},
      *     @OA\RequestBody(
      *         required=true,
@@ -189,7 +179,7 @@ class ProfileController extends Controller
      *     ),
      *     @OA\Response(
      *         response=422,
-     *         description="Datos de validación incorrectos"
+     *         description="Incorrect validation data"
      *     )
      * )
      */

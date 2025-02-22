@@ -18,12 +18,11 @@
                 "tags": [
                     "Cards"
                 ],
-                "summary": "Lista todas las cartas",
-                "description": "Obtener todas las cartas.",
+                "summary": "List all cards",
                 "operationId": "e35184e8a68a0379ee92df6444996c8a",
                 "responses": {
                     "200": {
-                        "description": "Lista de cartas obtenida correctamente",
+                        "description": "List of cards obtained successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -38,19 +37,18 @@
                 }
             }
         },
-        "/api/cards/{id}": {
+        "/api/cards/{card}": {
             "get": {
                 "tags": [
                     "Cards"
                 ],
-                "summary": "Obtener una carta por su ID",
-                "description": "Obtener una carta específica.",
-                "operationId": "4900dbd1ec696dece55cb26826b7543d",
+                "summary": "Get a card",
+                "operationId": "dc004b7881adb0c6fac597bbe4b1e6fc",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "card",
                         "in": "path",
-                        "description": "ID de la carta",
+                        "description": "Card identifier",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -59,7 +57,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Carta obtenida correctamente",
+                        "description": "Successfully Obtained Card",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -69,7 +67,7 @@
                         }
                     },
                     "404": {
-                        "description": "Carta no encontrada"
+                        "description": "Card not found"
                     }
                 }
             }
@@ -79,12 +77,11 @@
                 "tags": [
                     "Profile"
                 ],
-                "summary": "Obtener el perfil del usuario autenticado",
-                "description": "Obtener el perfil del usuario autenticado.",
+                "summary": "Get the profile of the authenticated user",
                 "operationId": "f1784685f8270527da017b3616288443",
                 "responses": {
                     "200": {
-                        "description": "Perfil del usuario obtenido correctamente",
+                        "description": "User profile successfully obtained",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -94,7 +91,7 @@
                         }
                     },
                     "401": {
-                        "description": "No autenticado"
+                        "description": "Not authenticated"
                     }
                 },
                 "security": [
@@ -107,8 +104,7 @@
                 "tags": [
                     "Profile"
                 ],
-                "summary": "Actualizar el perfil del usuario autenticado",
-                "description": "Actualizar el perfil del usuario autenticado.",
+                "summary": "Update the profile of the authenticated user",
                 "operationId": "875e8801180287e4193f1aced9023960",
                 "requestBody": {
                     "required": true,
@@ -137,7 +133,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Perfil actualizado correctamente",
+                        "description": "Profile updated successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -147,7 +143,7 @@
                         }
                     },
                     "422": {
-                        "description": "Datos de entrada no válidos"
+                        "description": "Invalid input data"
                     }
                 },
                 "security": [
@@ -160,8 +156,7 @@
                 "tags": [
                     "Profile"
                 ],
-                "summary": "Eliminar la cuenta del usuario",
-                "description": "Eliminar la cuenta del usuario autenticado.",
+                "summary": "Delete user account",
                 "operationId": "696324677bc8a587bf01679e38cf9989",
                 "requestBody": {
                     "required": true,
@@ -184,10 +179,10 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Usuario eliminado correctamente"
+                        "description": "User deleted successfully"
                     },
                     "422": {
-                        "description": "Contraseña incorrecta"
+                        "description": "The password is incorrect"
                     }
                 },
                 "security": [
@@ -202,8 +197,7 @@
                 "tags": [
                     "Auth"
                 ],
-                "summary": "Iniciar sesión",
-                "description": "Iniciar sesión y obtener el usuario autenticado.",
+                "summary": "Login",
                 "operationId": "ef623afc428521756f486439e3307dc6",
                 "requestBody": {
                     "required": true,
@@ -242,7 +236,7 @@
                         }
                     },
                     "401": {
-                        "description": "Credenciales incorrectas"
+                        "description": "Incorrect credentials"
                     }
                 }
             }
@@ -252,8 +246,7 @@
                 "tags": [
                     "Auth"
                 ],
-                "summary": "Registrar un nuevo usuario",
-                "description": "Registrar un nuevo usuario.",
+                "summary": "Register",
                 "operationId": "8930e64d1f680ad30f44dfa5e1368387",
                 "requestBody": {
                     "required": true,
@@ -304,7 +297,7 @@
                         }
                     },
                     "422": {
-                        "description": "Datos de validación incorrectos"
+                        "description": "Incorrect validation data"
                     }
                 }
             }
@@ -314,12 +307,11 @@
                 "tags": [
                     "Sets"
                 ],
-                "summary": "Obtener todos los sets",
-                "description": "Obtener todos los sets.",
+                "summary": "Get all sets",
                 "operationId": "b30750ef8139ebbf8b7557d875927d5b",
                 "responses": {
                     "200": {
-                        "description": "Lista de sets obtenida correctamente",
+                        "description": "Set list obtained successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -334,19 +326,18 @@
                 }
             }
         },
-        "/api/sets/{id}": {
+        "/api/sets/{set}": {
             "get": {
                 "tags": [
                     "Sets"
                 ],
-                "summary": "Obtener un set específico",
-                "description": "Obtener un set específico.",
-                "operationId": "f3033b663b2f2500d3a1f2671eb92413",
+                "summary": "Get a specific set",
+                "operationId": "6f2b978e63a1fcb041f19e83e5ed1160",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "set",
                         "in": "path",
-                        "description": "ID del set",
+                        "description": "Set identificator",
                         "required": true,
                         "schema": {
                             "type": "integer",
@@ -356,7 +347,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Set obtenido correctamente",
+                        "description": "Set obtained correctly",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -366,24 +357,23 @@
                         }
                     },
                     "404": {
-                        "description": "Set no encontrado"
+                        "description": "Set not found"
                     }
                 }
             }
         },
-        "/api/sets/{id}/cards": {
+        "/api/sets/{set}/cards": {
             "get": {
                 "tags": [
                     "Sets"
                 ],
-                "summary": "Obtener las cartas de un set",
-                "description": "Obtener todas las cartas de un set específico.",
-                "operationId": "23d9862360b2eb1015d63b65d1031c2b",
+                "summary": "Get the cards from a set",
+                "operationId": "5e0677de97783fab8cf7e8e3163d0ec5",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "set",
                         "in": "path",
-                        "description": "ID del set",
+                        "description": "Set identificator",
                         "required": true,
                         "schema": {
                             "type": "integer",
@@ -393,7 +383,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Lista de cartas del set obtenida correctamente",
+                        "description": "List of cards from the set obtained successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -406,18 +396,18 @@
                         }
                     },
                     "404": {
-                        "description": "Set no encontrado"
+                        "description": "Set not found"
                     }
                 }
             }
         },
-        "/api/user_sets": {
+        "/api/user-sets": {
             "get": {
                 "tags": [
                     "UserSets"
                 ],
                 "summary": "Get all user sets",
-                "operationId": "a3e4af45351cd2abc62faae9d6897b88",
+                "operationId": "6518e4d95be9815a17cc467e792f3107",
                 "responses": {
                     "200": {
                         "description": "List of user sets",
@@ -439,7 +429,7 @@
                     "UserSets"
                 ],
                 "summary": "Create a new user set",
-                "operationId": "47c1842d13f1bb21c093d827e606e651",
+                "operationId": "72761e3e9bb3a698c0b68ee134f44fe0",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -464,18 +454,18 @@
                 }
             }
         },
-        "/api/user_sets/{id}": {
+        "/api/user-sets/{userSet}": {
             "get": {
                 "tags": [
                     "UserSets"
                 ],
-                "summary": "Get a user set by ID",
-                "operationId": "b6a82fdbb6211656b836638131c62b53",
+                "summary": "See a user set and cards of the set",
+                "operationId": "d8ef00671b25db2c742f3c4ef1667215",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "userSet",
                         "in": "path",
-                        "description": "ID of the user set",
+                        "description": "User set identifier",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -503,12 +493,12 @@
                     "UserSets"
                 ],
                 "summary": "Update a user set",
-                "operationId": "601820f3630107118522f1031727d490",
+                "operationId": "c89e50a5a7cecfe90369b7e2c3af96f8",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "userSet",
                         "in": "path",
-                        "description": "ID of the user set",
+                        "description": "User set identifier",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -543,12 +533,12 @@
                     "UserSets"
                 ],
                 "summary": "Delete a user set",
-                "operationId": "caf27eff786bbd7e7dcd685b2f5d6558",
+                "operationId": "44e12b4c2770791a3ecee5507cbab3c4",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "userSet",
                         "in": "path",
-                        "description": "ID of the user set",
+                        "description": "User set identifier",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -575,25 +565,27 @@
                 }
             }
         },
-        "/api/user_sets/{userSetId}/add_card/{cardId}": {
+        "/api/user-sets/{userSet}/add-card/{card}": {
             "post": {
                 "tags": [
                     "UserSets"
                 ],
                 "summary": "Add a card to a user set",
-                "operationId": "357279cfa774151cd0144f6d60929747",
+                "operationId": "0527af3e713c0b324a017d4139c8f8c6",
                 "parameters": [
                     {
-                        "name": "userSetId",
+                        "name": "userSet",
                         "in": "path",
+                        "description": "User set identifier",
                         "required": true,
                         "schema": {
                             "type": "integer"
                         }
                     },
                     {
-                        "name": "cardId",
+                        "name": "card",
                         "in": "path",
+                        "description": "Card identifier",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -620,25 +612,27 @@
                 }
             }
         },
-        "/api/user_sets/{userSetId}/remove_card/{cardId}": {
+        "/api/user-sets/{userSet}/remove-card/{card}": {
             "delete": {
                 "tags": [
                     "UserSets"
                 ],
                 "summary": "Remove a card from a user set",
-                "operationId": "cd7370fb2a69bc08371ba2f0fc70e2dd",
+                "operationId": "5890e257190a8c47022c553a54a5846e",
                 "parameters": [
                     {
-                        "name": "userSetId",
+                        "name": "userSet",
                         "in": "path",
+                        "description": "User set identifier",
                         "required": true,
                         "schema": {
                             "type": "integer"
                         }
                     },
                     {
-                        "name": "cardId",
+                        "name": "card",
                         "in": "path",
+                        "description": "Card identifier",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -685,6 +679,17 @@
                     "user_id": {
                         "type": "integer"
                     },
+                    "card_count": {
+                        "type": "integer"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
                     "cards": {
                         "type": "array",
                         "items": {
@@ -697,10 +702,260 @@
             "Card": {
                 "properties": {
                     "id": {
-                        "type": "integer"
+                        "description": "Card identifier",
+                        "type": "string"
                     },
                     "name": {
                         "type": "string"
+                    },
+                    "supertype_id": {
+                        "type": "integer"
+                    },
+                    "level": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "hp": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "evolvesFrom": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "evolvesTo": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "nullable": true
+                    },
+                    "rules": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "nullable": true
+                    },
+                    "ancientTrait": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "abilities": {
+                        "type": "array",
+                        "items": {
+                            "type": "object"
+                        },
+                        "nullable": true
+                    },
+                    "attacks": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "cost": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "text": {
+                                    "type": "string"
+                                },
+                                "damage": {
+                                    "type": "string"
+                                },
+                                "convertedEnergyCost": {
+                                    "type": "integer"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "weaknesses": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "type": {
+                                    "type": "string"
+                                },
+                                "value": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "resistances": {
+                        "type": "array",
+                        "items": {
+                            "type": "object"
+                        },
+                        "nullable": true
+                    },
+                    "retreatCost": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "nullable": true
+                    },
+                    "convertedRetreatCost": {
+                        "type": "integer"
+                    },
+                    "set_id": {
+                        "type": "string"
+                    },
+                    "number": {
+                        "type": "string"
+                    },
+                    "artist": {
+                        "type": "string"
+                    },
+                    "rarity_id": {
+                        "type": "integer"
+                    },
+                    "flavorText": {
+                        "type": "string"
+                    },
+                    "nationalPokedexNumbers": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    },
+                    "legalities": {
+                        "properties": {
+                            "unlimited": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "regulationMark": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "images": {
+                        "properties": {
+                            "large": {
+                                "type": "string"
+                            },
+                            "small": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "tcgplayer": {
+                        "properties": {
+                            "url": {
+                                "type": "string"
+                            },
+                            "prices": {
+                                "properties": {
+                                    "holofoil": {
+                                        "properties": {
+                                            "low": {
+                                                "type": "number"
+                                            },
+                                            "mid": {
+                                                "type": "number"
+                                            },
+                                            "high": {
+                                                "type": "number"
+                                            },
+                                            "market": {
+                                                "type": "number"
+                                            },
+                                            "directLow": {
+                                                "type": "number",
+                                                "nullable": true
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "updatedAt": {
+                                "type": "string",
+                                "format": "date"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "cardmarket": {
+                        "properties": {
+                            "url": {
+                                "type": "string"
+                            },
+                            "prices": {
+                                "properties": {
+                                    "avg1": {
+                                        "type": "number"
+                                    },
+                                    "avg7": {
+                                        "type": "number"
+                                    },
+                                    "avg30": {
+                                        "type": "number"
+                                    },
+                                    "lowPrice": {
+                                        "type": "number"
+                                    },
+                                    "trendPrice": {
+                                        "type": "number"
+                                    },
+                                    "germanProLow": {
+                                        "type": "number"
+                                    },
+                                    "lowPriceExPlus": {
+                                        "type": "number"
+                                    },
+                                    "reverseHoloLow": {
+                                        "type": "number"
+                                    },
+                                    "suggestedPrice": {
+                                        "type": "number"
+                                    },
+                                    "reverseHoloAvg1": {
+                                        "type": "number"
+                                    },
+                                    "reverseHoloAvg7": {
+                                        "type": "number"
+                                    },
+                                    "reverseHoloSell": {
+                                        "type": "number"
+                                    },
+                                    "averageSellPrice": {
+                                        "type": "number"
+                                    },
+                                    "reverseHoloAvg30": {
+                                        "type": "number"
+                                    },
+                                    "reverseHoloTrend": {
+                                        "type": "number"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "updatedAt": {
+                                "type": "string",
+                                "format": "date"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
                     }
                 },
                 "type": "object"
@@ -720,6 +975,11 @@
                         "format": "email",
                         "example": "johndoe@example.com"
                     },
+                    "email_verified_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-01T12:00:00Z"
+                    },
                     "created_at": {
                         "type": "string",
                         "format": "date-time",
@@ -736,26 +996,58 @@
             "Set": {
                 "properties": {
                     "id": {
-                        "type": "integer",
-                        "example": 1
+                        "description": "Set identifier",
+                        "type": "string"
                     },
                     "name": {
-                        "type": "string",
-                        "example": "Set of Pokémon Cards"
+                        "type": "string"
                     },
-                    "description": {
+                    "series": {
+                        "type": "string"
+                    },
+                    "printedTotal": {
+                        "type": "integer"
+                    },
+                    "total": {
+                        "type": "integer"
+                    },
+                    "legalities": {
+                        "properties": {
+                            "unlimited": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "ptcgoCode": {
+                        "type": "string"
+                    },
+                    "releaseDate": {
                         "type": "string",
-                        "example": "A special set containing rare Pokémon cards."
+                        "format": "date"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "images": {
+                        "properties": {
+                            "logo": {
+                                "type": "string"
+                            },
+                            "symbol": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
                     },
                     "created_at": {
                         "type": "string",
-                        "format": "date-time",
-                        "example": "2025-01-01T12:00:00Z"
+                        "format": "date-time"
                     },
                     "updated_at": {
                         "type": "string",
-                        "format": "date-time",
-                        "example": "2025-01-01T12:00:00Z"
+                        "format": "date-time"
                     }
                 },
                 "type": "object"
@@ -817,11 +1109,11 @@
         },
         {
             "name": "Profile",
-            "description": "Endpoints para gestionar el perfil del usuario"
+            "description": "Endpoints to manage user profiles"
         },
         {
             "name": "Sets",
-            "description": "Endpoints para gestionar sets de cartas"
+            "description": "Endpoints to manage card sets"
         },
         {
             "name": "Auth",

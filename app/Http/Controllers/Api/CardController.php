@@ -15,15 +15,13 @@ use Illuminate\Http\JsonResponse;
 class CardController extends Controller
 {
     /**
-     * Obtener todas las cartas.
-     *
      * @OA\Get(
      *     path="/api/cards",
-     *     summary="Lista todas las cartas",
+     *     summary="List all cards",
      *     tags={"Cards"},
      *     @OA\Response(
      *         response=200,
-     *         description="Lista de cartas obtenida correctamente",
+     *         description="List of cards obtained successfully",
      *         @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Card"))
      *     )
      * )
@@ -34,27 +32,25 @@ class CardController extends Controller
     }
 
     /**
-     * Obtener una carta específica.
-     *
      * @OA\Get(
-     *     path="/api/cards/{id}",
-     *     summary="Obtener una carta por su ID",
+     *     path="/api/cards/{card}",
+     *     summary="Get a card",
      *     tags={"Cards"},
      *     @OA\Parameter(
-     *         name="id",
+     *         name="card",
      *         in="path",
      *         required=true,
-     *         description="ID de la carta",
+     *         description="Card identifier",
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Carta obtenida correctamente",
+     *         description="Successfully Obtained Card",
      *         @OA\JsonContent(ref="#/components/schemas/Card")
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="Carta no encontrada"
+     *         description="Card not found"
      *     )
      * )
      */
