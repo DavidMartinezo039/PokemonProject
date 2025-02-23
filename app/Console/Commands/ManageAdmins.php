@@ -86,11 +86,11 @@ class ManageAdmins extends Command
         if ($user->hasRole('admin')) {
             $user->removeRole('admin');
             $user->assignRole('user');
-            $this->info("El usuario {$user->name} ahora es 'user'.");
+            $this->info("El usuario {$user->name} ahora es user.");
         } else {
             $user->removeRole('user');
             $user->assignRole('admin');
-            $this->info("El usuario {$user->name} ahora es 'admin'.");
+            $this->info("El usuario {$user->name} ahora es admin.");
         }
     }
 }

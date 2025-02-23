@@ -21,9 +21,9 @@
 
         <div style="text-align: center">
 
-            <form action="{{ route('generar-pdf', ['userSet' => $userSet]) }}" method="GET">
-                <button type="submit" class="btn btn-danger">{{__('Generate')}} PDF</button>
-            </form>
+            <div class="set-button-container">
+                @livewire('pdf-button', ['userSet' => $userSet])
+            </div>
             <a href="{{ route('user-sets.show', $userSet) }}">
                 <img src="{{ asset($userSet->image) }}" alt="Imagen del set" class="set-logo">
                 <h2 class="set-name">{{ $userSet->name }}</h2>
