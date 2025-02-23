@@ -1,7 +1,6 @@
 <?php
 
 use App\Jobs\GenerateUserSetPdf;
-use App\Jobs\DownloadImagesForPDF;
 use App\Models\Card;
 use App\Models\User;
 use App\Models\UserSet;
