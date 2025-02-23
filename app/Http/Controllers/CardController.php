@@ -18,9 +18,8 @@ class CardController extends Controller
     }
 
 
-    public function show($id)
+    public function show(Card $card)
     {
-        $card = Card::with(['set', 'types', 'subtypes'])->findOrFail($id);
         return view('cards.show', compact('card'));
     }
 

@@ -11,7 +11,7 @@ class UserSetRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true; // Cambia esto si necesitas lógica de autorización específica
+        return true;
     }
 
     /**

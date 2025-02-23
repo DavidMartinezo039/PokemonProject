@@ -12,8 +12,8 @@ class Card extends Model
 {
     use HasFactory;
 
-    protected $keyType = 'string'; // Clave primaria es una cadena
-    public $incrementing = false; // No es autoincremental
+    protected $keyType = 'string';
+    public $incrementing = false;
 
     protected $casts = [
         'images' => 'array',

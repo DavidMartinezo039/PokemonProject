@@ -9,10 +9,8 @@ class SetController extends Controller
 {
     public function index()
     {
-        // Obtener los sets ordenados por fecha de lanzamiento
         $sets = Set::orderBy('releaseDate', 'desc')->get();
 
-        // Agrupar los sets por serie
         $setsBySeries = $sets->groupBy('series');
 
         if ($sets->isEmpty()) {
@@ -28,10 +26,8 @@ class SetController extends Controller
         return view('sets.show', compact('set'));
     }
 
-    public function showCards($id)
+    public function showCards(Set $set)
     {
-        $set = Set::findOrFail($id);
-
         $cards = $set->cards()->get();
 
         // Ordenamos las cartas en PHP después de obtenerlas
